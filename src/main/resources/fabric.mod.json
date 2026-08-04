@@ -1,0 +1,38 @@
+{
+	"schemaVersion": 1,
+	"id": "astral-relics",
+	"version": "${version}",
+	"name": "Astral Relics",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Me!"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/astral-relics/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"de.ep.astralrelics.AstralRelics"
+		],
+		"client": [
+			"de.ep.astralrelics.client.AstralRelicsClient"
+		]
+	},
+	"mixins": [
+		"astral-relics.mixins.json",
+		{
+			"config": "astral-relics.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.19.3",
+		"minecraft": "~26.2",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
