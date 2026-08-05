@@ -1,5 +1,7 @@
 package de.ep.astralrelics.command;
 
+import de.ep.astralrelics.command.trust.TrustCommand;
+import de.ep.astralrelics.command.untrust.UntrustCommand;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 
 public class CommandRegistry {
@@ -11,6 +13,7 @@ public class CommandRegistry {
             // Register specific command trees sequentially
             //AstralRelicCommand.register(dispatcher);
             TrustCommand.register(dispatcher);
+            UntrustCommand.register(dispatcher);
 
         });
     }
