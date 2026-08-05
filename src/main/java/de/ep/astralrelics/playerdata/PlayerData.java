@@ -14,12 +14,12 @@ public class PlayerData {
     }
 
 
-    public RelicType getLeftSlot() {
+    public RelicType getLeftRelic() {
         return leftRelic;
     }
 
 
-    public void setLeftSlot(RelicType relic) {
+    public void setLeftRelic(RelicType relic) {
         this.leftRelic = relic;
     }
 
