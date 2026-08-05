@@ -62,7 +62,7 @@ public class PlayerDataManager {
 
 
     /*
-     * Loads player data when a player joins
+     * Loads player data from disk when a player joins.
      */
     public void load(ServerPlayer player) {
 
@@ -109,7 +109,13 @@ public class PlayerDataManager {
             );
 
 
-        } catch (IOException e) {
+        } catch (Exception e) {
+
+            cache.put(
+                    uuid,
+                    new PlayerData()
+            );
+
 
             AstralRelics.LOGGER.error(
                     "Failed loading player data for {}",
@@ -124,21 +130,31 @@ public class PlayerDataManager {
 
 
     /*
-     * Gets already loaded data from RAM
+     * Returns the player data stored in memory.
      */
     public PlayerData get(ServerPlayer player) {
 
-        return cache.computeIfAbsent(
-                player.getUUID(),
-                uuid -> new PlayerData()
-        );
+        PlayerData data =
+                cache.get(player.getUUID());
+
+
+        if (data == null) {
+
+            throw new IllegalStateException(
+                    "Player data not loaded for " + player.getUUID()
+            );
+
+        }
+
+
+        return data;
 
     }
 
 
 
     /*
-     * Saves player data to JSON
+     * Saves player data from memory to disk.
      */
     public void save(ServerPlayer player) {
 
@@ -156,11 +172,6 @@ public class PlayerDataManager {
 
             gson.toJson(data, writer);
 
-            AstralRelics.LOGGER.info(
-                    "Saved player data for {}",
-                    uuid
-            );
-
 
         } catch (IOException e) {
 
@@ -177,13 +188,15 @@ public class PlayerDataManager {
 
 
     /*
-     * Removes player from cache after saving
+     * Saves player data and removes it from memory.
      */
     public void unload(ServerPlayer player) {
 
         save(player);
 
-        cache.remove(player.getUUID());
+        cache.remove(
+                player.getUUID()
+        );
 
     }
 
