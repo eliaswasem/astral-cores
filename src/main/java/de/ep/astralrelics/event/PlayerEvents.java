@@ -1,4 +1,4 @@
-package de.ep.astralrelics.events;
+package de.ep.astralrelics.event;
 
 import de.ep.astralrelics.AstralRelics;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;

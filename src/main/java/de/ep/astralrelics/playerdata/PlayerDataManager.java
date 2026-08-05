@@ -1,214 +1,165 @@
 package de.ep.astralrelics.playerdata;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import de.ep.astralrelics.AstralRelics;
+import de.ep.astralrelics.relic.RelicType;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
+import java.lang.reflect.Type;
+import java.sql.*;
+import java.util.*;
 
 public class PlayerDataManager {
 
-
-    private final File folder;
-
-
+    // This HashMap caches the data in RAM so we don't spam database reads during normal gameplay
     private final Map<UUID, PlayerData> cache = new HashMap<>();
 
+    // The active database connection link
+    private Connection connection;
 
-    private final Gson gson =
-            new GsonBuilder()
-                    .setPrettyPrinting()
-                    .serializeNulls()
-                    .create();
+    // GSON tool used ONLY to convert our UUID list into a single text line for easy SQL storage
+    private final Gson gson = new Gson();
+    private final Type listType = new TypeToken<ArrayList<String>>() {}.getType();
 
-
-
+    // Constructor: This sets up your database file inside your world folder
     public PlayerDataManager(File worldFolder) {
+        // Create an "astralrelics" folder inside the active world save folder
+        File dataFolder = new File(worldFolder, "astralrelics");
+        if (!dataFolder.exists()) dataFolder.mkdirs();
 
-        this.folder = new File(
-                worldFolder,
-                "astralrelics/playerdata"
-        );
+        try {
+            // Load the standard SQLite driver built into Java / Minecraft dependencies
+            Class.forName("org.sqlite.JDBC");
 
+            // Connect to (or create) the playerdata.db file
+            File dbFile = new File(dataFolder, "playerdata.db");
+            this.connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile.getAbsolutePath());
 
-        if (!folder.exists()) {
-
-            if (folder.mkdirs()) {
-
-                AstralRelics.LOGGER.info(
-                        "Created player data folder"
+            // Automatically execute SQL to build our storage table if it does not exist yet
+            try (Statement statement = connection.createStatement()) {
+                statement.execute(
+                        "CREATE TABLE IF NOT EXISTS player_relics (" +
+                                "uuid TEXT PRIMARY KEY, " +     // Unique Key: Player UUID string
+                                "left_relic TEXT, " +          // Store Enum name string
+                                "right_relic TEXT, " +         // Store Enum name string
+                                "trusted_players TEXT)"        // Store List as a serialized text block
                 );
-
-            } else {
-
-                AstralRelics.LOGGER.error(
-                        "Failed to create player data folder"
-                );
-
             }
-
-        }
-
-    }
-
-
-
-    /*
-     * Loads player data from disk when a player joins.
-     */
-    public void load(ServerPlayer player) {
-
-        UUID uuid = player.getUUID();
-
-        File file = getFile(uuid);
-
-
-        if (!file.exists()) {
-
-            PlayerData data = new PlayerData();
-
-            cache.put(uuid, data);
-
-            save(player);
-
-            AstralRelics.LOGGER.info(
-                    "Created new player data for {}",
-                    uuid
-            );
-
-            return;
-        }
-
-
-
-        try (FileReader reader = new FileReader(file)) {
-
-            PlayerData data =
-                    gson.fromJson(reader, PlayerData.class);
-
-
-            if (data == null) {
-                data = new PlayerData();
-            }
-
-
-            cache.put(uuid, data);
-
-
-            AstralRelics.LOGGER.info(
-                    "Loaded player data for {}",
-                    uuid
-            );
-
-
+            AstralRelics.LOGGER.info("AstralRelics SQLite Database successfully loaded and healthy.");
         } catch (Exception e) {
-
-            cache.put(
-                    uuid,
-                    new PlayerData()
-            );
-
-
-            AstralRelics.LOGGER.error(
-                    "Failed loading player data for {}",
-                    uuid,
-                    e
-            );
-
+            AstralRelics.LOGGER.error("CRITICAL: Failed to initialize SQLite Database Engine!", e);
         }
-
     }
 
-
-
-    /*
-     * Returns the player data stored in memory.
-     */
-    public PlayerData get(ServerPlayer player) {
-
-        PlayerData data =
-                cache.get(player.getUUID());
-
-
-        if (data == null) {
-
-            throw new IllegalStateException(
-                    "Player data not loaded for " + player.getUUID()
-            );
-
-        }
-
-
-        return data;
-
-    }
-
-
-
-    /*
-     * Saves player data from memory to disk.
-     */
-    public void save(ServerPlayer player) {
-
+    // RUNS ON JOIN: Loads existing database records into our active RAM cache
+    public void load(ServerPlayer player) {
         UUID uuid = player.getUUID();
+        String query = "SELECT * FROM player_relics WHERE uuid = ?";
 
-        PlayerData data = cache.get(uuid);
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, uuid.toString()); // Replace the "?" in the query with the player's string UUID
 
+            try (ResultSet rs = ps.executeQuery()) {
+                PlayerData data = new PlayerData();
 
+                // If a database row exists for this player, read it
+                if (rs.next()) {
+                    String left = rs.getString("left_relic");
+                    String right = rs.getString("right_relic");
+                    String trustedJson = rs.getString("trusted_players");
+
+                    // Reconstruct relic states from raw text back to Java Enums
+                    if (left != null) data.setLeftRelic(RelicType.valueOf(left));
+                    if (right != null) data.setRightRelic(RelicType.valueOf(right));
+
+                    // Parse the JSON text string back into a standard list of Java UUIDs
+                    if (trustedJson != null && !trustedJson.isEmpty()) {
+                        List<String> trustedStrings = gson.fromJson(trustedJson, listType);
+                        if (trustedStrings != null) {
+                            for (String tUuid : trustedStrings) {
+                                data.addTrustedPlayer(UUID.fromString(tUuid));
+                            }
+                        }
+                    }
+                    // FIXED: Replaced player.getGameProfile().getName() with player.getScoreboardName()
+                    AstralRelics.LOGGER.info("Loaded SQLite profile data for player: {}", player.getScoreboardName());
+                } else {
+                    // Brand new player detected: Create an empty row profile in the database
+                    insertNewPlayer(uuid);
+                    // FIXED: Replaced player.getGameProfile().getName() with player.getScoreboardName()
+                    AstralRelics.LOGGER.info("Created brand new database profile row for player: {}", player.getScoreboardName());
+                }
+
+                // Put the completed data into our RAM cache map for fast in-game utilization
+                cache.put(uuid, data);
+            }
+        } catch (SQLException e) {
+            AstralRelics.LOGGER.error("SQL Exception caught during profile load routine for: {}", uuid, e);
+            cache.put(uuid, new PlayerData()); // Safety fallback: Give them blank data so the server doesn't crash
+        }
+    }
+
+    // RUNS IN GAME: Returns the rapid-access RAM cache data for active gameplay checks
+    public PlayerData get(ServerPlayer player) {
+        PlayerData data = cache.get(player.getUUID());
         if (data == null) {
-            return;
+            throw new IllegalStateException("RAM cache missed runtime check for active player entity: " + player.getUUID());
         }
-
-
-        try (FileWriter writer = new FileWriter(getFile(uuid))) {
-
-            gson.toJson(data, writer);
-
-
-        } catch (IOException e) {
-
-            AstralRelics.LOGGER.error(
-                    "Failed saving player data for {}",
-                    uuid,
-                    e
-            );
-
-        }
-
+        return data;
     }
 
+    // RUNS PERIODICALLY / ON QUIT: Updates database file safely using current RAM values
+    public void save(ServerPlayer player) {
+        UUID uuid = player.getUUID();
+        PlayerData data = cache.get(uuid);
+        if (data == null) return; // Nothing cached, skip saving
 
+        String update = "UPDATE player_relics SET left_relic = ?, right_relic = ?, trusted_players = ? WHERE uuid = ?";
+        try (PreparedStatement ps = connection.prepareStatement(update)) {
+            // Bind relic Enum values or null strings if empty
+            ps.setString(1, data.getLeftRelic() != null ? data.getLeftRelic().name() : null);
+            ps.setString(2, data.getRightRelic() != null ? data.getRightRelic().name() : null);
 
-    /*
-     * Saves player data and removes it from memory.
-     */
+            // Serialize trust context list into a compressed text line via GSON
+            List<String> trustedStrings = new ArrayList<>();
+            for (UUID tUuid : data.getTrustedPlayers()) {
+                trustedStrings.add(tUuid.toString());
+            }
+            ps.setString(3, gson.toJson(trustedStrings));
+            ps.setString(4, uuid.toString()); // Targeted Row
+
+            ps.executeUpdate(); // Push updates down to database file safely
+        } catch (SQLException e) {
+            AstralRelics.LOGGER.error("Failed executing SQLite push operation during state save for: {}", uuid, e);
+        }
+    }
+
+    // RUNS ON QUIT: Saves data to disk and completely removes player from RAM to save memory
     public void unload(ServerPlayer player) {
-
         save(player);
-
-        cache.remove(
-                player.getUUID()
-        );
-
+        cache.remove(player.getUUID());
     }
 
-
-
-    private File getFile(UUID uuid) {
-
-        return new File(
-                folder,
-                uuid + ".json"
-        );
-
+    // Helper method to write an empty starter row for a fresh player profile
+    private void insertNewPlayer(UUID uuid) throws SQLException {
+        String insert = "INSERT INTO player_relics (uuid, left_relic, right_relic, trusted_players) VALUES (?, NULL, NULL, '[]')";
+        try (PreparedStatement ps = connection.prepareStatement(insert)) {
+            ps.setString(1, uuid.toString());
+            ps.executeUpdate();
+        }
     }
 
+    // RUNS ON SERVER SHUTDOWN: Terminates stream pipeline connection pool cleanly
+    public void closeConnection() {
+        try {
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+                AstralRelics.LOGGER.info("SQLite storage stream safely terminated.");
+            }
+        } catch (SQLException e) {
+            AstralRelics.LOGGER.error("Critical stream termination failure on SQLite connection pool", e);
+        }
+    }
 }
