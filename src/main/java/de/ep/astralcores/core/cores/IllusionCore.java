@@ -2,27 +2,25 @@ package de.ep.astralcores.core.cores;
 
 import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreType;
-
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-public class EchoCore extends Core {
+public class IllusionCore extends Core {
 
-    public EchoCore() {
+    public IllusionCore() {
         super(
-                CoreType.ECHO_CORE,
-                "§9Echo Core",
-                Items.HEART_OF_THE_SEA,
+                CoreType.MIRROR_CORE,
+                "§fMirror Shard",
+                Items.AMETHYST_SHARD,
                 List.of(
-                        "§1[Active: Echo Jump]"
+                        "§f[Active: Mirror Swap]"
                 ),
-                10004,
+                10011,
                 0,
                 0
         );
-
     }
 
     @Override
@@ -35,4 +33,3 @@ public class EchoCore extends Core {
 
     }
 }
-

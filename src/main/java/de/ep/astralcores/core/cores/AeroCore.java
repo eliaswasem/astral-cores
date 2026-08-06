@@ -2,25 +2,27 @@ package de.ep.astralcores.core.cores;
 
 import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreType;
+
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-public class AbyssCore extends Core {
+public class AeroCore extends Core {
 
-    public AbyssCore() {
+    public AeroCore() {
         super(
-                CoreType.ABYSS_CORE,
-                "§1Abyss Core",
-                Items.TIPPED_ARROW,
+                CoreType.ECHO_CORE,
+                "§9Echo Core",
+                Items.HEART_OF_THE_SEA,
                 List.of(
-                        "§1[Active: Whirlpool]"
+                        "§1[Active: Echo Jump]"
                 ),
-                10009,
+                10004,
                 0,
                 0
         );
+
     }
 
     @Override
@@ -33,3 +35,4 @@ public class AbyssCore extends Core {
 
     }
 }
+

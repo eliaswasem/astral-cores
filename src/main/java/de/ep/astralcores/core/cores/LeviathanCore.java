@@ -7,17 +7,17 @@ import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-public class MirrorCore extends Core {
+public class LeviathanCore extends Core {
 
-    public MirrorCore() {
+    public LeviathanCore() {
         super(
-                CoreType.MIRROR_CORE,
-                "§fMirror Shard",
-                Items.AMETHYST_SHARD,
+                CoreType.ABYSS_CORE,
+                "§1Abyss Core",
+                Items.TIPPED_ARROW,
                 List.of(
-                        "§f[Active: Mirror Swap]"
+                        "§1[Active: Whirlpool]"
                 ),
-                10011,
+                10009,
                 0,
                 0
         );

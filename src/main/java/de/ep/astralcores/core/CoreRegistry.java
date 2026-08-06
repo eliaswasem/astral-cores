@@ -11,15 +11,15 @@ public class CoreRegistry {
     private static final Map<String, Core> BY_CORE_ID = new HashMap<>();
 
     public static void init() {
-        register(new AbyssCore());
+        register(new LeviathanCore());
         register(new BersekerCore());
         register(new ChronoCore());
-        register(new EchoCore());
+        register(new AeroCore());
         register(new FrostCore());
         register(new GaleCore());
         register(new GravityCore());
         register(new MagnetCore());
-        register(new MirrorCore());
+        register(new IllusionCore());
         register(new NatureCore());
         register(new PhoenixCore());
         register(new ShadowCore());
