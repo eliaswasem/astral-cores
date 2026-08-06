@@ -7,21 +7,20 @@ import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-public class BersekerRelic extends Core {
+public class AbyssCore extends Core {
 
-    public BersekerRelic() {
+    public AbyssCore() {
         super(
-                CoreType.BERSERKER_RELIC,
-                "§6Berseker Core",
-                Items.RABBIT,
+                CoreType.ABYSS_CORE,
+                "§1Abyss Core",
+                Items.TIPPED_ARROW,
                 List.of(
-                        "§6[Active: Rage Mode]"
+                        "§1[Active: Whirlpool]"
                 ),
-                10011,
+                10009,
                 0,
                 0
         );
-
     }
 
     @Override

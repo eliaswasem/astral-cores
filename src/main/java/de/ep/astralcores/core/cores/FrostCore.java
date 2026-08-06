@@ -7,17 +7,17 @@ import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-public class MagnetRelic extends Core {
+public class FrostCore extends Core {
 
-    public MagnetRelic() {
+    public FrostCore() {
         super(
-                CoreType.MAGNET_RELIC,
-                "§cMagnet Core",
-                Items.IRON_INGOT,
+                CoreType.FROST_CORE,
+                "§bFrost Relict",
+                Items.CLAY_BALL,
                 List.of(
-                        "§4[Active: Magnetic Pull]"
+                        "§b[Active: Frost Lock]"
                 ),
-                10012,
+                10008,
                 0,
                 0
         );
@@ -25,7 +25,7 @@ public class MagnetRelic extends Core {
 
     @Override
     public void applyPassive(ServerPlayer player) {
-        
+
     }
 
     @Override

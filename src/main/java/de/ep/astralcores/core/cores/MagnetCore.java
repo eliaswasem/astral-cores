@@ -7,17 +7,17 @@ import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-public class ShadowRelic extends Core {
+public class MagnetCore extends Core {
 
-    public ShadowRelic() {
+    public MagnetCore() {
         super(
-                CoreType.SHADOW_RELIC,
-                "§0Shadow Core",
-                Items.COMMAND_BLOCK,
+                CoreType.MAGNET_CORE,
+                "§cMagnet Core",
+                Items.IRON_INGOT,
                 List.of(
-                        "§0[Active: Smoke Veil]"
+                        "§4[Active: Magnetic Pull]"
                 ),
-                10010,
+                10012,
                 0,
                 0
         );
@@ -25,7 +25,7 @@ public class ShadowRelic extends Core {
 
     @Override
     public void applyPassive(ServerPlayer player) {
-
+        
     }
 
     @Override

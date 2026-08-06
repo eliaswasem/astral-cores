@@ -7,17 +7,17 @@ import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-public class GravityRelic extends Core {
+public class NatureCore extends Core {
 
-    public GravityRelic() {
+    public NatureCore() {
         super(
-                CoreType.GRAVITY_RELIC,
-                "§bGravity Shard",
-                Items.ARROW,
+                CoreType.NATURE_CORE,
+                "§2Nature Core",
+                Items.BOWL,
                 List.of(
-                        "§b[Active: Gravity Pull"
+                        "§2[Active: Root Trap]"
                 ),
-                10007,
+                10012,
                 0,
                 0
         );

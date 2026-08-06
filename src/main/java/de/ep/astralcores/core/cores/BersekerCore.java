@@ -7,20 +7,21 @@ import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-public class ChronoRelic extends Core {
+public class BersekerCore extends Core {
 
-    public ChronoRelic() {
+    public BersekerCore() {
         super(
-                CoreType.CHRONO_RELIC,
-                "$aChrono Core",
-                Items.BOOK,
+                CoreType.BERSERKER_CORE,
+                "§6Berseker Core",
+                Items.RABBIT,
                 List.of(
-                        "§a[Active: Time Return]"
+                        "§6[Active: Rage Mode]"
                 ),
-                10006,
+                10011,
                 0,
                 0
         );
+
     }
 
     @Override

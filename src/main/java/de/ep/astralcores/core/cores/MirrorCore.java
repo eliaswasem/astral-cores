@@ -7,17 +7,17 @@ import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-public class GaleRelic extends Core {
+public class MirrorCore extends Core {
 
-    public GaleRelic() {
+    public MirrorCore() {
         super(
-                CoreType.GALE_RELIC,
-                "§7Gale Core",
-                Items.BREEZE_ROD,
+                CoreType.MIRROR_CORE,
+                "§fMirror Shard",
+                Items.AMETHYST_SHARD,
                 List.of(
-                        "§f[Active: Sonic Dash]"
+                        "§f[Active: Mirror Swap]"
                 ),
-                10005,
+                10011,
                 0,
                 0
         );

@@ -7,17 +7,17 @@ import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-public class NatureRelic extends Core {
+public class ShadowCore extends Core {
 
-    public NatureRelic() {
+    public ShadowCore() {
         super(
-                CoreType.NATURE_RELIC,
-                "§2Nature Core",
-                Items.BOWL,
+                CoreType.SHADOW_CORE,
+                "§0Shadow Core",
+                Items.COMMAND_BLOCK,
                 List.of(
-                        "§2[Active: Root Trap]"
+                        "§0[Active: Smoke Veil]"
                 ),
-                10012,
+                10010,
                 0,
                 0
         );

@@ -7,17 +7,17 @@ import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-public class FrostRelic extends Core {
+public class GravityCore extends Core {
 
-    public FrostRelic() {
+    public GravityCore() {
         super(
-                CoreType.FROST_RELIC,
-                "§bFrost Relict",
-                Items.CLAY_BALL,
+                CoreType.GRAVITY_CORE,
+                "§bGravity Shard",
+                Items.ARROW,
                 List.of(
-                        "§b[Active: Frost Lock]"
+                        "§b[Active: Gravity Pull"
                 ),
-                10008,
+                10007,
                 0,
                 0
         );

@@ -10,11 +10,11 @@ import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-public class PhoenixRelic extends Core {
+public class PhoenixCore extends Core {
 
-    public PhoenixRelic() {
+    public PhoenixCore() {
         super(
-                CoreType.PHOENIX_RELIC,
+                CoreType.PHOENIX_CORE,
                 "§cPhoenix Core",
                 Items.MAGMA_CREAM,
                 List.of(

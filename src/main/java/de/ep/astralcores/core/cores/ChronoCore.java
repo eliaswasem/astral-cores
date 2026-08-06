@@ -7,17 +7,17 @@ import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-public class MirrorRelic extends Core {
+public class ChronoCore extends Core {
 
-    public MirrorRelic() {
+    public ChronoCore() {
         super(
-                CoreType.MIRROR_RELIC,
-                "§fMirror Shard",
-                Items.AMETHYST_SHARD,
+                CoreType.CHRONO_CORE,
+                "$aChrono Core",
+                Items.BOOK,
                 List.of(
-                        "§f[Active: Mirror Swap]"
+                        "§a[Active: Time Return]"
                 ),
-                10011,
+                10006,
                 0,
                 0
         );
