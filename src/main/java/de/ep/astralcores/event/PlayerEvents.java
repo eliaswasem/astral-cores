@@ -1,8 +1,8 @@
 package de.ep.astralcores.event;
 
 import de.ep.astralcores.AstralCores;
-import de.ep.astralcores.event.logic.RelicDeathLogic;
-import de.ep.astralcores.event.logic.RelicInteractLogic;
+import de.ep.astralcores.event.logic.CoreDeathLogic;
+import de.ep.astralcores.event.logic.CoreInteractLogic;
 import de.ep.astralcores.core.CoreFactory;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
@@ -49,11 +49,11 @@ public class PlayerEvents {
 
             /**
              * Inspects the item's Custom Data mapping array for our custom namespace identifier tag.
-             * If resolved successfully, handles validation and slots the relic into PlayerData.
-             * If not a custom relic, returns PASS to allow regular vanilla action sequences to resume.
+             * If resolved successfully, handles validation and slots the core into PlayerData.
+             * If not a custom core, returns PASS to allow regular vanilla action sequences to resume.
              */
             return CoreFactory.getCoreFromItem(stack)
-                    .map(relic -> RelicInteractLogic.executeEquip(serverPlayer, stack, relic, hand))
+                    .map(core -> CoreInteractLogic.executeEquip(serverPlayer, stack, core, hand))
                     .orElse(InteractionResult.PASS);
         });
 
@@ -64,7 +64,7 @@ public class PlayerEvents {
         ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
             /* Validates that the dying entity is safely a real physical ServerPlayer instance */
             if (entity instanceof ServerPlayer serverPlayer) {
-               RelicDeathLogic.executeDeathDrop(serverPlayer);
+               CoreDeathLogic.executeDeathDrop(serverPlayer);
             }
         });
     }
