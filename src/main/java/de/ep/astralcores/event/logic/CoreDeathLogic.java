@@ -8,7 +8,7 @@ import de.ep.astralcores.core.CoreType;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
-public class RelicDeathLogic {
+public class CoreDeathLogic {
 
     /**
      * Inspects the profile configuration of a dying player at the exact moment of death.
@@ -24,13 +24,13 @@ public class RelicDeathLogic {
 
         /* Processes the virtual left equipment track channel */
         if (data.getLeftCore() != null) {
-            dropRelicToWorld(player, data.getLeftCore());
+            dropCoreToWorld(player, data.getLeftCore());
             data.setLeftCore(null);
         }
 
         /* Processes the virtual right equipment track channel */
         if (data.getRightCore() != null) {
-            dropRelicToWorld(player, data.getRightCore());
+            dropCoreToWorld(player, data.getRightCore());
             data.setRightCore(null);
         }
 
@@ -39,15 +39,15 @@ public class RelicDeathLogic {
     }
 
     /**
-     * Resolves the template properties of a relic type and spawns it as an entity item in the world.
+     * Resolves the template properties of a core type and spawns it as an entity item in the world.
      */
-    private static void dropRelicToWorld(ServerPlayer player, CoreType type) {
-        CoreRegistry.get(type).ifPresent(relic -> {
-            /* Requests the 1.21+ factory engine to compile a valid unstackable item asset with its persistent tags */
-            ItemStack relicStack = CoreFactory.createStack(relic);
+    private static void dropCoreToWorld(ServerPlayer player, CoreType type) {
+        CoreRegistry.get(type).ifPresent(core -> {
+            /* Requests the core factory to compile a valid unstackable item asset with its persistent tags */
+            ItemStack coreStack = CoreFactory.createStack(core);
 
             /* Spawns the compiled item entity stack safely directly at the player's exact death location vectors */
-            player.drop(relicStack, true, false);
+            player.drop(coreStack, true, false);
         });
     }
 }
