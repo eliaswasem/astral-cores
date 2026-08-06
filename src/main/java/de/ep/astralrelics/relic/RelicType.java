@@ -5,7 +5,7 @@ public enum RelicType {
     GALE_CORE,
     CHRONO_CORE,
     GRAVITY_SHARD,
-    FROST_RELIKT,
+    FROST_RELICT,
     PHOENIX_CORE,
     ABYSS_CORE,
     SHADOW_CORE,

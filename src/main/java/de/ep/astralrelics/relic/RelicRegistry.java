@@ -1,7 +1,7 @@
 package de.ep.astralrelics.relic;
 
 
-import de.ep.astralrelics.relic.relics.PhoenixCore;
+import de.ep.astralrelics.relic.relics.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +14,19 @@ public class RelicRegistry {
 
 
     public static void init() {
+        register(new AbyssCore());
+        register(new BersekerCore());
+        register(new ChronoCore());
+        register(new EchoCore());
+        register(new FrostRelikt());
+        register(new GaleCore());
+        register(new GravityShard());
+        register(new MagnetCore());
+        register(new MirrorShard());
+        register(new NatureCore());
         register(new PhoenixCore());
+        register(new ShadowCore());
+
     }
 
 
