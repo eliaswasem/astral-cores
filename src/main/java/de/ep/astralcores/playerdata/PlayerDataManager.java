@@ -25,8 +25,8 @@ public class PlayerDataManager {
 
     // Constructor: This sets up the database file inside the world folder
     public PlayerDataManager(File worldFolder) {
-        // Create an "astralcores" folder inside the active world save folder
-        File dataFolder = new File(worldFolder, "astracores");
+        // KORRIGIERT: Ordnername von "astracores" zu "astralcores" geändert
+        File dataFolder = new File(worldFolder, "astralcores");
         if (!dataFolder.exists()) dataFolder.mkdirs();
 
         try {
@@ -38,12 +38,13 @@ public class PlayerDataManager {
             this.connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile.getAbsolutePath());
 
             // Automatically execute SQL to build our storage table if it does not exist yet
+            // KORRIGIERT: Tabellenname auf "player_cores" geändert
             try (Statement statement = connection.createStatement()) {
                 statement.execute(
-                        "CREATE TABLE IF NOT EXISTS player_relics (" +
+                        "CREATE TABLE IF NOT EXISTS player_cores (" +
                                 "uuid TEXT PRIMARY KEY, " +     // Unique Key: Player UUID string
-                                "left_relic TEXT, " +          // Store Enum name string
-                                "right_relic TEXT, " +         // Store Enum name string
+                                "left_core TEXT, " +          // Store Enum name string
+                                "right_core TEXT, " +         // Store Enum name string
                                 "trusted_players TEXT)"        // Store List as a serialized text block
                 );
             }
@@ -56,7 +57,8 @@ public class PlayerDataManager {
     // RUNS ON JOIN: Loads existing database records into our active RAM cache
     public void load(ServerPlayer player) {
         UUID uuid = player.getUUID();
-        String query = "SELECT * FROM player_relics WHERE uuid = ?";
+        // KORRIGIERT: Tabellenname auf "player_cores" vereinheitlicht
+        String query = "SELECT * FROM player_cores WHERE uuid = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, uuid.toString()); // Replace the "?" in the query with the player's string UUID
@@ -83,12 +85,10 @@ public class PlayerDataManager {
                             }
                         }
                     }
-                    // FIXED: Replaced player.getGameProfile().getName() with player.getScoreboardName()
                     AstralCores.LOGGER.info("Loaded SQLite profile data for player: {}", player.getScoreboardName());
                 } else {
                     // Brand new player detected: Create an empty row profile in the database
                     insertNewPlayer(uuid);
-                    // FIXED: Replaced player.getGameProfile().getName() with player.getScoreboardName()
                     AstralCores.LOGGER.info("Created brand new database profile row for player: {}", player.getScoreboardName());
                 }
 
@@ -116,7 +116,8 @@ public class PlayerDataManager {
         PlayerData data = cache.get(uuid);
         if (data == null) return; // Nothing cached, skip saving
 
-        String update = "UPDATE player_relics SET left_relic = ?, right_relic = ?, trusted_players = ? WHERE uuid = ?";
+        // KORRIGIERT: Tabelle auf "player_cores" und Spalten auf "left_core", "right_core" umgestellt
+        String update = "UPDATE player_cores SET left_core = ?, right_core = ?, trusted_players = ? WHERE uuid = ?";
         try (PreparedStatement ps = connection.prepareStatement(update)) {
             // Bind core Enum values or null strings if empty
             ps.setString(1, data.getLeftCore() != null ? data.getLeftCore().name() : null);
@@ -144,7 +145,8 @@ public class PlayerDataManager {
 
     // Helper method to write an empty starter row for a fresh player profile
     private void insertNewPlayer(UUID uuid) throws SQLException {
-        String insert = "INSERT INTO player_relics (uuid, left_relic, right_relic, trusted_players) VALUES (?, NULL, NULL, '[]')";
+        // KORRIGIERT: Tabelle auf "player_cores" und Spalten auf "left_core", "right_core" umgestellt
+        String insert = "INSERT INTO player_cores (uuid, left_core, right_core, trusted_players) VALUES (?, NULL, NULL, '[]')";
         try (PreparedStatement ps = connection.prepareStatement(insert)) {
             ps.setString(1, uuid.toString());
             ps.executeUpdate();
