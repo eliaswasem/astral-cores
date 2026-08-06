@@ -11,7 +11,7 @@ public class MagnetCore extends Relic {
 
     public MagnetCore() {
         super(
-                RelicType.MAGNET_CORE,
+                RelicType.MAGNET_RELICT,
                 "§cMagnet Core",
                 Items.IRON_INGOT,
                 List.of(

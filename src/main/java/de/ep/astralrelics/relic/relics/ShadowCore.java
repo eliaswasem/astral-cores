@@ -11,7 +11,7 @@ public class ShadowCore extends Relic {
 
     public ShadowCore() {
         super(
-                RelicType.SHADOW_CORE,
+                RelicType.SHADOW_RELICT,
                 "§0Shadow Core",
                 Items.COMMAND_BLOCK,
                 List.of(

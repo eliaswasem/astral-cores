@@ -11,7 +11,7 @@ public class NatureCore extends Relic {
 
     public NatureCore() {
         super(
-                RelicType.NATURE_CORE,
+                RelicType.NATURE_RELICT,
                 "§2Nature Core",
                 Items.BOWL,
                 List.of(

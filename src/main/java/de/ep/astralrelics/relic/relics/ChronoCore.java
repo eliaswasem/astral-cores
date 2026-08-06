@@ -11,7 +11,7 @@ public class ChronoCore extends Relic {
 
     public ChronoCore() {
         super(
-                RelicType.CHRONO_CORE,
+                RelicType.CHRONO_RELICT,
                 "$aChrono Core",
                 Items.BOOK,
                 List.of(

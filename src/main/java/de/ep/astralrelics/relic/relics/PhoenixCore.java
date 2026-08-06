@@ -15,7 +15,7 @@ public class PhoenixCore extends Relic {
 
     public PhoenixCore() {
         super(
-                RelicType.PHOENIX_CORE,
+                RelicType.PHOENIX_RELICT,
                 "§cPhoenix Core",
                 Items.MAGMA_CREAM,
                 List.of(

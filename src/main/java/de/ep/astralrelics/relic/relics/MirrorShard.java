@@ -11,7 +11,7 @@ public class MirrorShard extends Relic {
 
     public MirrorShard() {
         super(
-                RelicType.MIRROR_SHARD,
+                RelicType.MIRROR_RELICT,
                 "§fMirror Shard",
                 Items.AMETHYST_SHARD,
                 List.of(

@@ -11,7 +11,7 @@ public class GravityShard extends Relic {
 
     public GravityShard() {
         super(
-                RelicType.GRAVITY_SHARD,
+                RelicType.GRAVITY_RELICT,
                 "§bGravity Shard",
                 Items.ARROW,
                 List.of(
