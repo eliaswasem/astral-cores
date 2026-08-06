@@ -1,5 +1,6 @@
 package de.ep.astralrelics.command;
 
+import de.ep.astralrelics.command.relic.RelicCommand;
 import de.ep.astralrelics.command.trust.TrustCommand;
 import de.ep.astralrelics.command.untrust.UntrustCommand;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -14,6 +15,7 @@ public class CommandRegistry {
             //AstralRelicCommand.register(dispatcher);
             TrustCommand.register(dispatcher);
             UntrustCommand.register(dispatcher);
+            RelicCommand.register(dispatcher);
 
         });
     }
