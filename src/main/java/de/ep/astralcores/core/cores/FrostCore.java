@@ -12,7 +12,7 @@ public class FrostCore extends Core {
     public FrostCore() {
         super(
                 CoreType.FROST_CORE,
-                "§bFrost Relict",
+                "§bFrost Core",
                 Items.CLAY_BALL,
                 List.of(
                         "§b[Active: Frost Lock]"

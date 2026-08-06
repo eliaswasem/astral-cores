@@ -12,8 +12,8 @@ public class AeroCore extends Core {
 
     public AeroCore() {
         super(
-                CoreType.ECHO_CORE,
-                "§9Echo Core",
+                CoreType.AERO_CORE,
+                "§9Aero Core",
                 Items.HEART_OF_THE_SEA,
                 List.of(
                         "§1[Active: Echo Jump]"

@@ -11,8 +11,8 @@ public class IllusionCore extends Core {
 
     public IllusionCore() {
         super(
-                CoreType.MIRROR_CORE,
-                "§fMirror Shard",
+                CoreType.ILLUSION_CORE,
+                "§fIllusion Core",
                 Items.AMETHYST_SHARD,
                 List.of(
                         "§f[Active: Mirror Swap]"

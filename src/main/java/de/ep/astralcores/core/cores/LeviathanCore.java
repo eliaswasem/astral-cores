@@ -11,8 +11,8 @@ public class LeviathanCore extends Core {
 
     public LeviathanCore() {
         super(
-                CoreType.ABYSS_CORE,
-                "§1Abyss Core",
+                CoreType.LEVIATHAN_CORE,
+                "§1Leviathan Core",
                 Items.TIPPED_ARROW,
                 List.of(
                         "§1[Active: Whirlpool]"

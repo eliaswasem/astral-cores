@@ -12,7 +12,7 @@ public class GravityCore extends Core {
     public GravityCore() {
         super(
                 CoreType.GRAVITY_CORE,
-                "§bGravity Shard",
+                "§bGravity Core",
                 Items.ARROW,
                 List.of(
                         "§b[Active: Gravity Pull"
