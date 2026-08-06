@@ -7,17 +7,17 @@ import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-public class NatureCore extends Relic {
+public class ChronoRelic extends Relic {
 
-    public NatureCore() {
+    public ChronoRelic() {
         super(
-                RelicType.NATURE_RELICT,
-                "§2Nature Core",
-                Items.BOWL,
+                RelicType.CHRONO_RELIC,
+                "$aChrono Core",
+                Items.BOOK,
                 List.of(
-                        "§2[Active: Root Trap]"
+                        "§a[Active: Time Return]"
                 ),
-                10012,
+                10006,
                 0,
                 0
         );

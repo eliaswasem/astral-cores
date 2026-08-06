@@ -7,15 +7,15 @@ import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-public class MagnetCore extends Relic {
+public class NatureRelic extends Relic {
 
-    public MagnetCore() {
+    public NatureRelic() {
         super(
-                RelicType.MAGNET_RELICT,
-                "§cMagnet Core",
-                Items.IRON_INGOT,
+                RelicType.NATURE_RELIC,
+                "§2Nature Core",
+                Items.BOWL,
                 List.of(
-                        "§4[Active: Magnetic Pull]"
+                        "§2[Active: Root Trap]"
                 ),
                 10012,
                 0,
@@ -25,7 +25,7 @@ public class MagnetCore extends Relic {
 
     @Override
     public void applyPassive(ServerPlayer player) {
-        
+
     }
 
     @Override

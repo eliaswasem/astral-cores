@@ -6,16 +6,15 @@ import de.ep.astralrelics.util.Effects;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-public class PhoenixCore extends Relic {
+public class PhoenixRelic extends Relic {
 
-    public PhoenixCore() {
+    public PhoenixRelic() {
         super(
-                RelicType.PHOENIX_RELICT,
+                RelicType.PHOENIX_RELIC,
                 "§cPhoenix Core",
                 Items.MAGMA_CREAM,
                 List.of(

@@ -7,17 +7,17 @@ import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-public class AbyssCore extends Relic {
+public class FrostRelic extends Relic {
 
-    public AbyssCore() {
+    public FrostRelic() {
         super(
-                RelicType.ABYSS_RELICT,
-                "§1Abyss Core",
-                Items.TIPPED_ARROW,
+                RelicType.FROST_RELIC,
+                "§bFrost Relict",
+                Items.CLAY_BALL,
                 List.of(
-                        "§1[Active: Whirlpool]"
+                        "§b[Active: Frost Lock]"
                 ),
-                10009,
+                10008,
                 0,
                 0
         );

@@ -7,17 +7,17 @@ import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-public class ChronoCore extends Relic {
+public class MagnetRelic extends Relic {
 
-    public ChronoCore() {
+    public MagnetRelic() {
         super(
-                RelicType.CHRONO_RELICT,
-                "$aChrono Core",
-                Items.BOOK,
+                RelicType.MAGNET_RELIC,
+                "§cMagnet Core",
+                Items.IRON_INGOT,
                 List.of(
-                        "§a[Active: Time Return]"
+                        "§4[Active: Magnetic Pull]"
                 ),
-                10006,
+                10012,
                 0,
                 0
         );
@@ -25,7 +25,7 @@ public class ChronoCore extends Relic {
 
     @Override
     public void applyPassive(ServerPlayer player) {
-
+        
     }
 
     @Override

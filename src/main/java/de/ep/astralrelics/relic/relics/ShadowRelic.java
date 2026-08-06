@@ -7,17 +7,17 @@ import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-public class GaleCore extends Relic {
+public class ShadowRelic extends Relic {
 
-    public GaleCore() {
+    public ShadowRelic() {
         super(
-                RelicType.GALE_RELICT,
-                "§7Gale Core",
-                Items.BREEZE_ROD,
+                RelicType.SHADOW_RELIC,
+                "§0Shadow Core",
+                Items.COMMAND_BLOCK,
                 List.of(
-                        "§f[Active: Sonic Dash]"
+                        "§0[Active: Smoke Veil]"
                 ),
-                10005,
+                10010,
                 0,
                 0
         );

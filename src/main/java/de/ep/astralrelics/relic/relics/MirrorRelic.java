@@ -7,11 +7,11 @@ import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-public class MirrorShard extends Relic {
+public class MirrorRelic extends Relic {
 
-    public MirrorShard() {
+    public MirrorRelic() {
         super(
-                RelicType.MIRROR_RELICT,
+                RelicType.MIRROR_RELIC,
                 "§fMirror Shard",
                 Items.AMETHYST_SHARD,
                 List.of(

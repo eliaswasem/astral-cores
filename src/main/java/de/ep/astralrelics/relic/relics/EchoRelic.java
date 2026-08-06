@@ -2,25 +2,27 @@ package de.ep.astralrelics.relic.relics;
 
 import de.ep.astralrelics.relic.Relic;
 import de.ep.astralrelics.relic.RelicType;
+
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-public class FrostRelikt extends Relic {
+public class EchoRelic extends Relic {
 
-    public FrostRelikt() {
+    public EchoRelic() {
         super(
-                RelicType.FROST_RELICT,
-                "§bFrost Relict",
-                Items.CLAY_BALL,
+                RelicType.ECHO_RELIC,
+                "§9Echo Core",
+                Items.HEART_OF_THE_SEA,
                 List.of(
-                        "§b[Active: Frost Lock]"
+                        "§1[Active: Echo Jump]"
                 ),
-                10008,
+                10004,
                 0,
                 0
         );
+
     }
 
     @Override
@@ -33,3 +35,4 @@ public class FrostRelikt extends Relic {
 
     }
 }
+

@@ -7,11 +7,11 @@ import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-public class BersekerCore extends Relic {
+public class BersekerRelic extends Relic {
 
-    public BersekerCore() {
+    public BersekerRelic() {
         super(
-                RelicType.BERSERKER_RELICT,
+                RelicType.BERSERKER_RELIC,
                 "§6Berseker Core",
                 Items.RABBIT,
                 List.of(

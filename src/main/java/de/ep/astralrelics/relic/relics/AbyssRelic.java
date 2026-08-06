@@ -2,27 +2,25 @@ package de.ep.astralrelics.relic.relics;
 
 import de.ep.astralrelics.relic.Relic;
 import de.ep.astralrelics.relic.RelicType;
-
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-public class EchoCore extends Relic {
+public class AbyssRelic extends Relic {
 
-    public EchoCore() {
+    public AbyssRelic() {
         super(
-                RelicType.ECHO_RELICT,
-                "§9Echo Core",
-                Items.HEART_OF_THE_SEA,
+                RelicType.ABYSS_RELIC,
+                "§1Abyss Core",
+                Items.TIPPED_ARROW,
                 List.of(
-                        "§1[Active: Echo Jump]"
+                        "§1[Active: Whirlpool]"
                 ),
-                10004,
+                10009,
                 0,
                 0
         );
-
     }
 
     @Override
@@ -35,4 +33,3 @@ public class EchoCore extends Relic {
 
     }
 }
-

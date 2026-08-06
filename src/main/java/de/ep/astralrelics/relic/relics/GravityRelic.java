@@ -7,11 +7,11 @@ import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-public class GravityShard extends Relic {
+public class GravityRelic extends Relic {
 
-    public GravityShard() {
+    public GravityRelic() {
         super(
-                RelicType.GRAVITY_RELICT,
+                RelicType.GRAVITY_RELIC,
                 "§bGravity Shard",
                 Items.ARROW,
                 List.of(
