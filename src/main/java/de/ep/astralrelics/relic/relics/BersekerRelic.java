@@ -11,7 +11,7 @@ public class BersekerRelic extends Relic {
 
     public BersekerRelic() {
         super(
-                RelicType.BERSERKER_RELIC,
+                RelicType.BERSERKER_CORE,
                 "§6Berseker Core",
                 Items.RABBIT,
                 List.of(

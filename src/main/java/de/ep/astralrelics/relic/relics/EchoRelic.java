@@ -12,7 +12,7 @@ public class EchoRelic extends Relic {
 
     public EchoRelic() {
         super(
-                RelicType.ECHO_RELIC,
+                RelicType.ECHO_CORE,
                 "§9Echo Core",
                 Items.HEART_OF_THE_SEA,
                 List.of(

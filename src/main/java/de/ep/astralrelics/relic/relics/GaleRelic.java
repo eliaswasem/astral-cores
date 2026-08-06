@@ -11,7 +11,7 @@ public class GaleRelic extends Relic {
 
     public GaleRelic() {
         super(
-                RelicType.GALE_RELIC,
+                RelicType.GALE_CORE,
                 "§7Gale Core",
                 Items.BREEZE_ROD,
                 List.of(

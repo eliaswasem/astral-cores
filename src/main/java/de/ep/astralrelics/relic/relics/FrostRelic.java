@@ -11,8 +11,8 @@ public class FrostRelic extends Relic {
 
     public FrostRelic() {
         super(
-                RelicType.FROST_RELIC,
-                "§bFrost Relict",
+                RelicType.FROST_CORE,
+                "§bFrost Core",
                 Items.CLAY_BALL,
                 List.of(
                         "§b[Active: Frost Lock]"

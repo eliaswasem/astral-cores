@@ -11,8 +11,8 @@ public class GravityRelic extends Relic {
 
     public GravityRelic() {
         super(
-                RelicType.GRAVITY_RELIC,
-                "§bGravity Shard",
+                RelicType.GRAVITY_CORE,
+                "§bGravity Core",
                 Items.ARROW,
                 List.of(
                         "§b[Active: Gravity Pull"

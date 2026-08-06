@@ -11,7 +11,7 @@ public class AbyssRelic extends Relic {
 
     public AbyssRelic() {
         super(
-                RelicType.ABYSS_RELIC,
+                RelicType.ABYSS_CORE,
                 "§1Abyss Core",
                 Items.TIPPED_ARROW,
                 List.of(

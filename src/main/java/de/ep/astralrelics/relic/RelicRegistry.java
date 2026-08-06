@@ -14,18 +14,18 @@ public class RelicRegistry {
 
 
     public static void init() {
-        register(new AbyssRelic());
-        register(new BersekerRelic());
-        register(new ChronoRelic());
-        register(new EchoRelic());
-        register(new FrostRelic());
-        register(new GaleRelic());
-        register(new GravityRelic());
-        register(new MagnetRelic());
-        register(new MirrorRelic());
-        register(new NatureRelic());
-        register(new PhoenixRelic());
-        register(new ShadowRelic());
+        register(new AbyssCore());
+        register(new BersekerCore());
+        register(new ChronoCore());
+        register(new EchoCore());
+        register(new FrostRelikt());
+        register(new GaleCore());
+        register(new GravityShard());
+        register(new MagnetCore());
+        register(new MirrorShard());
+        register(new NatureCore());
+        register(new PhoenixCore());
+        register(new ShadowCore());
 
     }
 

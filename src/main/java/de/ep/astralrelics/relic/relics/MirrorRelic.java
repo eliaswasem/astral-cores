@@ -11,8 +11,8 @@ public class MirrorRelic extends Relic {
 
     public MirrorRelic() {
         super(
-                RelicType.MIRROR_RELIC,
-                "§fMirror Shard",
+                RelicType.MIRROR_CORE,
+                "§fMirror Core",
                 Items.AMETHYST_SHARD,
                 List.of(
                         "§f[Active: Mirror Swap]"
