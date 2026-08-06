@@ -1,8 +1,10 @@
 package de.ep.astralrelics.command;
 
+import de.ep.astralrelics.command.activate.ActivateCommand;
 import de.ep.astralrelics.command.relic.RelicCommand;
 import de.ep.astralrelics.command.trust.TrustCommand;
 import de.ep.astralrelics.command.untrust.UntrustCommand;
+import de.ep.astralrelics.command.withdraw.WithdrawCommand;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 
 public class CommandRegistry {
@@ -16,6 +18,8 @@ public class CommandRegistry {
             TrustCommand.register(dispatcher);
             UntrustCommand.register(dispatcher);
             RelicCommand.register(dispatcher);
+            WithdrawCommand.register(dispatcher);
+            ActivateCommand.register(dispatcher);
 
         });
     }

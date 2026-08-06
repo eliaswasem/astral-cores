@@ -2,9 +2,9 @@ package de.ep.astralrelics.relic.relics;
 
 import de.ep.astralrelics.relic.Relic;
 import de.ep.astralrelics.relic.RelicType;
+import de.ep.astralrelics.util.Effects;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Items;
@@ -34,16 +34,7 @@ public class PhoenixCore extends Relic {
      */
     @Override
     public void applyPassive(ServerPlayer player) {
-        player.addEffect(
-                new MobEffectInstance(
-                        MobEffects.FIRE_RESISTANCE,
-                        20,
-                        0,
-                        false,
-                        false,
-                        true
-                )
-        );
+        Effects.applyEffect(player, MobEffects.FIRE_RESISTANCE, 20, 1);
     }
 
 
@@ -53,15 +44,7 @@ public class PhoenixCore extends Relic {
     @Override
     public void activate(ServerPlayer player) {
 
-        player.level()
-                .getEntities(
-                        player,
-                        player.getBoundingBox().inflate(5.0),
-                        Entity::isAlive
-                )
-                .forEach(entity -> {
-                    entity.setRemainingFireTicks(100);
-                });
+        Effects.applyEffect(player, MobEffects.BLINDNESS, 20, 1);
 
 
         player.sendSystemMessage(

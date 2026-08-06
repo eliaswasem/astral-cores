@@ -14,7 +14,7 @@ public class Effects {
             int duration,
             int level
     ) {
-        applyEffect(entity, effect, duration, level, false, true);
+        applyEffect(entity, effect, duration, level,false, false, true);
     }
 
 
@@ -23,6 +23,7 @@ public class Effects {
             Holder<MobEffect> effect,
             int duration,
             int level,
+            boolean ambient,
             boolean showParticles,
             boolean showIcon
     ) {
