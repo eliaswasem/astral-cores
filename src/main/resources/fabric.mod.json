@@ -1,31 +1,32 @@
 {
 	"schemaVersion": 1,
-	"id": "astral-relics",
+	"id": "astral-cores",
 	"version": "${version}",
-	"name": "Astral Relics",
+	"name": "Astral Cores",
 	"description": "This is an example description! Tell everyone what your mod is about!",
 	"authors": [
-		"Me!"
+		"Mr Panda",
+		"aEternalCatGod"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
 		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/astral-relics/icon.png",
+	"icon": "assets/astral-cores/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"de.ep.astralrelics.AstralRelics"
+			"de.ep.astralcores.AstralCores"
 		],
 		"client": [
-			"de.ep.astralrelics.client.AstralRelicsClient"
+			"de.ep.astralcores.client.AstralCoresClient"
 		]
 	},
 	"mixins": [
-		"astral-relics.mixins.json",
+		"astral-cores.mixins.json",
 		{
-			"config": "astral-relics.client.mixins.json",
+			"config": "astral-cores.client.mixins.json",
 			"environment": "client"
 		}
 	],
