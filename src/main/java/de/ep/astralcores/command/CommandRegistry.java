@@ -1,7 +1,7 @@
 package de.ep.astralcores.command;
 
 import de.ep.astralcores.command.activate.ActivateCommand;
-import de.ep.astralcores.command.relic.RelicCommand;
+import de.ep.astralcores.command.core.CoreCommand;
 import de.ep.astralcores.command.trust.TrustCommand;
 import de.ep.astralcores.command.untrust.UntrustCommand;
 import de.ep.astralcores.command.withdraw.WithdrawCommand;
@@ -17,7 +17,7 @@ public class CommandRegistry {
             //AstralRelicCommand.register(dispatcher);
             TrustCommand.register(dispatcher);
             UntrustCommand.register(dispatcher);
-            RelicCommand.register(dispatcher);
+            CoreCommand.register(dispatcher);
             WithdrawCommand.register(dispatcher);
             ActivateCommand.register(dispatcher);
 

@@ -1,4 +1,4 @@
-package de.ep.astralcores.command.relic;
+package de.ep.astralcores.command.core;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -11,25 +11,25 @@ import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.server.level.ServerPlayer;
 
-public class RelicCommand {
+public class CoreCommand {
 
     /* Registers the structural layout tree and filters matching tab suggestions for active operators */
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 
         dispatcher.register(
-                Commands.literal("relic")
+                Commands.literal("core")
                         .requires(Commands.hasPermission(Commands.LEVEL_MODERATORS))
                         .then(
                                 Commands.literal("give")
                                         .then(
                                                 Commands.argument("target", EntityArgument.player())
                                                         .then(
-                                                                Commands.argument("astralId", StringArgumentType.word())
+                                                                Commands.argument("coreId", StringArgumentType.word())
                                                                         .suggests((context, builder) -> SharedSuggestionProvider.suggest(
                                                                                 CoreRegistry.getAll().keySet(),
                                                                                 builder
                                                                         ))
-                                                                        .executes(RelicCommand::route)
+                                                                        .executes(CoreCommand::route)
                                                         )
                                         )
                         )
@@ -42,12 +42,12 @@ public class RelicCommand {
     ) throws CommandSyntaxException {
 
         ServerPlayer target = EntityArgument.getPlayer(context, "target");
-        String astralId = StringArgumentType.getString(context, "astralId");
+        String coreId = StringArgumentType.getString(context, "coreId");
 
-        return RelicCommandLogic.execute(
+        return CoreCommandLogic.execute(
                 context.getSource(),
                 target,
-                astralId
+                coreId
         );
     }
 }

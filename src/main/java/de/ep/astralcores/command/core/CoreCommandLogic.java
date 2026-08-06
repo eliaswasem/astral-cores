@@ -1,4 +1,4 @@
-package de.ep.astralcores.command.relic;
+package de.ep.astralcores.command.core;
 
 import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreFactory;
@@ -10,22 +10,22 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.Locale;
 
-public class RelicCommandLogic {
+public class CoreCommandLogic {
 
     /*
-     * Resolves a relic and gives the generated ItemStack to the target player.
+     * Resolves a core and gives the generated ItemStack to the target player.
      */
     public static int execute(CommandSourceStack source, ServerPlayer target, String astralId) {
 
         try {
-            Core relic = CoreRegistry.getByCoreId(
+            Core core = CoreRegistry.getByCoreId(
                     astralId.toLowerCase(Locale.ROOT)
             ).orElseThrow(
-                    () -> new IllegalArgumentException("Invalid Relic ID")
+                    () -> new IllegalArgumentException("Invalid Core ID")
             );
 
 
-            ItemStack itemStack = CoreFactory.createStack(relic);
+            ItemStack itemStack = CoreFactory.createStack(core);
 
 
             if (!target.getInventory().add(itemStack)) {
@@ -36,7 +36,7 @@ public class RelicCommandLogic {
             source.sendSuccess(
                     () -> Component.literal(
                             "§aGave "
-                                    + relic.getName()
+                                    + core.getName()
                                     + " to "
                                     + target.getScoreboardName()
                     ),
@@ -49,7 +49,7 @@ public class RelicCommandLogic {
 
             source.sendFailure(
                     Component.literal(
-                            "§cUnknown Relic identifier."
+                            "§cUnknown Core identifier."
                     )
             );
 
