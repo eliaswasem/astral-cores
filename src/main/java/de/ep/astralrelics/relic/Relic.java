@@ -79,8 +79,7 @@ public abstract class Relic {
     }
 
 
-    public void applyPassive(ServerPlayer player) {
-    }
+    public abstract void applyPassive(ServerPlayer player);
 
 
     public abstract void activate(ServerPlayer player);
