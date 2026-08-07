@@ -51,7 +51,7 @@ public class NatureCore extends Core {
         if (FoodUtils.isFinishedEating(player)) {
             float currentHealth = player.getHealth();
             float maxHealth = player.getMaxHealth();
-            float healing = 8.0f; // 4 Hearst Healing
+            float healing = 8.0f; // 4 Hearts Healing
 
             player.setHealth(Math.min(maxHealth, currentHealth + healing));
         }
