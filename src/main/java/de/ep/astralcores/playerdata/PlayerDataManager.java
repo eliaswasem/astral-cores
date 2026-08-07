@@ -25,7 +25,6 @@ public class PlayerDataManager {
 
     // Constructor: This sets up the database file inside the world folder
     public PlayerDataManager(File worldFolder) {
-        // KORRIGIERT: Ordnername von "astracores" zu "astralcores" geändert
         File dataFolder = new File(worldFolder, "astralcores");
         if (!dataFolder.exists()) dataFolder.mkdirs();
 
@@ -38,13 +37,11 @@ public class PlayerDataManager {
             this.connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile.getAbsolutePath());
 
             // Automatically execute SQL to build our storage table if it does not exist yet
-            // KORRIGIERT: Tabellenname auf "player_cores" geändert
             try (Statement statement = connection.createStatement()) {
                 statement.execute(
                         "CREATE TABLE IF NOT EXISTS player_cores (" +
                                 "uuid TEXT PRIMARY KEY, " +     // Unique Key: Player UUID string
-                                "left_core TEXT, " +          // Store Enum name string
-                                "right_core TEXT, " +         // Store Enum name string
+                                "equipped_core TEXT, " +       // AKTUALISIERT: Nur noch ein Core-Slot
                                 "trusted_players TEXT)"        // Store List as a serialized text block
                 );
             }
@@ -57,7 +54,6 @@ public class PlayerDataManager {
     // RUNS ON JOIN: Loads existing database records into our active RAM cache
     public void load(ServerPlayer player) {
         UUID uuid = player.getUUID();
-        // KORRIGIERT: Tabellenname auf "player_cores" vereinheitlicht
         String query = "SELECT * FROM player_cores WHERE uuid = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(query)) {
@@ -68,13 +64,11 @@ public class PlayerDataManager {
 
                 // If a database row exists for this player, read it
                 if (rs.next()) {
-                    String left = rs.getString("left_core");
-                    String right = rs.getString("right_core");
+                    String equipped = rs.getString("equipped_core"); // AKTUALISIERT: Einzige Core-Spalte auslesen
                     String trustedJson = rs.getString("trusted_players");
 
-                    // Reconstruct core states from raw text back to Java Enums
-                    if (left != null) data.setLeftCore(CoreType.valueOf(left));
-                    if (right != null) data.setRightCore(CoreType.valueOf(right));
+                    // Reconstruct core state from raw text back to Java Enum
+                    if (equipped != null) data.setEquippedCore(CoreType.valueOf(equipped));
 
                     // Parse the JSON text string back into a standard list of Java UUIDs
                     if (trustedJson != null && !trustedJson.isEmpty()) {
@@ -116,20 +110,19 @@ public class PlayerDataManager {
         PlayerData data = cache.get(uuid);
         if (data == null) return; // Nothing cached, skip saving
 
-        // KORRIGIERT: Tabelle auf "player_cores" und Spalten auf "left_core", "right_core" umgestellt
-        String update = "UPDATE player_cores SET left_core = ?, right_core = ?, trusted_players = ? WHERE uuid = ?";
+        // AKTUALISIERT: Update-Query auf "equipped_core" angepasst
+        String update = "UPDATE player_cores SET equipped_core = ?, trusted_players = ? WHERE uuid = ?";
         try (PreparedStatement ps = connection.prepareStatement(update)) {
-            // Bind core Enum values or null strings if empty
-            ps.setString(1, data.getLeftCore() != null ? data.getLeftCore().name() : null);
-            ps.setString(2, data.getRightCore() != null ? data.getRightCore().name() : null);
+            // Bind core Enum value or null string if empty
+            ps.setString(1, data.getEquippedCore() != null ? data.getEquippedCore().name() : null);
 
             // Serialize trust context list into a compressed text line via GSON
             List<String> trustedStrings = new ArrayList<>();
             for (UUID tUuid : data.getTrustedPlayers()) {
                 trustedStrings.add(tUuid.toString());
             }
-            ps.setString(3, gson.toJson(trustedStrings));
-            ps.setString(4, uuid.toString()); // Targeted Row
+            ps.setString(2, gson.toJson(trustedStrings));
+            ps.setString(3, uuid.toString()); // Targeted Row
 
             ps.executeUpdate(); // Push updates down to database file safely
         } catch (SQLException e) {
@@ -145,8 +138,8 @@ public class PlayerDataManager {
 
     // Helper method to write an empty starter row for a fresh player profile
     private void insertNewPlayer(UUID uuid) throws SQLException {
-        // KORRIGIERT: Tabelle auf "player_cores" und Spalten auf "left_core", "right_core" umgestellt
-        String insert = "INSERT INTO player_cores (uuid, left_core, right_core, trusted_players) VALUES (?, NULL, NULL, '[]')";
+        // AKTUALISIERT: Tabellenspalten für neue Spieler angepasst
+        String insert = "INSERT INTO player_cores (uuid, equipped_core, trusted_players) VALUES (?, NULL, '[]')";
         try (PreparedStatement ps = connection.prepareStatement(insert)) {
             ps.setString(1, uuid.toString());
             ps.executeUpdate();

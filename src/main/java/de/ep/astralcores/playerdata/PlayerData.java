@@ -7,27 +7,27 @@ import java.util.UUID;
 
 public class PlayerData {
 
-    // Store what core is equipped in each slot (null means empty slot)
-    private CoreType leftCore;
-    private CoreType rightCore;
+    // Store what core is equipped in the slot (null means empty slot)
+    private CoreType equippedCore;
 
     // List of unique IDs of players who are trusted by this player
     private final List<UUID> trustedPlayers;
 
     // Constructor: Automatically runs when a new player profile is created
     public PlayerData() {
-        this.leftCore = null;
-        this.rightCore = null;
+        this.equippedCore = null;
         this.trustedPlayers = new ArrayList<>();
     }
 
     // --- STANDARD GETTERS AND SETTERS ---
 
-    public CoreType getLeftCore() { return leftCore; }
-    public void setLeftCore(CoreType core) { this.leftCore = core; }
+    public CoreType getEquippedCore() {
+        return equippedCore;
+    }
 
-    public CoreType getRightCore() { return rightCore; }
-    public void setRightCore(CoreType core) { this.rightCore = core; }
+    public void setEquippedCore(CoreType core) {
+        this.equippedCore = core;
+    }
 
     // --- TRUSTED PLAYERS UTILITIES ---
 

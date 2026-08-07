@@ -16,16 +16,9 @@ public class PassiveAbilityManager {
             PlayerData data = AstralCores.PLAYER_DATA.get(player);
             if (data == null) continue;
 
-            /* Resolves and executes the left-hand slot passive effect if populated */
-            if (data.getLeftCore() != null) {
-                CoreRegistry.get(data.getLeftCore()).ifPresent(relic -> {
-                    relic.applyPassive(player);
-                });
-            }
-
-            /* Resolves and executes the right-hand slot passive effect if populated */
-            if (data.getRightCore() != null) {
-                CoreRegistry.get(data.getRightCore()).ifPresent(core -> {
+            /* Resolves and executes the single equipped core passive effect if populated */
+            if (data.getEquippedCore() != null) {
+                CoreRegistry.get(data.getEquippedCore()).ifPresent(core -> {
                     core.applyPassive(player);
                 });
             }
