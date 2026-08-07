@@ -44,11 +44,11 @@ public class PhoenixCore extends Core {
     @Override
     public void applyPassive(ServerPlayer player) {
         // Keeps the fire resistance active seamlessly every tick
-        Effects.applyEffect(player, MobEffects.FIRE_RESISTANCE, 25, 0);
+        Effects.applyEffect(player, MobEffects.FIRE_RESISTANCE, 25, 1);
 
         // Safely checks if the current server level is the Nether dimension
         if (player.level().dimension().equals(Level.NETHER)) {
-            Effects.applyEffect(player, MobEffects.REGENERATION, 25, 0);
+            Effects.applyEffect(player, MobEffects.REGENERATION, 25, 1);
         }
     }
 
@@ -72,7 +72,7 @@ public class PhoenixCore extends Core {
                 pos.x,
                 pos.y,
                 pos.z,
-                6.0F,
+                4.0F,
                 true,
                 Level.ExplosionInteraction.NONE
         );
@@ -84,9 +84,9 @@ public class PhoenixCore extends Core {
                 pos.y + 1,
                 pos.z,
                 200,
-                3,
-                1.5,
-                3,
+                2,
+                1.0,
+                2,
                 0.08
         );
 
@@ -96,9 +96,9 @@ public class PhoenixCore extends Core {
                 pos.y + 1,
                 pos.z,
                 80,
-                2,
-                1,
-                2,
+                1.33,
+                0.66,
+                1.33,
                 0.05
         );
 
@@ -108,8 +108,8 @@ public class PhoenixCore extends Core {
                 player.blockPosition(),
                 SoundEvents.BLAZE_SHOOT,
                 SoundSource.PLAYERS,
-                2.0F,
-                0.6F
+                1.33F,
+                0.8F
         );
     }
 

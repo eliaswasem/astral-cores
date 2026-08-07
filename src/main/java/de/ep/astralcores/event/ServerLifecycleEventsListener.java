@@ -1,6 +1,7 @@
 package de.ep.astralcores.event;
 
 import de.ep.astralcores.AstralCores;
+import de.ep.astralcores.config.ConfigManager;
 import de.ep.astralcores.playerdata.PlayerDataManager;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.world.level.storage.LevelResource;
@@ -18,6 +19,8 @@ public class ServerLifecycleEventsListener {
 
             // Spin up the SQLite connection pool safely
             AstralCores.PLAYER_DATA = new PlayerDataManager(worldDir);
+
+            ConfigManager.load();
         });
 
         // SERVER STOPPING: Runs on server shutdowns, restarts, or crashes

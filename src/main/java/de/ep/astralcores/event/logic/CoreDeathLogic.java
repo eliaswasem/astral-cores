@@ -1,53 +1,73 @@
 package de.ep.astralcores.event.logic;
 
 import de.ep.astralcores.AstralCores;
-import de.ep.astralcores.playerdata.PlayerData;
-import de.ep.astralcores.core.CoreFactory;
+import de.ep.astralcores.config.Config;
+import de.ep.astralcores.config.ConfigManager;
 import de.ep.astralcores.core.CoreRegistry;
 import de.ep.astralcores.core.CoreType;
+import de.ep.astralcores.playerdata.PlayerData;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.ItemStack;
 
 public class CoreDeathLogic {
 
     /**
-     * Inspects the profile configuration of a dying player at the exact moment of death.
-     * Reconstructs physical item assets from the equipped left and right enum tracks,
-     * ejects them into the level space immediately, and wipes the active data profile slots.
+     * Handles core retention or loss logic when a player dies based on the configured enum behavior.
+     * Instantly clears passive status effects/attribute buffers via onRemoved for lost cores.
      *
      * @param player The dying ServerPlayer entity containing the active slot configurations.
      */
     public static void executeDeathDrop(ServerPlayer player) {
-        /* Fetches the database profile cache mapping bound to the player profile instance */
         PlayerData data = AstralCores.PLAYER_DATA.get(player);
         if (data == null) return;
 
-        /* Processes the virtual left equipment track channel */
-        if (data.getLeftCore() != null) {
-            dropCoreToWorld(player, data.getLeftCore());
-            data.setLeftCore(null);
+        Config.DeathBehavior behavior = ConfigManager.get().general.core_death_behavior;
+
+        // Case 1: NONE -> Player keeps everything, no action required
+        if (behavior == Config.DeathBehavior.NONE) {
+            return;
         }
 
-        /* Processes the virtual right equipment track channel */
-        if (data.getRightCore() != null) {
-            dropCoreToWorld(player, data.getRightCore());
-            data.setRightCore(null);
+        // Case 2: RANDOM -> Only one core is stripped from the slots randomly
+        if (behavior == Config.DeathBehavior.RANDOM) {
+            boolean hasLeft = data.getLeftCore() != null;
+            boolean hasRight = data.getRightCore() != null;
+
+            if (hasLeft && hasRight) {
+                if (player.getRandom().nextBoolean()) {
+                    clearSlot(player, data, true);
+                } else {
+                    clearSlot(player, data, false);
+                }
+            } else if (hasLeft) {
+                clearSlot(player, data, true);
+            } else if (hasRight) {
+                clearSlot(player, data, false);
+            }
+            return;
         }
 
-        /* Clears the client actionbar display cache instantly so it is completely empty upon respawning */
-        //ActionBarUpdater.update(player);
+        // Case 3: ALL -> Both active data slots are completely wiped
+        if (behavior == Config.DeathBehavior.ALL) {
+            clearSlot(player, data, true);
+            clearSlot(player, data, false);
+        }
     }
 
     /**
-     * Resolves the template properties of a core type and spawns it as an entity item in the world.
+     * Helper method to trigger the onRemoved hook for long-running status buffers and clear the data slot.
      */
-    private static void dropCoreToWorld(ServerPlayer player, CoreType type) {
-        CoreRegistry.get(type).ifPresent(core -> {
-            /* Requests the core factory to compile a valid unstackable item asset with its persistent tags */
-            ItemStack coreStack = CoreFactory.createStack(core);
+    private static void clearSlot(ServerPlayer player, PlayerData data, boolean isLeftSlot) {
+        CoreType type = isLeftSlot ? data.getLeftCore() : data.getRightCore();
+        if (type == null) return;
 
-            /* Spawns the compiled item entity stack safely directly at the player's exact death location vectors */
-            player.drop(coreStack, true, false);
-        });
+        // 1. Clean up attribute or other modifications mabe by the core
+        CoreRegistry.get(type).ifPresent(core -> core.onRemoved(player));
+
+        // 2. Wipe the slot track entry data reference
+        if (isLeftSlot) {
+            data.setLeftCore(null);
+        } else {
+            data.setRightCore(null);
+        }
     }
 }

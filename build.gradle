@@ -37,6 +37,8 @@ dependencies {
 
 	implementation 'org.xerial:sqlite-jdbc:3.45.1.0'
 	include 'org.xerial:sqlite-jdbc:3.45.1.0'
+
+	implementation 'blue.endless:jankson:1.2.3'
 }
 
 processResources {

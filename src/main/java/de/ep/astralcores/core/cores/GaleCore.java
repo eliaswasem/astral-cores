@@ -2,7 +2,9 @@ package de.ep.astralcores.core.cores;
 
 import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreType;
+import de.ep.astralcores.util.Effects;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.Items;
 
 import java.util.List;
@@ -25,6 +27,9 @@ public class GaleCore extends Core {
 
     @Override
     public void applyPassive(ServerPlayer player) {
+        if (player.isSprinting()) {
+            Effects.applyEffect(player, MobEffects.SPEED, 25, 1);
+        }
 
     }
 
