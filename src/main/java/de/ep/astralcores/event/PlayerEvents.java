@@ -96,5 +96,22 @@ public class PlayerEvents {
             }
             return InteractionResult.PASS;
         });
+
+        ServerLivingEntityEvents.AFTER_DAMAGE.register(
+                (entity, damageSource, baseDamage, damageTaken, blocked) -> {
+
+                    if (entity instanceof ServerPlayer serverPlayer) {
+
+                        if (!ShadowCore.isPlayerHidden(serverPlayer.getUUID())) {
+                            return;
+                        }
+
+                        ShadowCorePassiveLogic.handleDamageReveal(
+                                serverPlayer,
+                                damageSource
+                        );
+                    }
+                }
+        );
     }
 }
