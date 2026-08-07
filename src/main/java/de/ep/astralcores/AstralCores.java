@@ -6,6 +6,7 @@ import de.ep.astralcores.event.ServerLifecycleEventsListener;
 import de.ep.astralcores.playerdata.PlayerDataManager;
 import de.ep.astralcores.core.CoreRegistry;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.server.MinecraftServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +17,8 @@ public class AstralCores implements ModInitializer {
 
 	// Persistent SQLite data processor instance
 	public static PlayerDataManager PLAYER_DATA;
+
+	private static MinecraftServer server;
 
 	@Override
 	public void onInitialize() {
@@ -34,4 +37,14 @@ public class AstralCores implements ModInitializer {
 
 		MainLoop.register();
 	}
+
+	public static void setServer(MinecraftServer minecraftServer) {
+		server = minecraftServer;
+	}
+
+	public static MinecraftServer getServer() {
+		return server;
+	}
 }
+
+

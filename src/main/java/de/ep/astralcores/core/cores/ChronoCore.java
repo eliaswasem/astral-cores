@@ -24,11 +24,6 @@ public class ChronoCore extends Core {
     }
 
     @Override
-    public void applyPassive(ServerPlayer player) {
-
-    }
-
-    @Override
     public void activate(ServerPlayer player) {
 
     }

@@ -18,7 +18,7 @@ import java.util.Optional;
  * Prevents protected items tracked as core fragments from being consumed inside standard crafting systems.
  */
 @Mixin(RecipeManager.class)
-public class PreventCoreCraftingMixin {
+public class RecipeManagerMixin {
 
     /**
      * Intercepts recipe checks at the start of execution. Iterates through input arrays

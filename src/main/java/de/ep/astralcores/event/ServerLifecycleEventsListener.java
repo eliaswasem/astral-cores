@@ -7,13 +7,15 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.world.level.storage.LevelResource;
 import java.io.File;
 
-// Unique class name to prevent compilation conflicts with the Fabric import
 public class ServerLifecycleEventsListener {
 
     public static void register() {
 
         // SERVER STARTING: Runs when the world folder becomes active
         ServerLifecycleEvents.SERVER_STARTING.register(server -> {
+
+            /* Cache the server instance statically inside the main class container for true O(1) lookups */
+            AstralCores.setServer(server);
 
             File worldDir = server.getWorldPath(LevelResource.ROOT).toFile();
 

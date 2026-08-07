@@ -160,7 +160,9 @@ public abstract class Core {
      *
      * @param player The active ServerPlayer target receiving the permanent passive applications.
      */
-    public abstract void applyPassive(ServerPlayer player);
+    public void applyPassive(ServerPlayer player){
+
+    }
 
     /**
      * Fires the major primary active capability spell effect directly at or around the executor position.
