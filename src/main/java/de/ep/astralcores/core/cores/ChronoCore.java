@@ -13,7 +13,7 @@ public class ChronoCore extends Core {
         super(
                 CoreType.CHRONO_CORE,
                 "$aChrono Core",
-                Items.BOOK,
+                Items.CLOCK,
                 List.of(
                         "§a[Active: Time Return]"
                 ),

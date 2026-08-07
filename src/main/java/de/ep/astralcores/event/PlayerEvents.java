@@ -1,6 +1,7 @@
 package de.ep.astralcores.event;
 
 import de.ep.astralcores.AstralCores;
+import de.ep.astralcores.event.logic.ChronoCorePassiveLogic;
 import de.ep.astralcores.event.logic.CoreDeathLogic;
 import de.ep.astralcores.event.logic.CoreInteractLogic;
 import de.ep.astralcores.core.CoreFactory;
@@ -55,6 +56,17 @@ public class PlayerEvents {
             return CoreFactory.getCoreFromItem(stack)
                     .map(core -> CoreInteractLogic.executeEquip(serverPlayer, stack, core, hand))
                     .orElse(InteractionResult.PASS);
+        });
+
+        /**
+         * Intercepts the death lifecycle sequence BEFORE damage finalization triggers.
+         * Redirects queries into core logic modules to check for active anti-death mechanics.
+         */
+        ServerLivingEntityEvents.ALLOW_DEATH.register((entity, damageSource, damageAmount) -> {
+            if (entity instanceof ServerPlayer serverPlayer) {
+                return ChronoCorePassiveLogic.handleSecondTimeline(serverPlayer, damageSource, damageAmount);
+            }
+            return true;
         });
 
         /**
