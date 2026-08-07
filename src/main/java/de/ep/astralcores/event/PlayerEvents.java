@@ -1,11 +1,14 @@
 package de.ep.astralcores.event;
 
 import de.ep.astralcores.AstralCores;
+import de.ep.astralcores.core.CoreType;
+import de.ep.astralcores.core.cores.ShadowCore;
 import de.ep.astralcores.event.logic.ChronoCorePassiveLogic;
 import de.ep.astralcores.event.logic.CoreDeathLogic;
 import de.ep.astralcores.event.logic.CoreInteractLogic;
 import de.ep.astralcores.core.CoreFactory;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
+import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.server.level.ServerPlayer;
@@ -78,6 +81,20 @@ public class PlayerEvents {
             if (entity instanceof ServerPlayer serverPlayer) {
                CoreDeathLogic.executeDeathDrop(serverPlayer);
             }
+        });
+
+        AttackEntityCallback.EVENT.register((player, level, hand, entity, hitResult) -> {
+            if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
+
+                /* Fetch the specific attacker profile metadata structure from the registry */
+                de.ep.astralcores.playerdata.PlayerData data = AstralCores.PLAYER_DATA.get(serverPlayer);
+
+                /* Only trigger revelation sequences if the attacker explicitly owns and carries the shadow core */
+                if (data != null && data.getEquippedCore() == CoreType.SHADOW_CORE) {
+                   ShadowCore.revealPlayer(serverPlayer);
+                }
+            }
+            return InteractionResult.PASS;
         });
     }
 }
