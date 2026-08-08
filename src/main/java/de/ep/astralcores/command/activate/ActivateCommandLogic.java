@@ -7,12 +7,12 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class ActivateCommandLogic {
 
-    // Process the core activation mechanics through the global execution manager
+    // Attempts to activate the player equipped core and handles the result
     public static int execute(CommandSourceStack source, ServerPlayer player) {
-        // Delegate all execution checks and effects to the standalone activation manager
+        // Delegates all activation checks and ability triggers to the activate manager
         ActivationResult result = CoreActivateManager.attemptActivation(player);
 
-        // If the manager declined the execution, feed the message back to the sender
+        // Sends the error message back to the player if the activation failed
         if (!result.isSuccess()) {
             source.sendFailure(result.errorMessage());
             return 0;

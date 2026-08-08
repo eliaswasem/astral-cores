@@ -1,12 +1,12 @@
 package de.ep.astralcores;
 
 import de.ep.astralcores.manager.CooldownManager;
-import de.ep.astralcores.manager.PassiveAbilityManager;
+import de.ep.astralcores.manager.CoreTickManager;
+import de.ep.astralcores.manager.ActionBarManager;
+import de.ep.astralcores.playerdata.PlayerData;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
 import org.jspecify.annotations.NonNull;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 
 public class MainLoop {
@@ -18,36 +18,42 @@ public class MainLoop {
             @Override
             public void onEndTick(@NonNull MinecraftServer server) {
 
-                /* Executed every single server tick */
                 oneTickLoop(server);
 
                 this.ticks++;
                 if (this.ticks >= 20) {
                     this.ticks = 0;
 
-                    for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-                        player.connection.send(
-                                new ClientboundSetActionBarTextPacket(
-                                        Component.literal("\uE000")
-                                )
-                        );
-                    }
-
-                    /* Executed once every 20 server ticks or one second */
                     twentyTickLoop(server);
                 }
             }
         });
     }
 
-    /* Isolated empty placeholder loop for high-frequency operations */
+    // Loop that runs every servertick
     private static void oneTickLoop(MinecraftServer server) {
+        for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+            PlayerData data = AstralCores.PLAYER_DATA.get(player);
+            // Applies the cores tick function
+            CoreTickManager.tick(player, data);
+        }
 
     }
 
-    /* Isolated empty placeholder loop for low-frequency operations */
+    // Loop that runs every second
     private static void twentyTickLoop(MinecraftServer server) {
-        PassiveAbilityManager.tick(server);
-        CooldownManager.tick(server);
+        // Runs for every online player
+        for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+            PlayerData data = AstralCores.PLAYER_DATA.get(player);
+
+            // Updates and manages the Cooldowns every second
+            CooldownManager.tick(player, data);
+            // Updates and manages the custom ActionBar HUD every second
+            ActionBarManager.tick(player, data);
+            // Applies the cores passive Ability function
+            CoreTickManager.tickPassiveAbility(player, data);
+        }
+
+
     }
 }

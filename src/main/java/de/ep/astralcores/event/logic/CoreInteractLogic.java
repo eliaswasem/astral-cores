@@ -1,6 +1,7 @@
 package de.ep.astralcores.event.logic;
 
 import de.ep.astralcores.AstralCores;
+import de.ep.astralcores.manager.ActionBarManager;
 import de.ep.astralcores.playerdata.PlayerData;
 import de.ep.astralcores.core.Core;
 import net.minecraft.network.chat.Component;
@@ -11,25 +12,27 @@ import net.minecraft.world.item.ItemStack;
 
 public class CoreInteractLogic {
 
-    // Process right-click logic to equip a core into the single available profile slot
+    // Equips a custom core into the player profile slot when right-clicked
     public static InteractionResult executeEquip(ServerPlayer player, ItemStack stack, Core core, InteractionHand hand) {
-        // Fetch cached player profile data
         PlayerData data = AstralCores.PLAYER_DATA.get(player);
         if (data == null) {
             return InteractionResult.FAIL;
         }
 
-        // Check if the single equipment slot is already occupied
+        // Stops equipment if the single profile slot is already full
         if (data.getEquippedCore() != null) {
             player.sendSystemMessage(Component.literal("§cYour core slot is already occupied!"));
             return InteractionResult.FAIL;
         }
 
-        // Bind the core to the single equipment slot
+        // Binds the core enum type to the player data profile
         data.setEquippedCore(core.getType());
         player.sendSystemMessage(Component.literal("§aSuccessfully bound " + core.getName() + " to your profile slot."));
 
-        // Consume one item from the stack if the player is not in creative mode
+        // Updates the action bar display text immediately
+        ActionBarManager.tick(player, data);
+
+        // Reduces the item stack count by one if not in creative mode
         if (!player.getAbilities().instabuild) {
             stack.shrink(1);
         }

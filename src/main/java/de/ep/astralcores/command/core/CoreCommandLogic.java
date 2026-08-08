@@ -12,26 +12,24 @@ import java.util.Locale;
 
 public class CoreCommandLogic {
 
-    /*
-     * Resolves a core and gives the generated ItemStack to the target player.
-     */
+    // Resolves a matching core instance by string id and transfers it to the target player
     public static int execute(CommandSourceStack source, ServerPlayer target, String astralId) {
 
         try {
+            // Looks up the requested core inside the registry mapping
             Core core = CoreRegistry.getByCoreId(
                     astralId.toLowerCase(Locale.ROOT)
             ).orElseThrow(
                     () -> new IllegalArgumentException("Invalid Core ID")
             );
 
-
+            // Generates the physical item stack for the requested core
             ItemStack itemStack = CoreFactory.createStack(core);
 
-
+            // Adds the item stack directly to the player inventory or drops it if full
             if (!target.getInventory().add(itemStack)) {
                 target.drop(itemStack, false);
             }
-
 
             source.sendSuccess(
                     () -> Component.literal(
@@ -47,6 +45,7 @@ public class CoreCommandLogic {
 
         } catch (IllegalArgumentException e) {
 
+            // Fails if the requested core string id does not exist in the registry
             source.sendFailure(
                     Component.literal(
                             "§cUnknown Core identifier."

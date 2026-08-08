@@ -9,32 +9,34 @@ import java.io.File;
 
 public class ServerLifecycleEventsListener {
 
+    // Registers server startup and shutdown lifecycle event listeners
     public static void register() {
 
-        // SERVER STARTING: Runs when the world folder becomes active
+        // Runs when the server is starting and the world folder becomes active
         ServerLifecycleEvents.SERVER_STARTING.register(server -> {
 
-            /* Cache the server instance statically inside the main class container for true O(1) lookups */
+            // Saves the server instance statically in the main class
             AstralCores.setServer(server);
 
             File worldDir = server.getWorldPath(LevelResource.ROOT).toFile();
 
-            // Spin up the SQLite connection pool safely
+            // Initializes the SQLite data manager using the world directory
             AstralCores.PLAYER_DATA = new PlayerDataManager(worldDir);
 
             ConfigManager.load();
         });
 
-        // SERVER STOPPING: Runs on server shutdowns, restarts, or crashes
+        // Runs when the server is stopping or shutting down
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
-            // Backup all currently connected online player data profiles
+
+            // Saves data for all currently online players to the database
             if (server != null && server.getPlayerList() != null && AstralCores.PLAYER_DATA != null) {
                 server.getPlayerList().getPlayers().forEach(player -> {
                     AstralCores.PLAYER_DATA.save(player);
                 });
             }
 
-            // Terminate the physical SQLite file connection to avoid stream locks
+            // Closes the active database connection safely
             if (AstralCores.PLAYER_DATA != null) {
                 AstralCores.PLAYER_DATA.closeConnection();
             }

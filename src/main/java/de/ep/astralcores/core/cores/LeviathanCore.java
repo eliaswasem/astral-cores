@@ -21,7 +21,8 @@ public class LeviathanCore extends Core {
                 0,
                 0,
                 "Whirlpool",
-                "Oceanborn"
+                "Oceanborn",
+                "\uE007"
         );
     }
 

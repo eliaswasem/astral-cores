@@ -1,22 +1,23 @@
 package de.ep.astralcores.core.cores;
 
-import de.ep.astralcores.AstralCores; // Generates access point to your static PLAYER_DATA variable
+import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.playerdata.PlayerData;
 import de.ep.astralcores.util.Effects;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -36,39 +37,33 @@ public class PhoenixCore extends Core {
                 30,
                 0,
                 "Phoenix Burst",
-                "Flameborn"
+                "Flameborn",
+                "\uE006"
         );
     }
 
-    /*
-     * Continuous passive fire immunity application.
-     */
     @Override
     public void applyPassive(ServerPlayer player) {
-        // Keeps the fire resistance active seamlessly every tick
+        // Base fire protection
         Effects.applyEffect(player, MobEffects.FIRE_RESISTANCE, 25, 1);
 
-        // Safely checks if the current server level is the Nether dimension
+        // Nether specific regen buff
         if (player.level().dimension().equals(Level.NETHER)) {
             Effects.applyEffect(player, MobEffects.REGENERATION, 25, 1);
         }
     }
 
-    /*
-     * Area-of-effect fire ignition ability deployment.
-     */
     @Override
     public void activate(ServerPlayer player) {
-
         ServerLevel level = player.level();
 
         player.sendSystemMessage(
-                Component.literal("§cYou unleashed a" + getActiveAbilityName() + "!")
+                Component.literal("§cYou unleashed a " + getActiveAbilityName() + "!")
         );
 
         Vec3 pos = player.position();
 
-        // Large explosion similar to vanilla, but without destroying blocks
+        // Spawn explosion without block damage
         level.explode(
                 player,
                 pos.x,
@@ -79,7 +74,7 @@ public class PhoenixCore extends Core {
                 Level.ExplosionInteraction.NONE
         );
 
-        // Additional phoenix visual styling
+        // Visual FX
         level.sendParticles(
                 ParticleTypes.FLAME,
                 pos.x,
@@ -104,7 +99,7 @@ public class PhoenixCore extends Core {
                 0.05
         );
 
-        // Sound effect played after the explosion
+        // Audio FX
         level.playSound(
                 null,
                 player.blockPosition(),
@@ -115,4 +110,10 @@ public class PhoenixCore extends Core {
         );
     }
 
+    @Override
+    public void tick(ServerPlayer player) {
+        if (player.getRemainingFireTicks() > 0) {
+            player.setRemainingFireTicks(0);
+        }
+    }
 }

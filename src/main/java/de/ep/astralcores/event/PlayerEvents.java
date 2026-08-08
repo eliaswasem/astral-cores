@@ -8,6 +8,7 @@ import de.ep.astralcores.event.logic.CoreDeathLogic;
 import de.ep.astralcores.event.logic.CoreInteractLogic;
 import de.ep.astralcores.core.CoreFactory;
 import de.ep.astralcores.event.logic.ShadowCorePassiveLogic;
+import de.ep.astralcores.playerdata.PlayerData;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
@@ -18,33 +19,25 @@ import net.minecraft.world.item.ItemStack;
 
 public class PlayerEvents {
 
-    /**
-     * Registers all global player-centric hooks including network sessions and interaction mappings.
-     * Combines connection lifecycles with physical right-click input packet interceptions.
-     */
+    // Registers game event listeners related to player actions and lifecycles
     public static void register() {
 
-        /* Triggered immediately when a player completes the handshake and joins the game world */
+        // Loads player profile data from the database when they join the server
         ServerPlayConnectionEvents.JOIN.register(
                 (handler, sender, server) -> {
                     AstralCores.PLAYER_DATA.load(handler.player);
                 }
         );
 
-        /* Triggered immediately when a player logs out or loses connection to the server cluster */
+        // Unloads player profile data from RAM when they disconnect from the server
         ServerPlayConnectionEvents.DISCONNECT.register(
                 (handler, server) -> {
                     AstralCores.PLAYER_DATA.unload(handler.player);
                 }
         );
 
-        /**
-         * Intercepts all vanilla player right-click item interactions globally on the server.
-         * Extracts the active stack, validates it through our 1.21+ data component factory,
-         * and routes the result directly into the profile account storage sequence.
-         */
+        // Intercepts item right-click actions to handle custom core equipment
         UseItemCallback.EVENT.register((player, level, hand) -> {
-            /* Safely bypasses client-side multi-execution loops to guarantee strict server-side state enforcement */
             if (level.isClientSide()) {
                 return InteractionResult.PASS;
             }
@@ -52,20 +45,13 @@ public class PlayerEvents {
             ServerPlayer serverPlayer = (ServerPlayer) player;
             ItemStack stack = serverPlayer.getItemInHand(hand);
 
-            /**
-             * Inspects the item's Custom Data mapping array for our custom namespace identifier tag.
-             * If resolved successfully, handles validation and slots the core into PlayerData.
-             * If not a custom core, returns PASS to allow regular vanilla action sequences to resume.
-             */
+            // Equips the core if the item is recognized as a valid core type
             return CoreFactory.getCoreFromItem(stack)
                     .map(core -> CoreInteractLogic.executeEquip(serverPlayer, stack, core, hand))
                     .orElse(InteractionResult.PASS);
         });
 
-        /**
-         * Intercepts the death lifecycle sequence BEFORE damage finalization triggers.
-         * Redirects queries into core logic modules to check for active anti-death mechanics.
-         */
+        // Intercepts the death check to evaluate anti-death mechanics like the chrono core
         ServerLivingEntityEvents.ALLOW_DEATH.register((entity, damageSource, damageAmount) -> {
             if (entity instanceof ServerPlayer serverPlayer) {
                 return ChronoCorePassiveLogic.handleSecondTimeline(serverPlayer, damageSource, damageAmount);
@@ -73,31 +59,27 @@ public class PlayerEvents {
             return true;
         });
 
-        /**
-         * Intercepts the exact millisecond of a player's death lifecycle.
-         * Invokes immediate item dropping mechanics alongside vanilla inventory drops.
-         */
+        // Handles custom item dropping actions immediately after a player dies
         ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
-            /* Validates that the dying entity is safely a real physical ServerPlayer instance */
             if (entity instanceof ServerPlayer serverPlayer) {
-               CoreDeathLogic.executeDeathDrop(serverPlayer);
+                CoreDeathLogic.executeDeathDrop(serverPlayer);
             }
         });
 
+        // Reveals hidden shadow core players if they attack an entity
         AttackEntityCallback.EVENT.register((player, level, hand, entity, hitResult) -> {
             if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
 
-                /* Fetch the specific attacker profile metadata structure from the registry */
-                de.ep.astralcores.playerdata.PlayerData data = AstralCores.PLAYER_DATA.get(serverPlayer);
+                PlayerData data = AstralCores.PLAYER_DATA.get(serverPlayer);
 
-                /* Only trigger revelation sequences if the attacker explicitly owns and carries the shadow core */
                 if (data != null && data.getEquippedCore() == CoreType.SHADOW_CORE) {
-                   ShadowCore.revealPlayer(serverPlayer);
+                    ShadowCore.revealPlayer(serverPlayer);
                 }
             }
             return InteractionResult.PASS;
         });
 
+        // Evaluates if a hidden shadow core player should be revealed after taking damage
         ServerLivingEntityEvents.AFTER_DAMAGE.register(
                 (entity, damageSource, baseDamage, damageTaken, blocked) -> {
 

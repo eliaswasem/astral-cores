@@ -9,72 +9,49 @@ import java.util.UUID;
 
 public class PlayerData {
 
-    // Store what core is equipped in the slot (null means empty slot)
+    // Supported rendering configurations for the action bar interface
+    public enum ActionBarMode {
+        TEXT,
+        ICON
+    }
+
+    // Stores the currently equipped core type (null means empty slot)
     private CoreType equippedCore;
 
-    // List of unique IDs of players who are trusted by this player
+    // Holds the unique IDs of players trusted by this profile owner
     private final List<UUID> trustedPlayers;
 
-    // Map tracking active capability cooldowns in seconds per specific core type
+    // Tracks active capability cooldown timers in seconds per core type
     private final Map<CoreType, Integer> activeCooldowns;
 
-    // Map tracking passive recovery channel cooldowns in seconds per specific core type
+    // Tracks passive ability cooldown timers in seconds per core type
     private final Map<CoreType, Integer> passiveCooldowns;
 
-    // Constructor: Automatically runs when a new player profile is created
+    // Stores the preferred visual display format for the action bar
+    private ActionBarMode actionBarMode;
+
+    // Initializes default blank data configurations for a new profile
     public PlayerData() {
         this.equippedCore = null;
         this.trustedPlayers = new ArrayList<>();
         this.activeCooldowns = new HashMap<>();
         this.passiveCooldowns = new HashMap<>();
+        this.actionBarMode = ActionBarMode.ICON;
     }
 
     // --- COOLDOWN MANAGEMENT UTILITIES ---
 
-    /**
-     * Retrieves the remaining active cooldown seconds for a specific core type.
-     * Returns 0 if no cooldown entry is active.
-     */
-    public int getActiveCooldownSeconds(CoreType type) {
-        return activeCooldowns.getOrDefault(type, 0);
+    // Returns the map tracking active capability cooldowns for serialization
+    public Map<CoreType, Integer> getActiveCooldownsMap() {
+        return this.activeCooldowns;
     }
 
-    /**
-     * Updates the remaining active cooldown seconds for a specific core type.
-     * Removes the mapping if the duration reaches zero or lower to save memory overhead.
-     */
-    public void setActiveCooldownSeconds(CoreType type, int seconds) {
-        if (seconds <= 0) {
-            activeCooldowns.remove(type);
-        } else {
-            activeCooldowns.put(type, seconds);
-        }
+    // Returns the map tracking passive ability cooldowns for serialization
+    public Map<CoreType, Integer> getPassiveCooldownsMap() {
+        return this.passiveCooldowns;
     }
 
-    /**
-     * Retrieves the remaining passive cooldown seconds for a specific core type.
-     * Returns 0 if no cooldown entry is active.
-     */
-    public int getPassiveCooldownSeconds(CoreType type) {
-        return passiveCooldowns.getOrDefault(type, 0);
-    }
-
-    /**
-     * Updates the remaining passive cooldown seconds for a specific core type.
-     * Removes the mapping if the duration reaches zero or lower to save memory overhead.
-     */
-    public void setPassiveCooldownSeconds(CoreType type, int seconds) {
-        if (seconds <= 0) {
-            passiveCooldowns.remove(type);
-        } else {
-            passiveCooldowns.put(type, seconds);
-        }
-    }
-
-    /**
-     * Ticks down all stored active and passive cooldown intervals by one second.
-     * Automatically purges expired tracking nodes from memory loops.
-     */
+    // Decrements all active and passive cooldown intervals by one second
     public void tickCooldowns() {
         activeCooldowns.replaceAll((type, seconds) -> seconds - 1);
         activeCooldowns.values().removeIf(seconds -> seconds <= 0);
@@ -83,22 +60,40 @@ public class PlayerData {
         passiveCooldowns.values().removeIf(seconds -> seconds <= 0);
     }
 
+    // --- ACTION BAR CONFIGURATION UTILITIES ---
+
+    // Gets the current action bar display preference
+    public ActionBarMode getActionBarMode() {
+        return this.actionBarMode;
+    }
+
+    // Sets the action bar layout mode configuration
+    public void setActionBarMode(ActionBarMode mode) {
+        if (mode != null) {
+            this.actionBarMode = mode;
+        }
+    }
+
     // --- STANDARD GETTERS AND SETTERS ---
 
+    // Gets the equipped core type
     public CoreType getEquippedCore() {
         return equippedCore;
     }
 
+    // Sets the equipped core type
     public void setEquippedCore(CoreType core) {
         this.equippedCore = core;
     }
 
     // --- TRUSTED PLAYERS UTILITIES ---
 
+    // Gets the full list of trusted player UUIDs
     public List<UUID> getTrustedPlayers() {
         return this.trustedPlayers;
     }
 
+    // Adds a player UUID to the trusted list if not already present
     public boolean addTrustedPlayer(UUID uuid) {
         if (!trustedPlayers.contains(uuid)) {
             trustedPlayers.add(uuid);
@@ -107,10 +102,12 @@ public class PlayerData {
         return false;
     }
 
+    // Removes a player UUID from the trusted list
     public boolean removeTrustedPlayer(UUID uuid) {
         return trustedPlayers.remove(uuid);
     }
 
+    // Checks if a specific player UUID is trusted
     public boolean isTrusted(UUID uuid) {
         return trustedPlayers.contains(uuid);
     }

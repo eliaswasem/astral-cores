@@ -10,13 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class CoreActivateManager {
 
-    /**
-     * Orchestrates the entire core activation sequence. Handles validation,
-     * core mapping, cooldown checks, execution, and cooldown enforcement.
-     *
-     * @param player The ServerPlayer executing the core ability.
-     * @return An ActivationResult detailing success or failure reasons.
-     */
+    // Validates player profiles, evaluates timers, and triggers active core ability execution sequences
     public static ActivationResult attemptActivation(ServerPlayer player) {
         PlayerData data = AstralCores.PLAYER_DATA.get(player);
         if (data == null) {
@@ -33,26 +27,26 @@ public class CoreActivateManager {
             return new ActivationResult(false, Component.literal("§cCritical: Stored core type mapping resolution failure."));
         }
 
-        // Evaluate active capability execution lock restrictions via CooldownManager
-        if (!CooldownManager.isActiveReady(player, targetedType)) {
-            int remaining = CooldownManager.getActiveRemaining(player, targetedType);
+        // Rejects execution sequence if the specific core capacity is currently locked on cooldown
+        if (!CooldownManager.isActiveReady(data, targetedType)) {
+            int remaining = CooldownManager.getActiveRemaining(data, targetedType);
 
-            // Fetch the dedicated active capability identity text string dynamically
             String abilityName = relic.getActiveAbilityName();
             return new ActivationResult(false, Component.literal("§c" + abilityName + " §cis on cooldown for another " + remaining + "s."));
         }
 
-        // Trigger the active core ability safely
+        // Executes the custom capability features bound to the target core instance
         relic.activate(player);
 
-        // Enforce active cooldown tracking boundaries onto the profile instance
-        CooldownManager.startActiveCooldown(player, targetedType, relic.getActiveCooldown());
+        // Commits the core cooldown parameters directly into active tracker memory lines
+        CooldownManager.startActiveCooldown(data, targetedType, relic.getActiveCooldown());
+
+        // Re-renders the action bar layout immediately to display updated timers on the HUD
+        ActionBarManager.tick(player, data);
 
         return new ActivationResult(true, null);
     }
 
-    /**
-     * Simple immutable wrapper object to safely transport execution status feedback.
-     */
+    // Transfers action status signals and failure feedback details through execution streams
     public record ActivationResult(boolean isSuccess, Component errorMessage) {}
 }

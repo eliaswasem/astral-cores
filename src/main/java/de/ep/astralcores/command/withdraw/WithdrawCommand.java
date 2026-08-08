@@ -9,19 +9,19 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class WithdrawCommand {
 
-    // Register the command literal layout into the Brigadier tree structure
+    // Registers the base withdraw command into the game command tree
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("withdraw")
-                // Execute directly on the base command without left/right sub-arguments
+                // Runs the command directly when no additional arguments are provided
                 .executes(WithdrawCommand::route)
         );
     }
 
-    // Resolve the executing entity context and pass it down to the logic layer
+    // Gets the executing player from the command context and routes it forward
     private static int route(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
 
-        // Redirect execution to the core withdrawal logic layer
+        // Redirects the action to the main withdrawal logic handler
         return WithdrawCommandLogic.execute(context.getSource(), player);
     }
 }

@@ -24,17 +24,19 @@ public class AstralCores implements ModInitializer {
 	public void onInitialize() {
 		LOGGER.info("Initializing AstralRelics Mod...");
 
-		// Initialize server-wide state listeners
+		// Registers server event listeners
 		ServerLifecycleEventsListener.register();
 
-		// Initialize individual player state listeners
+		// Registers the player event listeners
 		PlayerEvents.register();
 
 		// Registers the custom commands
 		CommandRegistry.register();
 
+		// Initializes core registry
 		CoreRegistry.init();
 
+		// Registers the Mainloop
 		MainLoop.register();
 	}
 

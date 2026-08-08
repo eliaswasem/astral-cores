@@ -1,5 +1,6 @@
 package de.ep.astralcores.core;
 
+// Defines all supported relic core types available
 public enum CoreType {
     AERO_CORE,
     GALE_CORE,

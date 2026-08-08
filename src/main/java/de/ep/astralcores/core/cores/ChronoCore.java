@@ -21,7 +21,8 @@ public class ChronoCore extends Core {
                 0,
                 0,
                 "Time Return",
-                "Second Timeline"
+                "Second Timeline",
+                "\uE003"
         );
     }
 
