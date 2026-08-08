@@ -3,11 +3,8 @@ package de.ep.astralcores.event;
 import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.core.cores.ShadowCore;
-import de.ep.astralcores.event.logic.ChronoCorePassiveLogic;
-import de.ep.astralcores.event.logic.CoreDeathLogic;
-import de.ep.astralcores.event.logic.CoreInteractLogic;
+import de.ep.astralcores.event.logic.*;
 import de.ep.astralcores.core.CoreFactory;
-import de.ep.astralcores.event.logic.ShadowCorePassiveLogic;
 import de.ep.astralcores.playerdata.PlayerData;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
@@ -63,6 +60,7 @@ public class PlayerEvents {
         ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
             if (entity instanceof ServerPlayer serverPlayer) {
                 CoreDeathLogic.executeDeathDrop(serverPlayer);
+                BerserkerCorePassivLogic.handleBloodlust(serverPlayer, damageSource);
             }
         });
 

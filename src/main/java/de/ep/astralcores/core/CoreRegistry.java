@@ -16,7 +16,7 @@ public class CoreRegistry {
     // Initializes and registers all custom core modules into memory maps
     public static void init() {
         register(new LeviathanCore());
-        register(new BersekerCore());
+        register(new BerserkerCore());
         register(new ChronoCore());
         register(new AeroCore());
         register(new FrostCore());
