@@ -7,6 +7,7 @@ import de.ep.astralcores.event.logic.ChronoCorePassiveLogic;
 import de.ep.astralcores.event.logic.CoreDeathLogic;
 import de.ep.astralcores.event.logic.CoreInteractLogic;
 import de.ep.astralcores.core.CoreFactory;
+import de.ep.astralcores.event.logic.ShadowCorePassiveLogic;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
