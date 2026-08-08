@@ -21,7 +21,7 @@ public class MagnetCore extends Core {
                 0,
                 0,
                 "Magnetic Pull",
-                "Magnetic Grip",
+                "Magnetic Disarm",
                 "\uE00C"
         );
     }

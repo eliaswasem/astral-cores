@@ -13,7 +13,7 @@ import java.util.List;
 
 public class AeroCore extends Core {
 
-    private static final Identifier AERO_MODIFIER_ID = Identifier.fromNamespaceAndPath("astralcores", "aero_air_cushion");
+    private static final Identifier AERO_MODIFIER_ID = Identifier.fromNamespaceAndPath("astralcores", "aero_featherweight");
 
     public AeroCore() {
         super(
@@ -22,13 +22,13 @@ public class AeroCore extends Core {
                 Items.FEATHER,
                 List.of(
                         "§7Forged in shifting air currents.",
-                        "§6[Active: Aero Jump]"
+                        "§6[Active: Tornado Lift]"
                 ),
                 10001,
                 15,
                 0,
-                "Aero Jump",
-                "Air Cushion",
+                "Tornado Lift",
+                "Featherweight",
                 "\uE001"
         );
     }
@@ -38,10 +38,10 @@ public class AeroCore extends Core {
         AttributeInstance attribute = player.getAttribute(Attributes.FALL_DAMAGE_MULTIPLIER);
         if (attribute != null) {
             if (!attribute.hasModifier(AERO_MODIFIER_ID)) {
-                // -0.70 cuts the base 1.0 multiplier down to 0.30 (70% damage reduction)
+                // -1.0 cuts the base 1.0 multiplier down to 0 (100% damage reduction)
                 attribute.addTransientModifier(new AttributeModifier(
                         AERO_MODIFIER_ID,
-                        -0.70,
+                        -1.0,
                         AttributeModifier.Operation.ADD_VALUE
                 ));
             }
