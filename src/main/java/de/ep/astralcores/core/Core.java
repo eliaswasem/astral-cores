@@ -32,16 +32,24 @@ public abstract class Core {
     /** The raw static cooldown interval limitation enforced on the passive recovery channel. */
     private final int passiveCooldown;
 
+    /** The user-facing display name configuration mapped to the major primary active capability. */
+    private final String activeAbilityName;
+
+    /** The user-facing display name configuration mapped to the persistent background passive mechanic. */
+    private final String passiveAbilityName;
+
     /**
      * Constructs a unified core instance template configuration block.
      *
-     * @param type             The unique module registry type identifier track.
-     * @param name             The colorized in-game display name formatting string.
-     * @param baseItem         The vanilla item instance chosen to back this asset container.
-     * @param lore             The list of unformatted or colorized lore text tooltip array indices.
-     * @param customModelData  The integer value matching custom resource pack predicate rules.
-     * @param activeCooldown   The default active spell casting cooldown limit in seconds.
-     * @param passiveCooldown  The default passive utility processing cooldown limit in seconds.
+     * @param type               The unique module registry type identifier track.
+     * @param name               The colorized in-game display name formatting string.
+     * @param baseItem           The vanilla item instance chosen to back this asset container.
+     * @param lore               The list of unformatted or colorized lore text tooltip array indices.
+     * @param customModelData    The integer value matching custom resource pack predicate rules.
+     * @param activeCooldown     The default active spell casting cooldown limit in seconds.
+     * @param passiveCooldown    The default passive utility processing cooldown limit in seconds.
+     * @param activeAbilityName  The uncolorized or formatted identification name of the active skill.
+     * @param passiveAbilityName The uncolorized or formatted identification name of the passive trait.
      */
     public Core(
             CoreType type,
@@ -50,7 +58,9 @@ public abstract class Core {
             List<String> lore,
             int customModelData,
             int activeCooldown,
-            int passiveCooldown
+            int passiveCooldown,
+            String activeAbilityName,
+            String passiveAbilityName
     ) {
         this.type = type;
         this.name = name;
@@ -59,6 +69,8 @@ public abstract class Core {
         this.customModelData = customModelData;
         this.activeCooldown = activeCooldown;
         this.passiveCooldown = passiveCooldown;
+        this.activeAbilityName = activeAbilityName;
+        this.passiveAbilityName = passiveAbilityName;
     }
 
     /**
@@ -132,6 +144,24 @@ public abstract class Core {
      */
     public int getPassiveCooldown() {
         return passiveCooldown;
+    }
+
+    /**
+     * Retrieves the display identity text string assigned to the active skill mechanic.
+     *
+     * @return The unformatted active ability name string tracker.
+     */
+    public String getActiveAbilityName() {
+        return activeAbilityName;
+    }
+
+    /**
+     * Retrieves the display identity text string assigned to the passive trait mechanic.
+     *
+     * @return The unformatted passive ability name string tracker.
+     */
+    public String getPassiveAbilityName() {
+        return passiveAbilityName;
     }
 
     /**
