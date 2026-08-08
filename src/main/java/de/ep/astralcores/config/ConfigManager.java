@@ -14,18 +14,17 @@ import java.nio.charset.StandardCharsets;
 
 public class ConfigManager {
 
+    // Target configuration file path within the system directories
     private static final File configFile = FabricLoader.getInstance().getConfigDir()
             .resolve("astralcores").resolve("config.json5").toFile();
 
+    // Configuration file engine parser library builder instance
     private static final Jankson jankson = Jankson.builder().build();
 
-    // The static holder for your Config instance object
+    // Holds the active configuration values loaded in memory
     private static Config config;
 
-    /**
-     * Reads configuration contents from disk and maps them directly to the static instance.
-     * Automatically creates a new default profile if no file exists.
-     */
+    // Reads the file from disk or generates defaults if missing
     public static void load() {
         if (!configFile.exists()) {
             config = new Config();
@@ -41,16 +40,13 @@ public class ConfigManager {
         }
     }
 
-    /**
-     * Serializes current memory instance values out into a structured text document layout.
-     * Preserves descriptive comment flags mapped within the object models.
-     */
+    // Serializes current configuration values and writes them to disk
     public static void save() {
         try {
             if (!configFile.getParentFile().exists()) {
                 configFile.getParentFile().mkdirs();
             }
-            // If save is called before load, ensure config isn't null
+
             if (config == null) {
                 config = new Config();
             }
@@ -64,10 +60,7 @@ public class ConfigManager {
         }
     }
 
-    /**
-     * Retrieves the active configuration data layer instance wrapper block.
-     * Lazily triggers an automatic parsing chain sequence run if memory is empty.
-     */
+    // Returns the active configuration instance or triggers a load call if empty
     public static Config get() {
         if (config == null) {
             load();

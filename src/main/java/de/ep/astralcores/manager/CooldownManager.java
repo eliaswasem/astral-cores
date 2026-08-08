@@ -6,53 +6,34 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class CooldownManager {
 
-    /**
-     * Updates active and passive core cooldown states for a specific player context.
-     * Invoked sequentially within the centralized server main loop tick handler.
-     *
-     * @param player The ServerPlayer target profile context to evaluate.
-     * @param data   The cached PlayerData reference provided by the central main loop.
-     */
+    // Decrements active and passive cooldown duration metrics inside the player profile data structures
     public static void tick(ServerPlayer player, PlayerData data) {
         if (data != null) {
             data.tickCooldowns();
         }
     }
 
-    /**
-     * Evaluates whether the active capability of a specific core type is ready for use.
-     */
+    // Checks if the active ability of a specific core type is ready for execution
     public static boolean isActiveReady(PlayerData data, CoreType type) {
         return data == null || getActiveRemaining(data, type) <= 0;
     }
 
-    /**
-     * Evaluates whether the passive capability of a specific core type is ready for use.
-     */
+    // Checks if the passive utility of a specific core type is ready for execution
     public static boolean isPassiveReady(PlayerData data, CoreType type) {
         return data == null || getPassiveRemaining(data, type) <= 0;
     }
 
-    /**
-     * Retrieves the remaining active cooldown duration metrics for a specific core type mapping.
-     * Queries the map directly using the new data layer getters.
-     */
+    // Gets the remaining active capability cooldown duration in seconds
     public static int getActiveRemaining(PlayerData data, CoreType type) {
         return data != null ? data.getActiveCooldownsMap().getOrDefault(type, 0) : 0;
     }
 
-    /**
-     * Retrieves the remaining passive cooldown duration metrics for a specific core type mapping.
-     * Queries the map directly using the new data layer getters.
-     */
+    // Gets the remaining passive recovery capability cooldown duration in seconds
     public static int getPassiveRemaining(PlayerData data, CoreType type) {
         return data != null ? data.getPassiveCooldownsMap().getOrDefault(type, 0) : 0;
     }
 
-    /**
-     * Forces a localized active capability lock boundary onto the target player profile.
-     * Modifies the backing map directly, purging keys if the duration hits zero.
-     */
+    // Sets or clears the active capability cooldown interval for a specific core type
     public static void startActiveCooldown(PlayerData data, CoreType type, int seconds) {
         if (data == null) return;
 
@@ -63,10 +44,7 @@ public class CooldownManager {
         }
     }
 
-    /**
-     * Forces a localized passive capability lock boundary onto the target player profile.
-     * Modifies the backing map directly, purging keys if the duration hits zero.
-     */
+    // Sets or clears the passive ability cooldown interval for a specific core type
     public static void startPassiveCooldown(PlayerData data, CoreType type, int seconds) {
         if (data == null) return;
 

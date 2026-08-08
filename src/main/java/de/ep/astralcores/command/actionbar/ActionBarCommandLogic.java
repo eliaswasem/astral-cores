@@ -10,7 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class ActionBarCommandLogic {
 
-    // Process the layout switch mechanics directly updating the targeted player data profile
+    // Changes the player's action bar display layout mode and updates the HUD
     public static int execute(CommandSourceStack source, ServerPlayer player, ActionBarMode mode) {
         PlayerData data = AstralCores.PLAYER_DATA.get(player);
 
@@ -19,12 +19,12 @@ public class ActionBarCommandLogic {
             return 0;
         }
 
-        // Apply the chosen Enum configuration preference straight to the user profile
+        // Saves the chosen layout preference directly to the player profile data
         data.setActionBarMode(mode);
-        // Instantly update Actionbar
+
+        // Updates the action bar display text immediately
         ActionBarManager.tick(player, data);
 
-        // Send validation tracking feedback directly back to the executing user stack
         source.sendSuccess(() -> Component.literal("§aActionbar display layout updated to: §e" + mode.name()), false);
         return 1;
     }

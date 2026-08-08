@@ -10,23 +10,16 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class ActionBarManager {
 
-    /**
-     * Updates the action bar text interface for a specific player based on their core status.
-     * Enforces the sequential layout structure: [Passive-Status] [Core Name OR Icon] [Active-Status].
-     * Dynamically omits passive tracking modules if the core defines no passive cooling window.
-     *
-     * @param player The ServerPlayer target profile context to evaluate.
-     * @param data   The cached PlayerData reference provided by the central main loop.
-     */
+    // Updates the player action bar text based on their equipped core and cooldown status
     public static void tick(ServerPlayer player, PlayerData data) {
-        // Resolve the preferred layout choice or default to ICON if profile records are missing
+        // Gets the player preferred display mode
         PlayerData.ActionBarMode mode = (data != null) ? data.getActionBarMode() : PlayerData.ActionBarMode.ICON;
 
-        // Handle the absolute empty state where no core module instance is bound to the target slot
+        // Shows empty slots if no core is equipped
         if (data == null || data.getEquippedCore() == null) {
             switch (mode) {
-                case ICON -> sendPacket(player, "\uE000"); // Displays the empty core container slot asset
-                case TEXT -> sendPacket(player, "§cNone");   // Explicitly fallbacks to raw unequipped string
+                case ICON -> sendPacket(player, "\uE000");
+                case TEXT -> sendPacket(player, "§cNone");
             }
             return;
         }
@@ -34,7 +27,7 @@ public class ActionBarManager {
         CoreType equippedType = data.getEquippedCore();
         Core relic = CoreRegistry.get(equippedType).orElse(null);
 
-        // Critical recovery routing if registry definition verification fails unexpectedly
+        // Shows empty slots if the core registry fails
         if (relic == null) {
             switch (mode) {
                 case ICON -> sendPacket(player, "\uE000");
@@ -43,54 +36,48 @@ public class ActionBarManager {
             return;
         }
 
-        // --- CORE MODULE CAPABILITY BOUNDARY EVALUATIONS ---
+        // Checks if the core has active or passive abilities
         boolean hasPassiveFeature = relic.getPassiveCooldown() > 0;
         boolean hasActiveFeature = relic.getActiveCooldown() > 0;
 
-        // Replaced player parameters with cached data profiles to prevent compilation failure
         boolean activeReady = CooldownManager.isActiveReady(data, equippedType);
         boolean passiveReady = CooldownManager.isPassiveReady(data, equippedType);
 
         int activeRemaining = CooldownManager.getActiveRemaining(data, equippedType);
         int passiveRemaining = CooldownManager.getPassiveRemaining(data, equippedType);
 
-        // --- COMPONENT SEGMENT STRING COMPOSITION ---
-        // Completely isolates the passive channel layout to prevent broken leading white spaces
+        // Formats the passive ability status string
         String passiveStatus = "";
         if (hasPassiveFeature) {
             passiveStatus = passiveReady ? "§aReady " : "§6" + formatTime(passiveRemaining) + " ";
         }
 
+        // Formats the active ability status string
         String activeStatus = "";
         if (hasActiveFeature) {
             activeStatus = activeReady ? " §aReady" : " §c" + formatTime(activeRemaining);
         }
 
-        // --- CORE IDENTITY MODULE INTERPOLATION ---
+        // Selects the center text or icon based on player settings
         String centerModule;
         switch (mode) {
-            case ICON -> centerModule = relic.getCustomChar(); // Resolves localized resource font identifier
-            case TEXT -> centerModule = relic.getName();       // Resolves configured display string name
+            case ICON -> centerModule = relic.getCustomChar();
+            case TEXT -> centerModule = relic.getName();
             default -> centerModule = relic.getName();
         }
 
-        // --- INTERFACE PIPELINE TRANSMISSION ---
-        // Concat and stream out the compiled hud component package via the direct packet channel
+        // Sends the combined text to the player action bar
         sendPacket(player, passiveStatus + centerModule + activeStatus);
     }
 
-    /**
-     * Enforces raw text parameters directly into the native client connection networking pipeline.
-     */
+    // Sends the action bar packet to the player connection
     private static void sendPacket(ServerPlayer player, String content) {
         if (player.connection != null) {
             player.connection.send(new ClientboundSetActionBarTextPacket(Component.literal(content)));
         }
     }
 
-    /**
-     * Converts raw integer tracking metrics into digital MM:SS formats or shorthand seconds.
-     */
+    // Formats seconds into MM:SS format or short shorthand text
     private static String formatTime(int totalSeconds) {
         if (totalSeconds < 60) {
             return totalSeconds + "s";
@@ -102,9 +89,7 @@ public class ActionBarManager {
         return String.format("%02d:%02d", minutes, seconds);
     }
 
-    /**
-     * Public bridge method triggering an instant, real-time action bar layout forced update.
-     */
+    // Forces an immediate real-time refresh of the player action bar
     public static void forceUpdate(ServerPlayer player) {
         PlayerData data = de.ep.astralcores.AstralCores.PLAYER_DATA.get(player);
         tick(player, data);

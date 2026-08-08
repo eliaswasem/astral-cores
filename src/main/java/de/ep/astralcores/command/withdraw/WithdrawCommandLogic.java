@@ -14,41 +14,39 @@ import net.minecraft.world.item.ItemStack;
 
 public class WithdrawCommandLogic {
 
-    // Extract the core from the single data slot and convert it back into an item
+    // Removes the equipped core from the player slot and converts it back into an item stack
     public static int execute(CommandSourceStack source, ServerPlayer player) {
-        // Fetch cached player profile data
         PlayerData data = AstralCores.PLAYER_DATA.get(player);
         if (data == null) {
             source.sendFailure(Component.literal("§cFailed to access your database profile."));
             return 0;
         }
 
-        // Read the single equipped core slot
         CoreType targetedType = data.getEquippedCore();
         if (targetedType == null) {
             source.sendFailure(Component.literal("§cYour equipment slot is currently empty."));
             return 0;
         }
 
-        // Cross-reference with registry to obtain the core instance
         Core core = CoreRegistry.get(targetedType).orElse(null);
         if (core == null) {
             source.sendFailure(Component.literal("§cCritical: Stored core type mapping resolution failure."));
             return 0;
         }
 
-        // Wipe passive status effects and attribute modifiers before removing the core
+        // Cleans up passive buffs or modifiers before the core gets unequipped
         core.onRemoved(player);
 
-        // Generate the physical item stack for the core
+        // Generates the physical item stack for the core item
         ItemStack coreStack = CoreFactory.createStack(core);
 
-        // Clear the single player core slot
+        // Clears the equipped core reference from the player profile data
         data.setEquippedCore(null);
-        // Instantly update Actionbar
+
+        // Updates the action bar display text immediately
         ActionBarManager.tick(player, data);
 
-        // Give the core item to the player or drop it on the ground if inventory is full
+        // Adds the core item to the inventory or drops it on the ground if full
         if (!player.getInventory().add(coreStack)) {
             player.drop(coreStack, false);
         }

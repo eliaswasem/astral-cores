@@ -10,25 +10,25 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class CoreDeathLogic {
 
-    // Process core removal on player death if enabled in the config
+    // Handles core unequipment and drops when a player dies
     public static void executeDeathDrop(ServerPlayer player) {
         PlayerData data = AstralCores.PLAYER_DATA.get(player);
         if (data == null) return;
 
-        // Check if dropping cores on death is disabled
+        // Stops execution if dropping cores on death is disabled in the config
         if (!ConfigManager.get().general.drop_core_on_death) {
             return;
         }
 
-        // Process the single equipped core slot
         CoreType equipped = data.getEquippedCore();
         if (equipped != null) {
-            // Clean up attributes or passive buffers before removal
+            // Runs cleanup actions for the equipped core before removal
             CoreRegistry.get(equipped).ifPresent(core -> core.onRemoved(player));
 
-            // Wipe the core data from the player slot
+            // Clears the core type from the player data slot
             data.setEquippedCore(null);
-            // Instantly update Actionbar
+
+            // Updates the action bar display text immediately
             ActionBarManager.tick(player, data);
         }
     }

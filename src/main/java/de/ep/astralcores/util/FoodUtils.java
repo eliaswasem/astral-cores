@@ -7,6 +7,7 @@ import net.minecraft.world.item.ItemStack;
 
 public class FoodUtils {
 
+    // Checks if the player is currently eating a food item
     public static boolean isEatingEdibleItem(Player player) {
         if (!player.isUsingItem()) {
             return false;
@@ -20,11 +21,12 @@ public class FoodUtils {
         return stack.has(DataComponents.FOOD);
     }
 
+    // Checks if the player is on the very last tick of eating
     public static boolean isFinishedEating(Player player) {
         return isEatingEdibleItem(player) && player.getUseItemRemainingTicks() == 1;
     }
 
-
+    // Gets the nutrition value of the item the player is eating
     public static int getNutritionValue(Player player) {
         if (!isEatingEdibleItem(player)) {
             return 0;

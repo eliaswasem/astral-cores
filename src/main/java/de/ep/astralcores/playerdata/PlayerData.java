@@ -9,64 +9,49 @@ import java.util.UUID;
 
 public class PlayerData {
 
-    /**
-     * Supported rendering configuration layouts for the active user action bar interface.
-     */
+    // Supported rendering configurations for the action bar interface
     public enum ActionBarMode {
         TEXT,
         ICON
     }
 
-    // Store what core is equipped in the slot (null means empty slot)
+    // Stores the currently equipped core type (null means empty slot)
     private CoreType equippedCore;
 
-    // List of unique IDs of players who are trusted by this player
+    // Holds the unique IDs of players trusted by this profile owner
     private final List<UUID> trustedPlayers;
 
-    // Map tracking active capability cooldowns in seconds per specific core type
+    // Tracks active capability cooldown timers in seconds per core type
     private final Map<CoreType, Integer> activeCooldowns;
 
-    // Map tracking passive recovery channel cooldowns in seconds per specific core type
+    // Tracks passive ability cooldown timers in seconds per core type
     private final Map<CoreType, Integer> passiveCooldowns;
 
-    // Personal display configuration preference controlling action bar visuals
+    // Stores the preferred visual display format for the action bar
     private ActionBarMode actionBarMode;
 
-    // Constructor: Automatically runs when a new player profile is created
+    // Initializes default blank data configurations for a new profile
     public PlayerData() {
         this.equippedCore = null;
         this.trustedPlayers = new ArrayList<>();
         this.activeCooldowns = new HashMap<>();
         this.passiveCooldowns = new HashMap<>();
-        this.actionBarMode = ActionBarMode.ICON; // Standard interface layout baseline
+        this.actionBarMode = ActionBarMode.ICON;
     }
 
     // --- COOLDOWN MANAGEMENT UTILITIES ---
 
-    /**
-     * Retrieves the entire backing map instance tracking active capability capabilities.
-     * Required internally by data persistence layers for GSON serialization structures.
-     *
-     * @return The raw active cooldown reference tracking map.
-     */
+    // Returns the map tracking active capability cooldowns for serialization
     public Map<CoreType, Integer> getActiveCooldownsMap() {
         return this.activeCooldowns;
     }
 
-    /**
-     * Retrieves the entire backing map instance tracking passive recovery capabilities.
-     * Required internally by data persistence layers for GSON serialization structures.
-     *
-     * @return The raw passive cooldown reference tracking map.
-     */
+    // Returns the map tracking passive ability cooldowns for serialization
     public Map<CoreType, Integer> getPassiveCooldownsMap() {
         return this.passiveCooldowns;
     }
 
-    /**
-     * Ticks down all stored active and passive cooldown intervals by one second.
-     * Automatically purges expired tracking nodes from memory loops.
-     */
+    // Decrements all active and passive cooldown intervals by one second
     public void tickCooldowns() {
         activeCooldowns.replaceAll((type, seconds) -> seconds - 1);
         activeCooldowns.values().removeIf(seconds -> seconds <= 0);
@@ -77,20 +62,12 @@ public class PlayerData {
 
     // --- ACTION BAR CONFIGURATION UTILITIES ---
 
-    /**
-     * Retrieves the current action bar formatting preference for this profile.
-     *
-     * @return The active ActionBarMode configuration node.
-     */
+    // Gets the current action bar display preference
     public ActionBarMode getActionBarMode() {
         return this.actionBarMode;
     }
 
-    /**
-     * Updates the action bar interface layout directly utilizing the internal Enum state.
-     *
-     * @param mode The targeted ActionBarMode configuration preference.
-     */
+    // Sets the action bar layout mode configuration
     public void setActionBarMode(ActionBarMode mode) {
         if (mode != null) {
             this.actionBarMode = mode;
@@ -99,20 +76,24 @@ public class PlayerData {
 
     // --- STANDARD GETTERS AND SETTERS ---
 
+    // Gets the equipped core type
     public CoreType getEquippedCore() {
         return equippedCore;
     }
 
+    // Sets the equipped core type
     public void setEquippedCore(CoreType core) {
         this.equippedCore = core;
     }
 
     // --- TRUSTED PLAYERS UTILITIES ---
 
+    // Gets the full list of trusted player UUIDs
     public List<UUID> getTrustedPlayers() {
         return this.trustedPlayers;
     }
 
+    // Adds a player UUID to the trusted list if not already present
     public boolean addTrustedPlayer(UUID uuid) {
         if (!trustedPlayers.contains(uuid)) {
             trustedPlayers.add(uuid);
@@ -121,10 +102,12 @@ public class PlayerData {
         return false;
     }
 
+    // Removes a player UUID from the trusted list
     public boolean removeTrustedPlayer(UUID uuid) {
         return trustedPlayers.remove(uuid);
     }
 
+    // Checks if a specific player UUID is trusted
     public boolean isTrusted(UUID uuid) {
         return trustedPlayers.contains(uuid);
     }

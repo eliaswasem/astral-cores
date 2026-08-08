@@ -14,8 +14,7 @@ public class CommandRegistry {
     public static void register() {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 
-            // Register specific command trees sequentially
-            //AstralRelicCommand.register(dispatcher);
+            // Register specific commands sequentially
             TrustCommand.register(dispatcher);
             UntrustCommand.register(dispatcher);
             CoreCommand.register(dispatcher);

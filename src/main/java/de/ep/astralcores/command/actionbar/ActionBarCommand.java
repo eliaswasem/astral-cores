@@ -10,7 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class ActionBarCommand {
 
-    // Register the command literal layout into the Brigadier tree structure
+    // Registers the actionbar command and its text/icon sub-arguments into the game command tree
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("actionbar")
                 .then(Commands.literal("text")
@@ -20,11 +20,11 @@ public class ActionBarCommand {
         );
     }
 
-    // Resolve the executing entity context and pass it down to the logic layer along with the mode
+    // Resolves the executing player from the command context and routes it along with the chosen mode
     private static int route(CommandContext<CommandSourceStack> context, ActionBarMode mode) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
 
-        // Redirect execution to the action bar command logic layer
+        // Redirects execution to the action bar command logic layer
         return ActionBarCommandLogic.execute(context.getSource(), player, mode);
     }
 }

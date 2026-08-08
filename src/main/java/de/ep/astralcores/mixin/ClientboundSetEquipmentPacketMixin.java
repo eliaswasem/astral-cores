@@ -28,7 +28,7 @@ public class ClientboundSetEquipmentPacketMixin {
     @Final
     private List<Pair<EquipmentSlot, ItemStack>> slots;
 
-
+    // Injects at the end of the packet constructor to intercept equipment updates
     @Inject(
             method = "<init>(ILjava/util/List;)V",
             at = @At("TAIL")
@@ -38,39 +38,31 @@ public class ClientboundSetEquipmentPacketMixin {
             List<Pair<EquipmentSlot, ItemStack>> originalSlots,
             CallbackInfo ci
     ) {
-
         MinecraftServer server = AstralCores.getServer();
-
         if (server == null) {
             return;
         }
 
-
         ServerPlayer targetPlayer = null;
 
+        // Finds the targeted player entity by checking active server IDs
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-
             if (player.getId() == this.entity) {
                 targetPlayer = player;
                 break;
             }
         }
 
-
         if (targetPlayer == null) {
             return;
         }
 
-
+        // Stops execution if the target player is not hidden by the shadow core
         if (!ShadowCore.isPlayerHidden(targetPlayer.getUUID())) {
             return;
         }
 
-
-        /*
-         * Replace all visible equipment with empty stacks.
-         * Vanilla continues sending the packet normally.
-         */
+        // Replaces all armor and hand equipment slots with empty item stacks
         this.slots.replaceAll(
                 pair -> Pair.of(
                         pair.getFirst(),

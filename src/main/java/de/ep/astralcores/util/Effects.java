@@ -7,17 +7,17 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class Effects {
 
-
+    // Applies a status effect with default visibility settings
     public static void applyEffect(
             LivingEntity entity,
             Holder<MobEffect> effect,
             int duration,
             int level
     ) {
-        applyEffect(entity, effect, duration, level,false, false, true);
+        applyEffect(entity, effect, duration, level, false, false, true);
     }
 
-
+    // Applies a status effect with fully customized visibility settings
     public static void applyEffect(
             LivingEntity entity,
             Holder<MobEffect> effect,
@@ -27,28 +27,16 @@ public class Effects {
             boolean showParticles,
             boolean showIcon
     ) {
-
+        // Applies the effect
         entity.addEffect(
                 new MobEffectInstance(
                         effect,
                         duration,
-                        level - 1,
-                        false,
+                        level - 1, // level - 1 is used because Minecraft amplifier indices start at 0
+                        ambient,
                         showParticles,
                         showIcon
                 )
         );
-
     }
-
-
-    public static void removeEffect(
-            LivingEntity entity,
-            Holder<MobEffect> effect
-    ) {
-
-        entity.removeEffect(effect);
-
-    }
-
 }

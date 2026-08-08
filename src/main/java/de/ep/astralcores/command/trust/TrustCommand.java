@@ -10,18 +10,19 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class TrustCommand {
 
+    // Registers the trust command and its player argument into the game command tree
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        // Register routing syntax layout structure
         dispatcher.register(Commands.literal("trust")
                 .then(Commands.argument("player", EntityArgument.player())
                         .executes(TrustCommand::route)));
     }
 
+    // Resolves both the executing player and the target player from the command arguments
     private static int route(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-        // Extract command targets and hand off immediately to execution layer
         ServerPlayer player = context.getSource().getPlayerOrException();
         ServerPlayer target = EntityArgument.getPlayer(context, "player");
 
+        // Redirects the action to the trust logic handler
         return TrustCommandLogic.execute(context.getSource(), player, target);
     }
 }

@@ -14,43 +14,41 @@ import java.util.*;
 
 public class PlayerDataManager {
 
-    // This HashMap caches the data in RAM so we don't spam database reads during normal gameplay
+    // Caches player data in RAM to prevent database read spikes during gameplay
     private final Map<UUID, PlayerData> cache = new HashMap<>();
 
-    // The active database connection link
+    // Holds the active connection link to the database
     private Connection connection;
 
-    // GSON tools used to convert maps and lists into flat text blocks for SQL table optimization
+    // Google GSON utilities used to convert objects into JSON strings for database layout optimization
     private final Gson gson = new Gson();
     private final Type listType = new TypeToken<ArrayList<String>>() {}.getType();
     private final Type cooldownMapType = new TypeToken<HashMap<CoreType, Integer>>() {}.getType();
 
-    // Constructor: This sets up the database file inside the world folder
+    // Initializes database folders and patches table schemas
     public PlayerDataManager(File worldFolder) {
         File dataFolder = new File(worldFolder, "astralcores");
         if (!dataFolder.exists()) dataFolder.mkdirs();
 
         try {
-            // Load the standard SQLite driver built into Java / Minecraft dependencies
             Class.forName("org.sqlite.JDBC");
 
-            // Connect to (or create) the playerdata.db file
             File dbFile = new File(dataFolder, "playerdata.db");
             this.connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile.getAbsolutePath());
 
-            // Automatically execute SQL to build or safety-patch our storage table layout
+            // Builds or safety-patches table layout parameters
             try (Statement statement = connection.createStatement()) {
                 statement.execute(
                         "CREATE TABLE IF NOT EXISTS player_cores (" +
-                                "uuid TEXT PRIMARY KEY, " +     // Unique Key: Player UUID string
-                                "equipped_core TEXT, " +       // Bound equipment core slot enum identification
-                                "trusted_players TEXT, " +     // Serialized trust permission tracking array
-                                "actionbar_mode TEXT, " +      // Layout visualization state node toggle
-                                "active_cooldowns TEXT, " +    // Persisted active capability timer map
-                                "passive_cooldowns TEXT)"      // Persisted passive feature timer map
+                                "uuid TEXT PRIMARY KEY, " +
+                                "equipped_core TEXT, " +
+                                "trusted_players TEXT, " +
+                                "actionbar_mode TEXT, " +
+                                "active_cooldowns TEXT, " +
+                                "passive_cooldowns TEXT)"
                 );
 
-                // Safety patches: Add tracking columns explicitly if the table was created by older mod builds
+                // Appends tracking parameters explicitly if table was built by older mod versions
                 try { statement.execute("ALTER TABLE player_cores ADD COLUMN active_cooldowns TEXT DEFAULT '{}'"); } catch (SQLException ignored) {}
                 try { statement.execute("ALTER TABLE player_cores ADD COLUMN passive_cooldowns TEXT DEFAULT '{}'"); } catch (SQLException ignored) {}
                 try { statement.execute("ALTER TABLE player_cores ADD COLUMN actionbar_mode TEXT DEFAULT 'ICON'"); } catch (SQLException ignored) {}
@@ -61,29 +59,28 @@ public class PlayerDataManager {
         }
     }
 
-    // RUNS ON JOIN: Loads existing database records into our active RAM cache
+    // Loads persistent database records into active RAM cache on player join
     public void load(ServerPlayer player) {
         UUID uuid = player.getUUID();
         String query = "SELECT * FROM player_cores WHERE uuid = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setString(1, uuid.toString()); // Replace the "?" in the query with the player's string UUID
+            ps.setString(1, uuid.toString());
 
             try (ResultSet rs = ps.executeQuery()) {
                 PlayerData data = new PlayerData();
 
-                // If a database row exists for this player, read it
                 if (rs.next()) {
                     String equipped = rs.getString("equipped_core");
                     String trustedJson = rs.getString("trusted_players");
                     String modeString = rs.getString("actionbar_mode");
-                    String activeCooldownsJson = rs.getString("active_cooldowns");   // Fetch active timers
-                    String passiveCooldownsJson = rs.getString("passive_cooldowns"); // Fetch passive timers
+                    String activeCooldownsJson = rs.getString("active_cooldowns");
+                    String passiveCooldownsJson = rs.getString("passive_cooldowns");
 
-                    // Reconstruct core state from raw text back to Java Enum
+                    // Reconstructs core status to Java Enum pattern
                     if (equipped != null) data.setEquippedCore(CoreType.valueOf(equipped));
 
-                    // Parse the JSON text string back into a standard list of Java UUIDs
+                    // Converts trusted player text records back to active UUID objects
                     if (trustedJson != null && !trustedJson.isEmpty()) {
                         List<String> trustedStrings = gson.fromJson(trustedJson, listType);
                         if (trustedStrings != null) {
@@ -93,7 +90,7 @@ public class PlayerDataManager {
                         }
                     }
 
-                    // Convert the stored database string token back into the native Enum mode safely
+                    // Converts text records back to native UI Enum structures safely
                     if (modeString != null) {
                         try {
                             data.setActionBarMode(ActionBarMode.valueOf(modeString));
@@ -102,13 +99,13 @@ public class PlayerDataManager {
                         }
                     }
 
-                    // Deserializes stored active cooldown parameters directly into active RAM storage
+                    // Restores active cooldown counters into running RAM registers
                     if (activeCooldownsJson != null && !activeCooldownsJson.isEmpty()) {
                         Map<CoreType, Integer> activeMap = gson.fromJson(activeCooldownsJson, cooldownMapType);
                         if (activeMap != null) data.getActiveCooldownsMap().putAll(activeMap);
                     }
 
-                    // Deserializes stored passive cooldown parameters directly into active RAM storage
+                    // Restores passive cooldown counters into running RAM registers
                     if (passiveCooldownsJson != null && !passiveCooldownsJson.isEmpty()) {
                         Map<CoreType, Integer> passiveMap = gson.fromJson(passiveCooldownsJson, cooldownMapType);
                         if (passiveMap != null) data.getPassiveCooldownsMap().putAll(passiveMap);
@@ -116,20 +113,19 @@ public class PlayerDataManager {
 
                     AstralCores.LOGGER.info("Loaded SQLite profile data for player: {}", player.getScoreboardName());
                 } else {
-                    // Brand new player detected: Create an empty row profile in the database
+                    // Generates fresh database profile fields for primary validation cycles
                     insertNewPlayer(uuid);
                     AstralCores.LOGGER.info("Created brand new database profile row for player: {}", player.getScoreboardName());
                 }
 
-                // Put the completed data into our RAM cache map for fast in-game utilization
                 cache.put(uuid, data);
             }
         } catch (SQLException e) {
             AstralCores.LOGGER.error("SQL Exception caught during profile load routine for: {}", uuid, e);
-            cache.put(uuid, new PlayerData()); // Safety fallback: Give them blank data so the server doesn't crash
+            cache.put(uuid, new PlayerData());
         }
     }
-    // RUNS IN GAME: Returns the rapid-access RAM cache data for active gameplay checks
+    // Fetches active RAM cached data profiles instantly for runtime checking
     public PlayerData get(ServerPlayer player) {
         PlayerData data = cache.get(player.getUUID());
         if (data == null) {
@@ -138,51 +134,50 @@ public class PlayerDataManager {
         return data;
     }
 
-    // RUNS PERIODICALLY / ON QUIT: Updates database file safely using current RAM values
+    // Serializes and commits active RAM cached parameters down into the database file
     public void save(ServerPlayer player) {
         UUID uuid = player.getUUID();
         PlayerData data = cache.get(uuid);
-        if (data == null) return; // Nothing cached, skip saving
+        if (data == null) return;
 
-        // Added active_cooldowns and passive_cooldowns tracking serialization slots into the pipeline
         String update = "UPDATE player_cores SET equipped_core = ?, trusted_players = ?, actionbar_mode = ?, active_cooldowns = ?, passive_cooldowns = ? WHERE uuid = ?";
         try (PreparedStatement ps = connection.prepareStatement(update)) {
-            // Bind core Enum value or null string if empty
+            // Converts the equipped core Enum type to a string value
             ps.setString(1, data.getEquippedCore() != null ? data.getEquippedCore().name() : null);
 
-            // Serialize trust context list into a compressed text line via GSON
+            // Serializes the list of trusted player UUIDs into a JSON string
             List<String> trustedStrings = new ArrayList<>();
             for (UUID tUuid : data.getTrustedPlayers()) {
                 trustedStrings.add(tUuid.toString());
             }
             ps.setString(2, gson.toJson(trustedStrings));
 
-            // Push the exact active layout state Enum name down to the SQL stack
+            // Saves the action bar UI display mode configuration name
             ps.setString(3, data.getActionBarMode().name());
 
-            // Serialize active timers map into raw JSON text lines
+            // Serializes active talent capability cooldown counters into JSON text lines
             ps.setString(4, gson.toJson(data.getActiveCooldownsMap()));
 
-            // Serialize passive timers map into raw JSON text lines
+            // Serializes passive talent property cooldown counters into JSON text lines
             ps.setString(5, gson.toJson(data.getPassiveCooldownsMap()));
 
-            ps.setString(6, uuid.toString()); // Targeted Row
+            // Targets the specific player row using their string UUID index
+            ps.setString(6, uuid.toString());
 
-            ps.executeUpdate(); // Push updates down to database file safely
+            ps.executeUpdate();
         } catch (SQLException e) {
             AstralCores.LOGGER.error("Failed executing SQLite push operation during state save for: {}", uuid, e);
         }
     }
 
-    // RUNS ON QUIT: Saves data to disk and completely removes player from RAM to save memory
+    // Saves current records to disk and removes the player profile from running RAM
     public void unload(ServerPlayer player) {
         save(player);
         cache.remove(player.getUUID());
     }
 
-    // Helper method to write an empty starter row for a fresh player profile
+    // Inserts a blank starter data row format for a completely new player profile
     private void insertNewPlayer(UUID uuid) throws SQLException {
-        // Expanded basic framework insertions to cover default values for timer columns
         String insert = "INSERT INTO player_cores (uuid, equipped_core, trusted_players, actionbar_mode, active_cooldowns, passive_cooldowns) VALUES (?, NULL, '[]', 'ICON', '{}', '{}')";
         try (PreparedStatement ps = connection.prepareStatement(insert)) {
             ps.setString(1, uuid.toString());
@@ -190,7 +185,7 @@ public class PlayerDataManager {
         }
     }
 
-    // RUNS ON SERVER SHUTDOWN: Terminates stream pipeline connection pool cleanly
+    // Closes the active database connection pool during server shutdown routines
     public void closeConnection() {
         try {
             if (connection != null && !connection.isClosed()) {

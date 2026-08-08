@@ -26,36 +26,30 @@ import java.util.List;
 
 public class ChronoCorePassiveLogic {
 
-    /**
-     * Checks if the player has the Chrono Core equipped and rolls a 50% chance to cheat death.
-     * @return false if death is prevented; true if the player should die normally.
-     */
+    // Evaluates if the chrono core is equipped and rolls a 50% chance to prevent death
     public static boolean handleSecondTimeline(ServerPlayer player, DamageSource damageSource, float damageAmount) {
 
-        /* Validate if player profile exists and Chrono Core is actively equipped */
         PlayerData data = AstralCores.PLAYER_DATA.get(player);
         if (data == null || data.getEquippedCore() != CoreType.CHRONO_CORE) {
             return true;
         }
 
-        /* Roll the 50% success chance */
+        // Rolls a 50% success chance to trigger the death cheat mechanic
         if (player.getRandom().nextBoolean()) {
 
-            /* Cancel death lifecycle and restore full health stability */
+            // Restores the player to maximum health and resets their combat state
             player.setHealth(player.getMaxHealth());
             player.getCombatTracker().recheckStatus();
 
-            /* Trigger the vanilla death protection animation utilizing packet-level fake equipment */
+            // Triggers visual and audio totem activation effects
             playDeathCheatEffects(player);
 
-            /* Simple text success message */
             player.sendSystemMessage(Component.literal("[Chrono Core] Second Timeline activated! You have been healed.")
                     .withStyle(ChatFormatting.GREEN));
 
             return false;
         } else {
 
-            /* Simple text failure message */
             player.sendSystemMessage(Component.literal("[Chrono Core] Second Timeline failed!")
                     .withStyle(ChatFormatting.RED));
 
@@ -63,8 +57,9 @@ public class ChronoCorePassiveLogic {
         }
     }
 
+    // Handles the particles, sounds, and fake item packets for the death prevention animation
     private static void playDeathCheatEffects(ServerPlayer player) {
-        /* Broadcast the standard vanilla Totem activation sound profile at player position */
+        // Plays the vanilla totem activation sound at the player position
         player.level().playSound(
                 null,
                 player.getX(), player.getY(), player.getZ(),
@@ -73,7 +68,7 @@ public class ChronoCorePassiveLogic {
                 1.0F, 1.0F
         );
 
-        /* Spawn vanilla totem particles globally on the server level for all nearby tracking players */
+        // Spawns totem particles around the player location
         if (player.level() instanceof ServerLevel serverLevel) {
             serverLevel.sendParticles(
                     ParticleTypes.TOTEM_OF_UNDYING,
@@ -82,34 +77,25 @@ public class ChronoCorePassiveLogic {
             );
         }
 
-        /**
-         * Resolves the backing vanilla item directly through the central core registry instance lookup map.
-         * Falls back onto a basic clock item instance if the registration data container misses.
-         */
+        // Fetches the core base item or defaults to a clock item if missing
         Item registeredItem = CoreRegistry.get(CoreType.CHRONO_CORE)
                 .map(Core::getBaseItem)
                 .orElse(Items.CLOCK);
 
-        /* Construct a fake visual item stack dynamically fetching the registered base item from the core type */
+        // Builds a temporary item stack configured with death protection attributes
         ItemStack fakeCoreItem = new ItemStack(registeredItem);
         fakeCoreItem.set(DataComponents.DEATH_PROTECTION, new DeathProtection(List.of()));
 
-        /**
-         * Send a packet telling the client they are holding the core item in their off-hand.
-         * This does NOT change the server inventory and does not touch any real item.
-         */
+        // Sends a fake packet showing the item in the player off-hand slot
         player.connection.send(new ClientboundSetEquipmentPacket(
                 player.getId(),
                 List.of(Pair.of(EquipmentSlot.OFFHAND, fakeCoreItem))
         ));
 
-        /* Dispatch entity status packet 35. The client now sees the core item in its off-hand and renders it */
+        // Triggers entity event status 35 to force the client totem screen animation
         player.connection.send(new ClientboundEntityEventPacket(player, (byte) 35));
 
-        /**
-         * Instantly resend the actual server inventory state for the off-hand slot to the client.
-         * This cleans up the fake item visualization immediately so the player's HUD stays perfectly accurate.
-         */
+        // Instantly restores the real server off-hand item data to correct the client HUD display
         player.connection.send(new ClientboundSetEquipmentPacket(
                 player.getId(),
                 List.of(Pair.of(EquipmentSlot.OFFHAND, player.getItemInHand(net.minecraft.world.InteractionHand.OFF_HAND)))
