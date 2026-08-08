@@ -4,7 +4,7 @@ import de.ep.astralcores.playerdata.PlayerData;
 import de.ep.astralcores.core.CoreRegistry;
 import net.minecraft.server.level.ServerPlayer;
 
-public class PassiveAbilityManager {
+public class CoreTickManager {
 
     /**
      * Resolves and executes the single equipped core passive effect if populated.
@@ -13,7 +13,7 @@ public class PassiveAbilityManager {
      * @param player The ServerPlayer target profile context to evaluate.
      * @param data   The cached PlayerData reference provided by the central main loop.
      */
-    public static void tick(ServerPlayer player, PlayerData data) {
+    public static void tickPassiveAbility(ServerPlayer player, PlayerData data) {
         if (data == null) return;
 
         /* Resolves and executes the single equipped core passive effect if populated */
@@ -22,5 +22,17 @@ public class PassiveAbilityManager {
                 core.applyPassive(player);
             });
         }
+    }
+
+    public static void tick(ServerPlayer player, PlayerData data) {
+        if (data == null) return;
+
+        /* Resolves and executes the cores tick function if populated */
+        if (data.getEquippedCore() != null) {
+            CoreRegistry.get(data.getEquippedCore()).ifPresent(core -> {
+                core.tick(player);
+            });
+        }
+
     }
 }
