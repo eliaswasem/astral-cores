@@ -33,7 +33,7 @@ public class BersekerCore extends Core {
                 0,
                 "aRage Mode",
                 "Bloodlust",
-                ""
+                "\uE009"
         );
     }
 
