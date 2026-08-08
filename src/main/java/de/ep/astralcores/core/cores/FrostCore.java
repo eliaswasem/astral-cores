@@ -21,9 +21,6 @@ public class FrostCore extends Core {
                 Items.CLAY_BALL,
                 List.of(
                         "§b[Passive: Frost Aura]",
-                        "§7Emits a slowness aura that gets",
-                        "§7stronger the closer enemies are.",
-                        "",
                         "§b[Active: Frost Lock]"
                 ),
                 10008,
