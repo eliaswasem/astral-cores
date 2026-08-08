@@ -36,7 +36,8 @@ public class PhoenixCore extends Core {
                 30,
                 0,
                 "Phoenix Burst",
-                "Flameborn"
+                "Flameborn",
+                "\uE006"
         );
     }
 

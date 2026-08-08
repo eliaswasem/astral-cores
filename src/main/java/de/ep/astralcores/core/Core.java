@@ -38,6 +38,9 @@ public abstract class Core {
     /** The user-facing display name configuration mapped to the persistent background passive mechanic. */
     private final String passiveAbilityName;
 
+    /** The custom resource pack font character utilized to display this core's interface icon. */
+    private final String customChar;
+
     /**
      * Constructs a unified core instance template configuration block.
      *
@@ -50,6 +53,7 @@ public abstract class Core {
      * @param passiveCooldown    The default passive utility processing cooldown limit in seconds.
      * @param activeAbilityName  The uncolorized or formatted identification name of the active skill.
      * @param passiveAbilityName The uncolorized or formatted identification name of the passive trait.
+     * @param customChar         The custom font unicode character representing this core's icon asset.
      */
     public Core(
             CoreType type,
@@ -60,7 +64,8 @@ public abstract class Core {
             int activeCooldown,
             int passiveCooldown,
             String activeAbilityName,
-            String passiveAbilityName
+            String passiveAbilityName,
+            String customChar
     ) {
         this.type = type;
         this.name = name;
@@ -71,6 +76,7 @@ public abstract class Core {
         this.passiveCooldown = passiveCooldown;
         this.activeAbilityName = activeAbilityName;
         this.passiveAbilityName = passiveAbilityName;
+        this.customChar = customChar;
     }
 
     /**
@@ -162,6 +168,15 @@ public abstract class Core {
      */
     public String getPassiveAbilityName() {
         return passiveAbilityName;
+    }
+
+    /**
+     * Retrieves the custom resource pack font character mapped to this core module.
+     *
+     * @return A string containing the unicode character asset index.
+     */
+    public String getCustomChar() {
+        return customChar;
     }
 
     /**

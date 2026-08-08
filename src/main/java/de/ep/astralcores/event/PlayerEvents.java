@@ -8,6 +8,7 @@ import de.ep.astralcores.event.logic.CoreDeathLogic;
 import de.ep.astralcores.event.logic.CoreInteractLogic;
 import de.ep.astralcores.core.CoreFactory;
 import de.ep.astralcores.event.logic.ShadowCorePassiveLogic;
+import de.ep.astralcores.playerdata.PlayerData;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
@@ -88,7 +89,7 @@ public class PlayerEvents {
             if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
 
                 /* Fetch the specific attacker profile metadata structure from the registry */
-                de.ep.astralcores.playerdata.PlayerData data = AstralCores.PLAYER_DATA.get(serverPlayer);
+                PlayerData data = AstralCores.PLAYER_DATA.get(serverPlayer);
 
                 /* Only trigger revelation sequences if the attacker explicitly owns and carries the shadow core */
                 if (data != null && data.getEquippedCore() == CoreType.SHADOW_CORE) {

@@ -21,7 +21,8 @@ public class BersekerCore extends Core {
                 0,
                 0,
                 "Rage Mode",
-                "Bloodlust"
+                "Bloodlust",
+                "\uE009"
         );
 
     }

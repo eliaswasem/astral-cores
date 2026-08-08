@@ -12,6 +12,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.LightLayer;
 
 import java.util.ArrayList;
@@ -37,13 +38,14 @@ public class ShadowCore extends Core {
         super(
                 CoreType.SHADOW_CORE,
                 "§8Shadow Core",
-                net.minecraft.world.item.Items.POTION,
+                Items.DRAGON_BREATH,
                 List.of("§8[Passive: Living Shadow]"),
                 10007,
                 0,
                 0,
-                "",
-                ""
+                "Smoke Veil",
+                "Living Shadow",
+                "\uE008"
         );
     }
 

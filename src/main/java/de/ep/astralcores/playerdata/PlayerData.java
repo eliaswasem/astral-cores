@@ -9,6 +9,14 @@ import java.util.UUID;
 
 public class PlayerData {
 
+    /**
+     * Supported rendering configuration layouts for the active user action bar interface.
+     */
+    public enum ActionBarMode {
+        TEXT,
+        ICON
+    }
+
     // Store what core is equipped in the slot (null means empty slot)
     private CoreType equippedCore;
 
@@ -21,54 +29,38 @@ public class PlayerData {
     // Map tracking passive recovery channel cooldowns in seconds per specific core type
     private final Map<CoreType, Integer> passiveCooldowns;
 
+    // Personal display configuration preference controlling action bar visuals
+    private ActionBarMode actionBarMode;
+
     // Constructor: Automatically runs when a new player profile is created
     public PlayerData() {
         this.equippedCore = null;
         this.trustedPlayers = new ArrayList<>();
         this.activeCooldowns = new HashMap<>();
         this.passiveCooldowns = new HashMap<>();
+        this.actionBarMode = ActionBarMode.ICON; // Standard interface layout baseline
     }
 
     // --- COOLDOWN MANAGEMENT UTILITIES ---
 
     /**
-     * Retrieves the remaining active cooldown seconds for a specific core type.
-     * Returns 0 if no cooldown entry is active.
+     * Retrieves the entire backing map instance tracking active capability capabilities.
+     * Required internally by data persistence layers for GSON serialization structures.
+     *
+     * @return The raw active cooldown reference tracking map.
      */
-    public int getActiveCooldownSeconds(CoreType type) {
-        return activeCooldowns.getOrDefault(type, 0);
+    public Map<CoreType, Integer> getActiveCooldownsMap() {
+        return this.activeCooldowns;
     }
 
     /**
-     * Updates the remaining active cooldown seconds for a specific core type.
-     * Removes the mapping if the duration reaches zero or lower to save memory overhead.
+     * Retrieves the entire backing map instance tracking passive recovery capabilities.
+     * Required internally by data persistence layers for GSON serialization structures.
+     *
+     * @return The raw passive cooldown reference tracking map.
      */
-    public void setActiveCooldownSeconds(CoreType type, int seconds) {
-        if (seconds <= 0) {
-            activeCooldowns.remove(type);
-        } else {
-            activeCooldowns.put(type, seconds);
-        }
-    }
-
-    /**
-     * Retrieves the remaining passive cooldown seconds for a specific core type.
-     * Returns 0 if no cooldown entry is active.
-     */
-    public int getPassiveCooldownSeconds(CoreType type) {
-        return passiveCooldowns.getOrDefault(type, 0);
-    }
-
-    /**
-     * Updates the remaining passive cooldown seconds for a specific core type.
-     * Removes the mapping if the duration reaches zero or lower to save memory overhead.
-     */
-    public void setPassiveCooldownSeconds(CoreType type, int seconds) {
-        if (seconds <= 0) {
-            passiveCooldowns.remove(type);
-        } else {
-            passiveCooldowns.put(type, seconds);
-        }
+    public Map<CoreType, Integer> getPassiveCooldownsMap() {
+        return this.passiveCooldowns;
     }
 
     /**
@@ -81,6 +73,28 @@ public class PlayerData {
 
         passiveCooldowns.replaceAll((type, seconds) -> seconds - 1);
         passiveCooldowns.values().removeIf(seconds -> seconds <= 0);
+    }
+
+    // --- ACTION BAR CONFIGURATION UTILITIES ---
+
+    /**
+     * Retrieves the current action bar formatting preference for this profile.
+     *
+     * @return The active ActionBarMode configuration node.
+     */
+    public ActionBarMode getActionBarMode() {
+        return this.actionBarMode;
+    }
+
+    /**
+     * Updates the action bar interface layout directly utilizing the internal Enum state.
+     *
+     * @param mode The targeted ActionBarMode configuration preference.
+     */
+    public void setActionBarMode(ActionBarMode mode) {
+        if (mode != null) {
+            this.actionBarMode = mode;
+        }
     }
 
     // --- STANDARD GETTERS AND SETTERS ---

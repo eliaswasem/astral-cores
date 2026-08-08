@@ -23,7 +23,8 @@ public class GaleCore extends Core {
                 0,
                 0,
                 "Sonic Dash",
-                "Lightfeet"
+                "Lightfeet",
+                "\uE002"
         );
     }
 

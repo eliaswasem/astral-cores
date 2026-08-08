@@ -30,7 +30,8 @@ public class FrostCore extends Core {
                 0,
                 0,
                 "Frost Lock",
-                "Frost Aura"
+                "Frost Aura",
+                "\uE005"
         );
     }
 

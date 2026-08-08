@@ -32,7 +32,8 @@ public class GravityCore extends Core {
                 25,
                 0,
                 "Gravity Pull",
-                "Heavy Presence"
+                "Heavy Presence",
+                "\uE004"
         );
     }
 

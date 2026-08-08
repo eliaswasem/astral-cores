@@ -28,7 +28,8 @@ public class AeroCore extends Core {
                 15,
                 0,
                 "Aero Jump",
-                "Air Cushion"
+                "Air Cushion",
+                "\uE001"
         );
     }
 

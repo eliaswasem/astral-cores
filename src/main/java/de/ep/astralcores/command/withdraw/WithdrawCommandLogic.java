@@ -1,6 +1,7 @@
 package de.ep.astralcores.command.withdraw;
 
 import de.ep.astralcores.AstralCores;
+import de.ep.astralcores.manager.ActionBarManager;
 import de.ep.astralcores.playerdata.PlayerData;
 import de.ep.astralcores.core.CoreFactory;
 import de.ep.astralcores.core.Core;
@@ -44,6 +45,8 @@ public class WithdrawCommandLogic {
 
         // Clear the single player core slot
         data.setEquippedCore(null);
+        // Instantly update Actionbar
+        ActionBarManager.tick(player, data);
 
         // Give the core item to the player or drop it on the ground if inventory is full
         if (!player.getInventory().add(coreStack)) {

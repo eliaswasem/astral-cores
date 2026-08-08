@@ -1,5 +1,6 @@
 package de.ep.astralcores.command;
 
+import de.ep.astralcores.command.actionbar.ActionBarCommand;
 import de.ep.astralcores.command.activate.ActivateCommand;
 import de.ep.astralcores.command.core.CoreCommand;
 import de.ep.astralcores.command.trust.TrustCommand;
@@ -20,6 +21,7 @@ public class CommandRegistry {
             CoreCommand.register(dispatcher);
             WithdrawCommand.register(dispatcher);
             ActivateCommand.register(dispatcher);
+            ActionBarCommand.register(dispatcher);
 
         });
     }

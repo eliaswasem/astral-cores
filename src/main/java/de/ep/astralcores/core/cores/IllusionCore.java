@@ -21,7 +21,8 @@ public class IllusionCore extends Core {
                 0,
                 0,
                 "Mirror Swap",
-                "Mirror Image"
+                "Mirror Image",
+                "\uE00A"
         );
     }
 

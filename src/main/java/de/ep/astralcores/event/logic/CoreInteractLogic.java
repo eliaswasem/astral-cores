@@ -1,6 +1,7 @@
 package de.ep.astralcores.event.logic;
 
 import de.ep.astralcores.AstralCores;
+import de.ep.astralcores.manager.ActionBarManager;
 import de.ep.astralcores.playerdata.PlayerData;
 import de.ep.astralcores.core.Core;
 import net.minecraft.network.chat.Component;
@@ -28,6 +29,8 @@ public class CoreInteractLogic {
         // Bind the core to the single equipment slot
         data.setEquippedCore(core.getType());
         player.sendSystemMessage(Component.literal("§aSuccessfully bound " + core.getName() + " to your profile slot."));
+        // Instantly update Actionbar
+        ActionBarManager.tick(player, data);
 
         // Consume one item from the stack if the player is not in creative mode
         if (!player.getAbilities().instabuild) {

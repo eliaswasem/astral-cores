@@ -34,8 +34,8 @@ public class CoreActivateManager {
         }
 
         // Evaluate active capability execution lock restrictions via CooldownManager
-        if (!CooldownManager.isActiveReady(player, targetedType)) {
-            int remaining = CooldownManager.getActiveRemaining(player, targetedType);
+        if (!CooldownManager.isActiveReady(data, targetedType)) {
+            int remaining = CooldownManager.getActiveRemaining(data, targetedType);
 
             // Fetch the dedicated active capability identity text string dynamically
             String abilityName = relic.getActiveAbilityName();
@@ -46,7 +46,10 @@ public class CoreActivateManager {
         relic.activate(player);
 
         // Enforce active cooldown tracking boundaries onto the profile instance
-        CooldownManager.startActiveCooldown(player, targetedType, relic.getActiveCooldown());
+        CooldownManager.startActiveCooldown(data, targetedType, relic.getActiveCooldown());
+
+        // Force an instant action bar update so the cooldown timer shows up on the client hud immediately
+        ActionBarManager.tick(player, data);
 
         return new ActivationResult(true, null);
     }

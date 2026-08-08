@@ -4,6 +4,7 @@ import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.config.ConfigManager;
 import de.ep.astralcores.core.CoreRegistry;
 import de.ep.astralcores.core.CoreType;
+import de.ep.astralcores.manager.ActionBarManager;
 import de.ep.astralcores.playerdata.PlayerData;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -27,6 +28,8 @@ public class CoreDeathLogic {
 
             // Wipe the core data from the player slot
             data.setEquippedCore(null);
+            // Instantly update Actionbar
+            ActionBarManager.tick(player, data);
         }
     }
 }
