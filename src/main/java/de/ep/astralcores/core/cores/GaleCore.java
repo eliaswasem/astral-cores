@@ -21,7 +21,9 @@ public class GaleCore extends Core {
                 ),
                 10005,
                 0,
-                0
+                0,
+                "Sonic Dash",
+                "Lightfeet"
         );
     }
 

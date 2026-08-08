@@ -34,7 +34,9 @@ public class PhoenixCore extends Core {
                 ),
                 10003,
                 30,
-                0
+                0,
+                "Phoenix Burst",
+                "Flameborn"
         );
     }
 
@@ -61,7 +63,7 @@ public class PhoenixCore extends Core {
         ServerLevel level = player.level();
 
         player.sendSystemMessage(
-                Component.literal("§cYou unleashed a Phoenix Burst!")
+                Component.literal("§cYou unleashed a" + getActiveAbilityName() + "!")
         );
 
         Vec3 pos = player.position();

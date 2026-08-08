@@ -19,7 +19,9 @@ public class MagnetCore extends Core {
                 ),
                 10012,
                 0,
-                0
+                0,
+                "Magnetic Pull",
+                "Magnetic Grip"
         );
     }
 

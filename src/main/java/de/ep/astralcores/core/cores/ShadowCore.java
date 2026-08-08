@@ -41,7 +41,9 @@ public class ShadowCore extends Core {
                 List.of("§8[Passive: Living Shadow]"),
                 10007,
                 0,
-                0
+                0,
+                "",
+                ""
         );
     }
 

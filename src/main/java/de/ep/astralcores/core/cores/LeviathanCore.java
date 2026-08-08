@@ -19,7 +19,9 @@ public class LeviathanCore extends Core {
                 ),
                 10009,
                 0,
-                0
+                0,
+                "Whirlpool",
+                "Oceanborn"
         );
     }
 

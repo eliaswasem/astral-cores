@@ -28,7 +28,9 @@ public class FrostCore extends Core {
                 ),
                 10008,
                 0,
-                0
+                0,
+                "Frost Lock",
+                "Frost Aura"
         );
     }
 

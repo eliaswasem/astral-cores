@@ -1,5 +1,6 @@
 package de.ep.astralcores;
 
+import de.ep.astralcores.manager.CooldownManager;
 import de.ep.astralcores.manager.PassiveAbilityManager;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
@@ -47,5 +48,6 @@ public class MainLoop {
     /* Isolated empty placeholder loop for low-frequency operations */
     private static void twentyTickLoop(MinecraftServer server) {
         PassiveAbilityManager.tick(server);
+        CooldownManager.tick(server);
     }
 }

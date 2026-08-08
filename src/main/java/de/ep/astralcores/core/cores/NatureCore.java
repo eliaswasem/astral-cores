@@ -24,7 +24,9 @@ public class NatureCore extends Core {
                 ),
                 10012,
                 0,
-                0
+                0,
+                "Root Trap",
+                "Nature Blessing"
         );
     }
 
