@@ -64,7 +64,7 @@ public class FrostCore extends Core {
                 } else {
                    effectLevel = 1; // Slowness I
                 }
-                Effects.applyEffect(player, MobEffects.SLOWNESS, 40, effectLevel, false, false, false);
+                Effects.applyEffect(enemy, MobEffects.SLOWNESS, 40, effectLevel, false, false, false);
             }
         }
     }
