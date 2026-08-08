@@ -1,7 +1,10 @@
 package de.ep.astralcores.core.cores;
 
+import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreType;
+import de.ep.astralcores.playerdata.PlayerData;
+import de.ep.astralcores.util.Effects;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -31,6 +34,7 @@ public class FrostCore extends Core {
 
     @Override
     public void applyPassive(ServerPlayer player) {
+        PlayerData data = AstralCores.PLAYER_DATA.get(player);
         ServerLevel level = player.level();
         double maxRange = 8.0;
 
@@ -41,20 +45,23 @@ public class FrostCore extends Core {
         );
 
         for (LivingEntity enemy : nearbyEnemies) {
+
+            if (data != null && data.isTrusted(enemy.getUUID())){
+                continue;
+            }
             double distance = player.distanceTo(enemy);
 
             if (distance <= maxRange) {
-                int amplifier;
+                int effectLevel;
 
                 if (distance <= 3.5) {
-                    amplifier = 2; // Slowness III
+                    effectLevel = 3; // Slowness III
                 } else if (distance <= 5.0) {
-                    amplifier = 1; // Slowness II
+                    effectLevel = 2; // Slowness II
                 } else {
-                    amplifier = 0; // Slowness I
+                   effectLevel = 1; // Slowness I
                 }
-
-                enemy.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 40, amplifier, false, false, true));
+                Effects.applyEffect(player, MobEffects.SLOWNESS, 40, effectLevel, false, false, false);
             }
         }
     }
