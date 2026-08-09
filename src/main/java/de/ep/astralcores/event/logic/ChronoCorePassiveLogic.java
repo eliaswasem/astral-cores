@@ -1,10 +1,9 @@
 package de.ep.astralcores.event.logic;
 
-import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreRegistry;
 import de.ep.astralcores.core.CoreType;
-import de.ep.astralcores.playerdata.PlayerData;
+import de.ep.astralcores.core.cores.ChronoCore;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
@@ -28,9 +27,8 @@ public class ChronoCorePassiveLogic {
 
     // Evaluates if the chrono core is equipped and rolls a 50% chance to prevent death
     public static boolean handleSecondTimeline(ServerPlayer player, DamageSource damageSource, float damageAmount) {
-
-        PlayerData data = AstralCores.PLAYER_DATA.get(player);
-        if (data == null || data.getEquippedCore() != CoreType.CHRONO_CORE) {
+        // Stops execution immediately if the player does not have the ChronoCore active in the map
+        if (!ChronoCore.activePlayers.containsKey(player)) {
             return true;
         }
 

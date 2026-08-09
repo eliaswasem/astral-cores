@@ -2,18 +2,16 @@ package de.ep.astralcores.core.cores;
 
 import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreType;
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Items;
 
 import java.util.List;
+import java.util.WeakHashMap;
 
 public class AeroCore extends Core {
 
-    private static final Identifier AERO_MODIFIER_ID = Identifier.fromNamespaceAndPath("astralcores", "aero_featherweight");
+    // Tracks which players currently have this core's passive effect active
+    public static final WeakHashMap<ServerPlayer, Boolean> activePlayers = new WeakHashMap<>();
 
     public AeroCore() {
         super(
@@ -35,27 +33,14 @@ public class AeroCore extends Core {
 
     @Override
     public void applyPassive(ServerPlayer player) {
-        AttributeInstance attribute = player.getAttribute(Attributes.FALL_DAMAGE_MULTIPLIER);
-        if (attribute != null) {
-            if (!attribute.hasModifier(AERO_MODIFIER_ID)) {
-                // -1.0 cuts the base 1.0 multiplier down to 0 (100% damage reduction)
-                attribute.addTransientModifier(new AttributeModifier(
-                        AERO_MODIFIER_ID,
-                        -1.0,
-                        AttributeModifier.Operation.ADD_VALUE
-                ));
-            }
-        }
+        // Just add the player to the active map
+        activePlayers.put(player, true);
     }
 
     @Override
     public void onRemoved(ServerPlayer player) {
-        AttributeInstance attribute = player.getAttribute(Attributes.FALL_DAMAGE_MULTIPLIER);
-        if (attribute != null) {
-            if (attribute.hasModifier(AERO_MODIFIER_ID)) {
-                attribute.removeModifier(AERO_MODIFIER_ID);
-            }
-        }
+        // Just remove the player from the active map
+        activePlayers.remove(player);
     }
 
     @Override

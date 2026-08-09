@@ -50,4 +50,9 @@ public class BerserkerCore extends Core {
     @Override
     public void activate(ServerPlayer player) {
     }
+
+    @Override
+    public void onRemoved(ServerPlayer player) {
+        activePlayers.remove(player);
+    }
 }

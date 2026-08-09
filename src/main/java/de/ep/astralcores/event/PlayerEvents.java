@@ -49,9 +49,16 @@ public class PlayerEvents {
         });
 
         // Intercepts the death check to evaluate anti-death mechanics like the chrono core
-        ServerLivingEntityEvents.ALLOW_DEATH.register((entity, damageSource, damageAmount) -> {
+        ServerLivingEntityEvents.ALLOW_DEATH.register((entity, source, damageAmount) -> {
             if (entity instanceof ServerPlayer serverPlayer) {
-                return ChronoCorePassiveLogic.handleSecondTimeline(serverPlayer, damageSource, damageAmount);
+                return ChronoCorePassiveLogic.handleSecondTimeline(serverPlayer, source, damageAmount);
+            }
+            return true;
+        });
+
+        ServerLivingEntityEvents.ALLOW_DAMAGE.register((entity, source, amount) -> {
+            if (entity instanceof ServerPlayer serverPlayer) {
+                return AeroCorePassiveLogic.handleFallShockwave(serverPlayer, source);
             }
             return true;
         });
@@ -79,7 +86,7 @@ public class PlayerEvents {
 
         // Evaluates if a hidden shadow core player should be revealed after taking damage
         ServerLivingEntityEvents.AFTER_DAMAGE.register(
-                (entity, damageSource, baseDamage, damageTaken, blocked) -> {
+                (entity, source, baseDamage, damageTaken, blocked) -> {
 
                     if (entity instanceof ServerPlayer serverPlayer) {
 
@@ -89,7 +96,7 @@ public class PlayerEvents {
 
                         ShadowCorePassiveLogic.handleDamageReveal(
                                 serverPlayer,
-                                damageSource
+                                source
                         );
                     }
                 }
