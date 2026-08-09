@@ -5,6 +5,7 @@
   "mixins": [
     "BundleItemMixin",
     "ClientboundSetEquipmentPacketMixin",
+    "HopperBlockEntityMixin",
     "MobMixin",
     "RecipeManagerMixin",
     "ServerExplosionMixin",
