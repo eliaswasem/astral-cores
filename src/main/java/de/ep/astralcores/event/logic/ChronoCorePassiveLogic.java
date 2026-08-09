@@ -28,7 +28,7 @@ public class ChronoCorePassiveLogic {
     // Evaluates if the chrono core is equipped and rolls a 50% chance to prevent death
     public static boolean handleSecondTimeline(ServerPlayer player, DamageSource damageSource, float damageAmount) {
         // Stops execution immediately if the player does not have the ChronoCore active in the map
-        if (!ChronoCore.activePlayers.containsKey(player)) {
+        if (!ChronoCore.activePlayers.contains(player)) {
             return true;
         }
 

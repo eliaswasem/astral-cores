@@ -20,7 +20,7 @@ public class AeroCorePassiveLogic {
     // Handles the passive wind shockwave when an AeroCore player lands from a fall
     public static boolean handleFallShockwave(ServerPlayer player, DamageSource source) {
         // Stops execution immediately if the player does not have the AeroCore active
-        if (!AeroCore.activePlayers.containsKey(player)) {
+        if (!AeroCore.activePlayers.contains(player)) {
             return true;
         }
 

@@ -15,7 +15,7 @@ public class BerserkerCorePassivLogic {
 
         Entity attacker = source.getEntity();
 
-        if (attacker instanceof ServerPlayer killer && BerserkerCore.activePlayers.containsKey(killer)) {
+        if (attacker instanceof ServerPlayer killer && BerserkerCore.activePlayers.contains(killer)) {
             handleBerserkerKill(killer);
         }
 

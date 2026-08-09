@@ -12,13 +12,15 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.network.chat.Component;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.WeakHashMap;
 
 public class BerserkerCore extends Core {
 
     // Track which players currently have this core's passive effect active
-    public static final WeakHashMap<ServerPlayer, Boolean> activePlayers = new WeakHashMap<>();
+    public static final Set<ServerPlayer> activePlayers = Collections.newSetFromMap(new WeakHashMap<>());
 
     public BerserkerCore() {
         super(
@@ -44,7 +46,7 @@ public class BerserkerCore extends Core {
         }
 
         // Mark this player as having the core active
-        activePlayers.put(player, true);
+        activePlayers.add(player);
     }
 
     @Override

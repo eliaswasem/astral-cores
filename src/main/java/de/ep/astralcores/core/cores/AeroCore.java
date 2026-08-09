@@ -5,13 +5,15 @@ import de.ep.astralcores.core.CoreType;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Items;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.WeakHashMap;
 
 public class AeroCore extends Core {
 
     // Tracks which players currently have this core's passive effect active
-    public static final WeakHashMap<ServerPlayer, Boolean> activePlayers = new WeakHashMap<>();
+    public static final Set<ServerPlayer> activePlayers = Collections.newSetFromMap(new WeakHashMap<>());
 
     public AeroCore() {
         super(
@@ -34,7 +36,7 @@ public class AeroCore extends Core {
     @Override
     public void applyPassive(ServerPlayer player) {
         // Just add the player to the active map
-        activePlayers.put(player, true);
+        activePlayers.add(player);
     }
 
     @Override
