@@ -24,6 +24,8 @@ import java.util.List;
 
 public class PhoenixCore extends Core {
 
+    private static final Identifier BURNING_TIME_MODIFIER_ID = Identifier.fromNamespaceAndPath("astralcores", "phoenix_flameborn");
+
     public PhoenixCore() {
         super(
                 CoreType.PHOENIX_CORE,
@@ -50,6 +52,19 @@ public class PhoenixCore extends Core {
         // Nether specific regen buff
         if (player.level().dimension().equals(Level.NETHER)) {
             Effects.applyEffect(player, MobEffects.REGENERATION, 25, 1);
+        }
+
+        AttributeInstance attribute = player.getAttribute(Attributes.BURNING_TIME);
+        if (attribute != null) {
+            // Guard clause to avoid duplicate stacking in the twentyTickLoop
+            if (!attribute.hasModifier(BURNING_TIME_MODIFIER_ID)) {
+                // Adds +0.5 to the base player knockback resistance (0.0)
+                attribute.addTransientModifier(new AttributeModifier(
+                        BURNING_TIME_MODIFIER_ID,
+                        -1,
+                        AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
+                ));
+            }
         }
     }
 
@@ -114,6 +129,17 @@ public class PhoenixCore extends Core {
     public void tick(ServerPlayer player) {
         if (player.getRemainingFireTicks() > 0) {
             player.setRemainingFireTicks(0);
+        }
+    }
+
+    @Override
+    public void onRemoved(ServerPlayer player) {
+        AttributeInstance attribute = player.getAttribute(Attributes.BURNING_TIME);
+        if (attribute != null) {
+            // Wipes the modifier instantly on unequip, core swap, or death
+            if (attribute.hasModifier(BURNING_TIME_MODIFIER_ID)) {
+                attribute.removeModifier(BURNING_TIME_MODIFIER_ID);
+            }
         }
     }
 }
