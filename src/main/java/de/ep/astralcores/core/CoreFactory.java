@@ -4,12 +4,12 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.CustomModelData;
 import net.minecraft.world.item.component.ItemLore;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -83,21 +83,39 @@ public class CoreFactory {
 
     // Resolves a matching core instance from the custom data tags of an item stack
     public static Optional<Core> getCoreFromItem(ItemStack stack) {
-
         if (stack.isEmpty() || !stack.has(DataComponents.CUSTOM_DATA)) {
             return Optional.empty();
         }
 
-        CompoundTag tag = Objects.requireNonNull(
-                stack.get(DataComponents.CUSTOM_DATA)
-        ).copyTag();
+        CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
+        if (customData == null) {
+            return Optional.empty();
+        }
 
-        // Reads the core identifier string from the item nbt data
-        Optional<String> coreId = tag.getString(
-                "core_id"
-        );
+        CompoundTag tag = customData.copyTag();
 
-        // Looks up the core type inside the central registry using the found id string
+        // Reads the core identifier string from the item nbt data as an Optional
+        Optional<String> coreId = tag.getString("core_id");
+
+        // Safely unwraps the Optional string and maps it to the registry lookup
+        return coreId.flatMap(CoreRegistry::getByCoreId);
+    }
+
+    // Looks up the core type directly from an ItemStackTemplate using its component data
+    public static Optional<Core> getCoreFromTemplate(ItemStackTemplate template) {
+        CustomData customData = template.get(DataComponents.CUSTOM_DATA);
+
+        // Stops execution if the template data is missing custom components
+        if (customData == null) {
+            return Optional.empty();
+        }
+
+        CompoundTag tag = customData.copyTag();
+
+        // Reads the core identifier string from the item nbt data as an Optional
+        Optional<String> coreId = tag.getString("core_id");
+
+        // Safely unwraps the Optional string and maps it to the registry lookup
         return coreId.flatMap(CoreRegistry::getByCoreId);
     }
 }

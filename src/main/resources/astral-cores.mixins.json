@@ -6,7 +6,8 @@
     "ClientboundSetEquipmentPacketMixin",
     "MobMixin",
     "RecipeManagerMixin",
-    "ServerExplosionMixin"
+    "ServerExplosionMixin",
+    "SlotAndShulkerBoxSlotMixin"
   ],
   "injectors": {
     "defaultRequire": 1
