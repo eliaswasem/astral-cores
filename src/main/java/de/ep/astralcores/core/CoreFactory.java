@@ -10,6 +10,7 @@ import net.minecraft.world.item.component.CustomModelData;
 import net.minecraft.world.item.component.ItemLore;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -101,21 +102,33 @@ public class CoreFactory {
         return coreId.flatMap(CoreRegistry::getByCoreId);
     }
 
-    // Looks up the core type directly from an ItemStackTemplate using its component data
-    public static Optional<Core> getCoreFromTemplate(ItemStackTemplate template) {
-        CustomData customData = template.get(DataComponents.CUSTOM_DATA);
-
-        // Stops execution if the template data is missing custom components
-        if (customData == null) {
-            return Optional.empty();
+    // Determines if the given item stack contains a valid core identifier tag
+    public static boolean isCore(ItemStack stack) {
+        if (stack == null || stack.isEmpty() || !stack.has(DataComponents.CUSTOM_DATA)) {
+            return false;
         }
 
-        CompoundTag tag = customData.copyTag();
+        CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
 
-        // Reads the core identifier string from the item nbt data as an Optional
-        Optional<String> coreId = tag.getString("core_id");
-
-        // Safely unwraps the Optional string and maps it to the registry lookup
-        return coreId.flatMap(CoreRegistry::getByCoreId);
+        // Checks the copied NBT structure for the core key without any object creation overhead
+        return customData != null && customData.copyTag().contains("core_id");
     }
+
+    // Determines if the given item stack template contains a valid core identifier tag
+    public static boolean isCore(ItemStackTemplate template) {
+        if (template == null) {
+            return false;
+        }
+
+        // Direct fetch from the template - returns null if the component is missing
+        CustomData customData = template.get(DataComponents.CUSTOM_DATA);
+        if (customData == null) {
+            return false;
+        }
+
+        // Checks the copied NBT structure for the core key without creating an Optional wrapper
+        return customData.copyTag().contains("core_id");
+    }
+
+
 }

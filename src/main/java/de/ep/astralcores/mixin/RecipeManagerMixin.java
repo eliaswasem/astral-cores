@@ -29,7 +29,7 @@ public class RecipeManagerMixin {
         int size = recipeInput.size();
         for (int i = 0; i < size; i++) {
             // Rejects the entire recipe if any ingredient is recognized as a mod core item
-            if (CoreFactory.getCoreFromItem(recipeInput.getItem(i)).isPresent()) {
+            if (CoreFactory.isCore(recipeInput.getItem(i))) {
                 cir.setReturnValue(Optional.empty());
                 return;
             }

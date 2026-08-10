@@ -6,6 +6,7 @@
     "BundleItemMixin",
     "ClientboundSetEquipmentPacketMixin",
     "HopperBlockEntityMixin",
+    "ItemEntityMixin",
     "MobMixin",
     "RecipeManagerMixin",
     "ServerExplosionMixin",

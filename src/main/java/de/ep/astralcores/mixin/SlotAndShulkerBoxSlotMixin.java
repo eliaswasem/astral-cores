@@ -25,7 +25,7 @@ public class SlotAndShulkerBoxSlotMixin {
         }
 
         // Rejects placement if the item being moved is identified as a registered core module
-        if (CoreFactory.getCoreFromItem(stack).isPresent()) {
+        if (CoreFactory.isCore(stack)) {
             cir.setReturnValue(false);
             return;
         }
@@ -35,7 +35,7 @@ public class SlotAndShulkerBoxSlotMixin {
         if (bundleData != null) {
             for (var template : bundleData.items()) {
                 // Intercepts the action if a player attempts to bypass container blacklists using bundles
-                if (CoreFactory.getCoreFromTemplate(template).isPresent()) {
+                if (CoreFactory.isCore(template)) {
                     cir.setReturnValue(false);
                     return;
                 }

@@ -25,7 +25,7 @@ public class BundleItemMixin {
         }
 
         // Rejects the interaction if the item stack trying to enter the container bundle is a registered core
-        if (CoreFactory.getCoreFromItem(other).isPresent()) {
+        if (CoreFactory.isCore(other)) {
             cir.setReturnValue(false);
         }
     }

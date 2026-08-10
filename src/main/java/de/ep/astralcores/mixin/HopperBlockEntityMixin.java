@@ -25,7 +25,7 @@ public class HopperBlockEntityMixin {
     ) {
         ItemStack stack = entity.getItem();
 
-        if (CoreFactory.getCoreFromItem(stack).isPresent()) {
+        if (CoreFactory.isCore(stack)) {
             cir.setReturnValue(false);
         }
     }
