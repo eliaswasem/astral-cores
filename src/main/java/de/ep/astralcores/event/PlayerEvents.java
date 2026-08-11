@@ -70,7 +70,11 @@ public class PlayerEvents {
                 BerserkerCorePassivLogic.handleBloodlust(serverPlayer, damageSource);
             }
         });
-
+        ServerLivingEntityEvents.AFTER_DAMAGE.register((entity, source, baseDamageTaken, damageTaken, blocked) -> {
+            if (entity instanceof  ServerPlayer serverPlayer) {
+                IllusionCorePassiveLogic.handleMirrorImage(serverPlayer, source);
+            }
+        });
         // Reveals hidden shadow core players if they attack an entity
         AttackEntityCallback.EVENT.register((player, level, hand, entity, hitResult) -> {
             if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
