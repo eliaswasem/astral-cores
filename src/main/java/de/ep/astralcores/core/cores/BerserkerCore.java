@@ -4,13 +4,13 @@ import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.util.Effects;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.network.chat.Component;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,6 +19,7 @@ import java.util.WeakHashMap;
 
 public class BerserkerCore extends Core {
 
+    private static final Identifier BERSERKER_MODIFIER_ID = Identifier.fromNamespaceAndPath("astralcores", "berserker_ragemode");
     // Track which players currently have this core's passive effect active
     public static final Set<ServerPlayer> activePlayers = Collections.newSetFromMap(new WeakHashMap<>());
 
@@ -51,10 +52,15 @@ public class BerserkerCore extends Core {
 
     @Override
     public void activate(ServerPlayer player) {
+        Effects.applyEffect(player, MobEffects.STRENGTH, 200, 2);
+        Effects.applyEffect(player, MobEffects.STRENGTH, 1800, 2);
+        Effects.applyEffect(player, MobEffects.SPEED, 1800, 2);
+        Effects.applyEffect(player, MobEffects.FIRE_RESISTANCE, 1800, 2);
     }
 
     @Override
     public void onRemoved(ServerPlayer player) {
         activePlayers.remove(player);
+
     }
 }

@@ -2,10 +2,8 @@ package de.ep.astralcores.event.logic;
 
 import de.ep.astralcores.core.cores.BerserkerCore;
 import de.ep.astralcores.util.Effects;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -21,7 +19,7 @@ public class BerserkerCorePassivLogic {
 
     }
     private static void handleBerserkerKill(ServerPlayer killer) {
-        // Send a a sound
+        // Send a sound
         killer.playSound(SoundEvents.WARDEN_HEARTBEAT, 1.0f, 1.2f);
         // Apply Effects using your utility
         Effects.applyEffect(killer, MobEffects.SPEED, 200, 2 );
