@@ -2,6 +2,8 @@ package de.ep.astralcores.event.logic;
 
 import de.ep.astralcores.core.cores.IllusionCore;
 import de.ep.astralcores.util.Effects;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -33,6 +35,7 @@ public class IllusionCorePassiveLogic {
         // 4. Trigger the Mirror Image Effect
         if (player.getLastAttacker() instanceof ServerPlayer attacker) {
             Effects.applyEffect(attacker, MobEffects.BLINDNESS, 5, 255, false, false, false);
+            attacker.sendSystemMessage(Component.literal("You are distracted").withStyle(ChatFormatting.WHITE));
         }
         // 5. Decide outcome
         // Return false if the illusion completely dodges the attack
