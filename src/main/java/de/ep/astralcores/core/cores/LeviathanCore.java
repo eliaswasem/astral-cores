@@ -39,8 +39,6 @@ public class LeviathanCore extends Core {
             Effects.applyEffect(player, MobEffects.STRENGTH,20, 1, false, false, false);
             Effects.applyEffect(player, MobEffects.SPEED,20, 1, false, false, false);
             Effects.applyEffect(player, MobEffects.REGENERATION,20, 1, false, false, false);
-            Effects.applyEffect(player, MobEffects.HASTE,20, 1, false, false, false);
-            Effects.applyEffect(player, MobEffects.SATURATION,20, 1, false, false, false);
         }
     }
 
