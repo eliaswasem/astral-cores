@@ -1,21 +1,134 @@
-MIT License
+Astral Cores Source-Available License 1.0
 
 Copyright (c) 2026 eliaswasem and aEternalCatGod
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+1. Definitions
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+For the purposes of this License:
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+“Software” means the source code, compiled code, assets, documentation, configuration files, and other materials distributed as part of the Astral Cores project and covered by this License.
+
+“Original Software” means the Software as originally published by the Copyright Holders.
+
+“Modified Version” means any version of the Software in which the source code, functionality, structure, or other substantial parts of the Software have been modified, added to, removed from, or otherwise changed.
+
+“Source Code” means the preferred form of the Software for making modifications, including all source files and other files reasonably necessary to build or modify the corresponding version of the Software.
+
+“Distribution” means making the Software or a Modified Version available to another person or to the public, whether by download, physical transfer, hosting, publication, inclusion in a modpack, or any other method.
+
+“Sale” means providing the Software or a Modified Version to another person in exchange for a monetary payment or other consideration where such payment or consideration is specifically required in order to obtain the Software or Modified Version.
+
+2. Grant of Rights
+
+Subject to the terms and conditions of this License, permission is hereby granted, free of charge, to any person obtaining a copy of the Software to:
+
+* use the Software for personal, educational, and commercial purposes;
+* inspect and study the Source Code;
+* copy the Software;
+* modify the Software;
+* create Modified Versions;
+* distribute the Original Software free of charge;
+* distribute Modified Versions free of charge; and
+* include and use the Software in Minecraft servers, modpacks, projects, and other works, including commercially operated Minecraft servers.
+
+The rights granted by this License are worldwide, non-exclusive, royalty-free, and perpetual, subject to termination under Section 7.
+
+3. Prohibition of Sale
+
+The Software and any Modified Version must not be sold or otherwise distributed in exchange for payment where such payment is required to obtain the Software or Modified Version.
+
+This prohibition applies regardless of whether:
+
+* the Software is distributed under its original name;
+* the Software has been modified;
+* the Software has been renamed;
+* the Software has been repackaged;
+* the Software has been incorporated into another software package; or
+* the Software or Modified Version is distributed as a standalone product or as part of a paid software or Minecraft modification product.
+
+The Software may, however, be used in connection with commercial activities that do not constitute the sale of the Software or a Modified Version.
+
+For the avoidance of doubt, the following are permitted:
+
+* operating a commercial Minecraft server using the Software;
+* charging players for server services, ranks, cosmetics, subscriptions, or other server features;
+* receiving donations;
+* receiving Patreon, Ko-fi, or similar financial support;
+* monetizing content or services that use the Software; and
+* distributing modpacks containing the Software free of charge.
+
+4. Source Code Requirement for Modified Versions
+
+Any person who Distributes a Modified Version must make the complete corresponding Source Code of that Modified Version publicly available.
+
+The Source Code must:
+
+1. contain all modifications made to the Software;
+2. be provided in a form reasonably suitable for inspection and further modification;
+3. be made available without charge;
+4. be made available to recipients of the Modified Version; and
+5. be distributed under this License.
+
+A Modified Version may be distributed through any reasonable public source-code hosting service, including GitHub, GitLab, Codeberg, or an equivalent service.
+
+Private modifications that are not Distributed are not subject to the Source Code publication requirement.
+
+5. Independent Implementations and Use of Concepts
+
+Nothing in this License shall be interpreted as restricting any person from learning from, studying, analyzing, or gaining knowledge from the Software.
+
+Any person may independently implement, reproduce, or develop functionality, features, mechanics, algorithms, concepts, systems, or ideas that are demonstrated or implemented by the Software, provided that such implementation does not constitute a copy or derivative work of the Source Code or other copyrightable material of the Software.
+
+The following activities are expressly permitted:
+
+* studying the Source Code to understand how a feature works;
+* using knowledge gained from studying the Software to develop an independent implementation;
+* implementing the same or substantially similar gameplay feature using independently written code;
+* developing competing or alternative implementations of the same functionality; and
+* using general programming techniques, concepts, algorithms, ideas, or methods learned from the Software.
+
+An independently written implementation is not considered a Modified Version solely because it provides functionality similar to, or inspired by, functionality provided by the Software.
+
+This License does not grant permission to copy substantial portions of the Software’s Source Code into such an independent implementation. Any copied or adapted Source Code remains subject to this License.
+
+Nothing in this section shall be interpreted as granting rights to trademarks, logos, artwork, textures, sounds, or other separately protected assets of the Copyright Holders.
+
+6. Copyright and Attribution
+
+The copyright notice and this License must be retained in all copies or substantial portions of the Software.
+
+Modified Versions must clearly indicate that the Software has been modified.
+
+No person may represent a Modified Version as the unmodified Original Software or falsely claim authorship of the Original Software.
+
+This License does not grant permission to use the names, trademarks, logos, or other branding of the Copyright Holders except as reasonably necessary to identify the Software or to accurately describe compatibility.
+
+7. Termination
+
+Any rights granted under this License automatically terminate if the terms of this License are violated.
+
+Rights may be reinstated if the violation is completely cured within thirty (30) days after the violator becomes aware of the violation.
+
+Termination does not affect rights already validly granted to recipients who have complied with this License.
+
+8. No Additional Restrictions
+
+Recipients of the Software may not impose additional legal or technological restrictions that prevent another recipient from exercising the rights granted by this License.
+
+9. Disclaimer of Warranty
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NONINFRINGEMENT, OR ANY OTHER WARRANTY ARISING FROM THE USE OF OR IN CONNECTION WITH THE SOFTWARE.
+
+10. Limitation of Liability
+
+IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OF OR IN CONNECTION WITH THE SOFTWARE.
+
+11. Acceptance
+
+By using, modifying, or distributing the Software, you agree to the terms of this License.
+
+⸻
+
+Copyright (c) 2026 eliaswasem and aEternalCatGod
+
+Astral Cores Source-Available License 1.0
