@@ -29,9 +29,11 @@ public class PlayerEvents {
 
         // Unloads player profile data from RAM when they disconnect from the server
         ServerPlayConnectionEvents.DISCONNECT.register(
-                (handler, server) -> {
-                    AstralCores.PLAYER_DATA.unload(handler.player);
-                }
+                (handler, server) -> server.execute(() -> {
+                    if (AstralCores.PLAYER_DATA != null) {
+                        AstralCores.PLAYER_DATA.unload(handler.player);
+                    }
+                })
         );
 
         // Intercepts item right-click actions to handle custom core equipment
@@ -100,7 +102,7 @@ public class PlayerEvents {
                     if (source.getEntity() instanceof ServerPlayer attacker
                             && FrostCore.armedPlayers.remove(attacker.getUUID())) {
 
-                        FrostCore.lockEntity(entity);
+                        FrostCore.tryLockEntity(attacker, entity);
                     }
                 }
         );

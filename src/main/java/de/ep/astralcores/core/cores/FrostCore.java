@@ -87,10 +87,21 @@ public final class FrostCore extends Core {
         }
     }
 
-    public static void lockEntity(LivingEntity entity) {
-        if (entity.isAlive() && !entity.isRemoved()) {
-            // Prevent multiple Frost Locks from being applied to the same entity.
-            activeLocks.putIfAbsent(entity.getUUID(), new FrostLock(entity));
+    public static void tryLockEntity(ServerPlayer attacker, LivingEntity target) {
+        if (!target.isAlive() || target.isRemoved()) {
+            return;
+        }
+
+        PlayerData data = AstralCores.PLAYER_DATA.get(attacker);
+
+        // Trusted entities cannot be frozen by Frost Lock.
+        if (data != null && data.isTrusted(target.getUUID())) {
+            return;
+        }
+
+        // Do not replace an existing Frost Lock.
+        if (!activeLocks.containsKey(target.getUUID())) {
+            activeLocks.put(target.getUUID(), new FrostLock(target));
         }
     }
 

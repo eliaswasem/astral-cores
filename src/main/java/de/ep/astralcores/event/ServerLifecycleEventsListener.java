@@ -4,6 +4,7 @@ import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.config.ConfigManager;
 import de.ep.astralcores.playerdata.PlayerDataManager;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.storage.LevelResource;
 import java.io.File;
 
@@ -26,17 +27,20 @@ public class ServerLifecycleEventsListener {
             ConfigManager.load();
         });
 
-        // Runs when the server is stopping or shutting down
+        // Saves all player data before the database is finally closed.
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
-
-            // Saves data for all currently online players to the database
-            if (server != null && server.getPlayerList() != null && AstralCores.PLAYER_DATA != null) {
-                server.getPlayerList().getPlayers().forEach(player -> {
-                    AstralCores.PLAYER_DATA.save(player);
-                });
+            if (AstralCores.PLAYER_DATA == null) {
+                return;
             }
 
-            // Closes the active database connection safely
+            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+                AstralCores.PLAYER_DATA.save(player);
+            }
+        });
+
+        // The server has completely stopped.
+        // At this point no player disconnect saves should still be running.
+        ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
             if (AstralCores.PLAYER_DATA != null) {
                 AstralCores.PLAYER_DATA.closeConnection();
             }
