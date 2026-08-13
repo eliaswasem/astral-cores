@@ -18,7 +18,7 @@ public class HopperBlockEntityMixin {
             at = @At("HEAD"),
             cancellable = true
     )
-    private static void blockCoreItem(
+    private static void astralcores$blockCoreItem(
             Container container,
             ItemEntity entity,
             CallbackInfoReturnable<Boolean> cir

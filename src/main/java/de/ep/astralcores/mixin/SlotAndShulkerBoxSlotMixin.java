@@ -17,7 +17,7 @@ public class SlotAndShulkerBoxSlotMixin {
 
     // Overrides insertion checks for both standard containers and shulker box slots server-side
     @Inject(method = "mayPlace", at = @At("HEAD"), cancellable = true)
-    private void preventCoreContainerPlacement(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
+    private void astralcores$preventCoreContainerPlacement(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
 
         // Bypasses the validation if the target slot belongs to the player's personal inventory profile
         if (((Slot) (Object) this).container instanceof Inventory) {

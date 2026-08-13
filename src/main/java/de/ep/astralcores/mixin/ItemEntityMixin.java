@@ -23,7 +23,7 @@ public abstract class ItemEntityMixin {
 
     // Set despawn timer for core items to 0 every tick
     @Inject(method = "tick", at = @At("HEAD"))
-    private void preventCoreDespawn(CallbackInfo ci) {
+    private void astralcores$preventCoreDespawn(CallbackInfo ci) {
         ItemStack stack = this.getItem();
 
         if (CoreFactory.isCore(stack)) {
@@ -33,7 +33,7 @@ public abstract class ItemEntityMixin {
 
     // Prevent Cores from being destroyed by everything except the void
     @Inject(method = "hurtServer", at = @At("HEAD"), cancellable = true)
-    private void handleCoreDamageAndVoid(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
+    private void astralcores$handleCoreDamageAndVoid(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
         ItemEntity entity = (ItemEntity) (Object) this;
         ItemStack stack = this.getItem();
 

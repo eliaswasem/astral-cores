@@ -18,7 +18,7 @@ public class BundleItemMixin {
 
     // Intercepts moving an item onto a bundle slot to prevent direct core insertion inside external containers
     @Inject(method = "overrideOtherStackedOnMe", at = @At("HEAD"), cancellable = true)
-    private void preventCoreInsertionInContainerBundles(ItemStack self, ItemStack other, Slot slot, ClickAction clickAction, Player player, SlotAccess carriedItem, CallbackInfoReturnable<Boolean> cir) {
+    private void astralcores$preventCoreInsertionInContainerBundles(ItemStack self, ItemStack other, Slot slot, ClickAction clickAction, Player player, SlotAccess carriedItem, CallbackInfoReturnable<Boolean> cir) {
         // Allows insertion if the target container slot resides inside the player's personal inventory profile
         if (slot.container instanceof Inventory) {
             return;

@@ -8,6 +8,7 @@
     "HopperBlockEntityMixin",
     "ItemEntityMixin",
     "MobMixin",
+    "PlayerEntityMixin",
     "RecipeManagerMixin",
     "ServerExplosionMixin",
     "SlotAndShulkerBoxSlotMixin"

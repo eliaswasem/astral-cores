@@ -91,7 +91,6 @@ public class PlayerEvents {
                     if (entity instanceof ServerPlayer serverPlayer) {
 
                         IllusionCorePassiveLogic.handleMirrorImage(serverPlayer, source);
-                        MagnetCorePassiveLogic.handleMagneticDisarm(serverPlayer, source);
 
                         if (!ShadowCore.isPlayerHidden(serverPlayer.getUUID())) {
                             return;

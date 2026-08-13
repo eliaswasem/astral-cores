@@ -14,7 +14,7 @@ public class MobMixin {
 
     // Injects into the start of the mob target assignment method
     @Inject(method = "setTarget", at = @At("HEAD"), cancellable = true)
-    private void interceptShadowTargeting(LivingEntity target, CallbackInfo ci) {
+    private void astralcores$interceptShadowTargeting(LivingEntity target, CallbackInfo ci) {
         // Stops execution if the target objective is not a player
         if (target instanceof ServerPlayer player) {
 

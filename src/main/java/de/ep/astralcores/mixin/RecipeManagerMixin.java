@@ -19,7 +19,7 @@ public class RecipeManagerMixin {
             at = @At("HEAD"),
             cancellable = true
     )
-    private <I extends RecipeInput, T extends Recipe<I>> void blockCoreIngredients(
+    private <I extends RecipeInput, T extends Recipe<I>> void astralcores$blockCoreIngredients(
             RecipeType<T> recipeType,
             I recipeInput,
             Level level,

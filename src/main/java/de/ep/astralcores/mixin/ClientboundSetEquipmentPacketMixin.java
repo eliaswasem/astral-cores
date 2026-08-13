@@ -33,7 +33,7 @@ public class ClientboundSetEquipmentPacketMixin {
             method = "<init>(ILjava/util/List;)V",
             at = @At("TAIL")
     )
-    private void hideShadowEquipment(
+    private void astralcores$hideShadowEquipment(
             int entityId,
             List<Pair<EquipmentSlot, ItemStack>> originalSlots,
             CallbackInfo ci
