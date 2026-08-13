@@ -71,7 +71,7 @@ public class MagnetCore extends Core {
         }
 
         // Magnetic Disarm has a 25% chance to trigger on a qualifying attack.
-        if (attacker.getRandom().nextFloat() >= 0.50F) {
+        if (attacker.getRandom().nextFloat() >= 0.25F) {
             return;
         }
 
