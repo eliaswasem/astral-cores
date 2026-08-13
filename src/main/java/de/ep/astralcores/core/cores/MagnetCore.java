@@ -71,7 +71,7 @@ public class MagnetCore extends Core {
         }
 
         // Magnetic Disarm has a 25% chance to trigger on a qualifying attack.
-        if (attacker.getRandom().nextFloat() >= 0.25F) {
+        if (attacker.getRandom().nextFloat() >= 0.50F) {
             return;
         }
 
@@ -93,25 +93,5 @@ public class MagnetCore extends Core {
                         .withStyle(ChatFormatting.BOLD, ChatFormatting.WHITE)
         );
 
-        // Create the visual effect around the victim to indicate the disarm.
-        spawnWeaponParticles(victim);
-    }
-
-    private static void spawnWeaponParticles(ServerPlayer player) {
-        ServerLevel level = player.level();
-
-        // Spawn particles slightly in front of the player's view,
-        // giving the appearance that the weapon itself is magnetized.
-        level.sendParticles(
-                ParticleTypes.FIREWORK,
-                player.getX() + player.getLookAngle().x * 0.6,
-                player.getEyeY() - 0.3 + player.getLookAngle().y * 0.4,
-                player.getZ() + player.getLookAngle().z * 0.6,
-                90,
-                0.1,
-                0.1,
-                0.1,
-                0.0
-        );
     }
 }
