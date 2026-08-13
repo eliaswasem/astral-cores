@@ -3,6 +3,7 @@ package de.ep.astralcores.core.cores;
 import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.util.Effects;
+import de.ep.astralcores.util.TickTimer;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,8 +21,8 @@ import java.util.UUID;
 
 public class GaleCore extends Core {
 
-    // Players with an active Sonic Dash explosion timer.
-    private static final Map<UUID, Integer> explosionTimers = new HashMap<>();
+    // Stores the explosion timer for each player currently using Sonic Dash.
+    private static final Map<UUID, TickTimer> explosionTimers = new HashMap<>();
 
     public GaleCore() {
         super(
@@ -56,6 +57,7 @@ public class GaleCore extends Core {
     public void activate(ServerPlayer player) {
         Vec3 look = player.getLookAngle();
 
+        // Launches the player forward in the direction they are looking.
         player.setDeltaMovement(
                 look.x * 5,
                 0.2,
@@ -64,42 +66,41 @@ public class GaleCore extends Core {
 
         player.hurtMarked = true;
 
-        // 500 ms = 10 server ticks.
-        explosionTimers.put(player.getUUID(), 10);
+        // Starts a 10-tick timer before the Sonic Dash explosion.
+        explosionTimers.put(
+                player.getUUID(),
+                new TickTimer(10)
+        );
     }
 
     @Override
     public void tick(ServerPlayer player) {
         UUID uuid = player.getUUID();
-        Integer timer = explosionTimers.get(uuid);
+        TickTimer timer = explosionTimers.get(uuid);
 
+        // The player has no active Sonic Dash.
         if (timer == null) {
             return;
         }
 
+        // Cancels the ability if the player is no longer valid.
         if (!player.isAlive() || player.isRemoved()) {
             explosionTimers.remove(uuid);
             return;
         }
 
-        ServerLevel level = player.level();
-
-        Vec3 direction = player.getDeltaMovement().normalize();
-        Vec3 trail = player.position().subtract(direction.scale(1.2));
-
-        if (timer > 1) {
-            explosionTimers.put(uuid, timer - 1);
-            return;
+        // TickTimer returns true when the timer reaches zero.
+        if (timer.tick()) {
+            explosionTimers.remove(uuid);
+            explode(player);
         }
-
-        explosionTimers.remove(uuid);
-        explode(player);
     }
 
     private void explode(ServerPlayer player) {
         ServerLevel level = player.level();
         Vec3 pos = player.position();
 
+        // Creates the visual/audio explosion without block damage.
         level.explode(
                 player,
                 pos.x,
@@ -110,6 +111,7 @@ public class GaleCore extends Core {
                 Level.ExplosionInteraction.NONE
         );
 
+        // Large flame burst around the player.
         level.sendParticles(
                 ParticleTypes.SOUL_FIRE_FLAME,
                 pos.x,
@@ -122,6 +124,7 @@ public class GaleCore extends Core {
                 0.08
         );
 
+        // Sonic Boom particles at the explosion position.
         level.sendParticles(
                 ParticleTypes.SONIC_BOOM,
                 pos.x,
@@ -134,6 +137,7 @@ public class GaleCore extends Core {
                 0.05
         );
 
+        // Plays the Warden charge sound when the dash ends.
         level.playSound(
                 null,
                 player.blockPosition(),

@@ -5,6 +5,7 @@ import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.playerdata.PlayerData;
 import de.ep.astralcores.util.Effects;
+import de.ep.astralcores.util.TickTimer;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -29,13 +30,14 @@ import java.util.UUID;
 
 public final class FrostCore extends Core {
 
-    // Temporary modifier used to completely prevent knockback during Frost Lock.
-    private static final Identifier FROST_MODIFIER_ID = Identifier.fromNamespaceAndPath("astralcores", "frost_lock_resistance");
+    // Temporary modifier that prevents knockback while Frost Lock is active.
+    private static final Identifier FROST_MODIFIER_ID =
+            Identifier.fromNamespaceAndPath("astralcores", "frost_lock_resistance");
 
-    // Players waiting for their next valid hit to trigger Frost Lock.
+    // Players whose next valid attack will trigger Frost Lock.
     public static final Set<UUID> armedPlayers = new HashSet<>();
 
-    // Currently active Frost Locks, indexed by entity UUID.
+    // Currently frozen entities.
     private static final Map<UUID, FrostLock> activeLocks = new HashMap<>();
 
     public FrostCore() {
@@ -60,19 +62,19 @@ public final class FrostCore extends Core {
     public void applyPassive(ServerPlayer player) {
         PlayerData data = AstralCores.PLAYER_DATA.get(player);
 
-        // Search for entities within the 6 block Frost Aura.
+        // Applies Frost Aura to nearby non-trusted entities.
         AABB box = player.getBoundingBox().inflate(6.0);
 
-        for (LivingEntity entity : player.level().getEntitiesOfClass(LivingEntity.class, box, entity ->
-                entity != player && entity.isAlive()
-        )) {
+        for (LivingEntity entity : player.level().getEntitiesOfClass(
+                LivingEntity.class,
+                box,
+                entity -> entity != player && entity.isAlive())) {
+
             if (data != null && data.isTrusted(entity.getUUID())) {
                 continue;
             }
 
             double distance = player.distanceTo(entity);
-
-            // Stronger Slowness is applied at closer distances.
             int effectLevel = distance <= 3.5 ? 3 : distance <= 5.0 ? 2 : 1;
 
             Effects.applyEffect(entity, MobEffects.SLOWNESS, 40, effectLevel, false, false, false);
@@ -82,7 +84,7 @@ public final class FrostCore extends Core {
     @Override
     public void activate(ServerPlayer player) {
         if (player.isAlive() && !player.isRemoved()) {
-            // The next valid player attack will consume the Frost Lock.
+            // The next valid player hit will trigger Frost Lock.
             armedPlayers.add(player.getUUID());
         }
     }
@@ -94,20 +96,18 @@ public final class FrostCore extends Core {
 
         PlayerData data = AstralCores.PLAYER_DATA.get(attacker);
 
-        // Trusted entities cannot be frozen by Frost Lock.
+        // Trusted entities cannot be frozen.
         if (data != null && data.isTrusted(target.getUUID())) {
             return;
         }
 
         // Do not replace an existing Frost Lock.
-        if (!activeLocks.containsKey(target.getUUID())) {
-            activeLocks.put(target.getUUID(), new FrostLock(target));
-        }
+        activeLocks.putIfAbsent(target.getUUID(), new FrostLock(target));
     }
 
     @Override
     public void tick(ServerPlayer player) {
-        // Update all active locks and remove the ones that have expired.
+        // Updates all active Frost Locks and removes expired ones.
         activeLocks.values().removeIf(FrostLock::tick);
     }
 
@@ -121,8 +121,7 @@ public final class FrostCore extends Core {
 
         private final BlockDisplay bottom;
         private final BlockDisplay top;
-
-        private int ticks = 40;
+        private final TickTimer timer = new TickTimer(40);
 
         private FrostLock(LivingEntity entity) {
             this.entity = entity;
@@ -136,7 +135,9 @@ public final class FrostCore extends Core {
             bottom = createDisplay(level);
             top = createDisplay(level);
 
+            // Prevents knockback during the freeze.
             addKnockbackResistance();
+
             update();
         }
 
@@ -148,7 +149,8 @@ public final class FrostCore extends Core {
 
             update();
 
-            if (--ticks <= 0) {
+            // Frost Lock lasts 40 ticks.
+            if (timer.tick()) {
                 cleanup();
                 return true;
             }
@@ -157,7 +159,7 @@ public final class FrostCore extends Core {
         }
 
         private void update() {
-            // Keep the entity locked to its original position and rotation.
+            // Keeps the entity at its original position and rotation.
             entity.setPos(position.x, position.y, position.z);
             entity.setYRot(yaw);
             entity.setXRot(pitch);
@@ -165,7 +167,7 @@ public final class FrostCore extends Core {
             entity.setDeltaMovement(Vec3.ZERO);
             entity.setTicksFrozen(40);
 
-            // Center the ice blocks using the entity's actual bounding box.
+            // Centers the ice displays around the entity.
             AABB box = entity.getBoundingBox();
             double x = (box.minX + box.maxX) * 0.5 - 0.5;
             double z = (box.minZ + box.maxZ) * 0.5 - 0.5;
@@ -195,12 +197,14 @@ public final class FrostCore extends Core {
         }
 
         private void cleanup() {
+            // Remove the visual ice blocks.
             bottom.discard();
             top.discard();
 
+            // Remove the temporary knockback resistance.
             removeKnockbackResistance();
 
-            // Restore the gravity state the entity had before being frozen.
+            // Restore the entity's original gravity state.
             if (entity.isAlive() && !entity.isRemoved()) {
                 entity.setNoGravity(noGravity);
             }
@@ -208,11 +212,8 @@ public final class FrostCore extends Core {
 
         private static BlockDisplay createDisplay(ServerLevel level) {
             BlockDisplay display = new BlockDisplay(EntityTypes.BLOCK_DISPLAY, level);
-
             display.setBlockState(Blocks.PACKED_ICE.defaultBlockState());
-
             level.addFreshEntity(display);
-
             return display;
         }
     }
