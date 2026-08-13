@@ -52,7 +52,7 @@ public class BerserkerCore extends Core {
 
     @Override
     public void activate(ServerPlayer player) {
-        Effects.applyEffect(player, MobEffects.STRENGTH, 200, 2);
+        Effects.applyEffect(player, MobEffects.STRENGTH, 200, 3);
         Effects.applyEffect(player, MobEffects.STRENGTH, 1800, 2);
         Effects.applyEffect(player, MobEffects.SPEED, 1800, 2);
         Effects.applyEffect(player, MobEffects.FIRE_RESISTANCE, 1800, 2);
