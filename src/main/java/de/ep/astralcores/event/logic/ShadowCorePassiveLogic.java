@@ -13,6 +13,11 @@ public class ShadowCorePassiveLogic {
             DamageSource source
     ) {
 
+        if (!ShadowCore.isPlayerHidden(player.getUUID())) {
+            return;
+        }
+
+
         // Bypasses the reveal check if the damage was caused by falling
         if (source.is(DamageTypeTags.IS_FALL)) {
             return;

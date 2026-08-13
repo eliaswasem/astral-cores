@@ -1,10 +1,11 @@
 package de.ep.astralcores.event;
 
 import de.ep.astralcores.AstralCores;
+import de.ep.astralcores.core.CoreFactory;
 import de.ep.astralcores.core.CoreType;
+import de.ep.astralcores.core.cores.FrostCore;
 import de.ep.astralcores.core.cores.ShadowCore;
 import de.ep.astralcores.event.logic.*;
-import de.ep.astralcores.core.CoreFactory;
 import de.ep.astralcores.playerdata.PlayerData;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
@@ -92,14 +93,14 @@ public class PlayerEvents {
 
                         IllusionCorePassiveLogic.handleMirrorImage(serverPlayer, source);
 
-                        if (!ShadowCore.isPlayerHidden(serverPlayer.getUUID())) {
-                            return;
-                        }
+                        ShadowCorePassiveLogic.handleDamageReveal(serverPlayer, source);
+                    }
 
-                        ShadowCorePassiveLogic.handleDamageReveal(
-                                serverPlayer,
-                                source
-                        );
+
+                    if (source.getEntity() instanceof ServerPlayer attacker
+                            && FrostCore.armedPlayers.remove(attacker.getUUID())) {
+
+                        FrostCore.lockEntity(entity);
                     }
                 }
         );
