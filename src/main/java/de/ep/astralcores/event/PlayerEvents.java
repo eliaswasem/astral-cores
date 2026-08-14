@@ -3,9 +3,9 @@ package de.ep.astralcores.event;
 import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.core.CoreFactory;
 import de.ep.astralcores.core.CoreType;
-import de.ep.astralcores.core.cores.FrostCore;
-import de.ep.astralcores.core.cores.ShadowCore;
-import de.ep.astralcores.event.logic.*;
+import de.ep.astralcores.core.cores.logic.*;
+import de.ep.astralcores.event.logic.CoreDeathLogic;
+import de.ep.astralcores.event.logic.CoreInteractLogic;
 import de.ep.astralcores.playerdata.PlayerData;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
@@ -54,14 +54,21 @@ public class PlayerEvents {
         // Intercepts the death check to evaluate anti-death mechanics like the chrono core
         ServerLivingEntityEvents.ALLOW_DEATH.register((entity, source, damageAmount) -> {
             if (entity instanceof ServerPlayer serverPlayer) {
-                return ChronoCorePassiveLogic.handleSecondTimeline(serverPlayer, source, damageAmount);
+                return ChronoCoreLogic.handleSecondTimeline(serverPlayer, source, damageAmount);
             }
             return true;
         });
 
         ServerLivingEntityEvents.ALLOW_DAMAGE.register((entity, source, amount) -> {
-            if (entity instanceof ServerPlayer serverPlayer) {
-                return AeroCorePassiveLogic.handleFallShockwave(serverPlayer, source);
+            if (!(entity instanceof ServerPlayer player)) {
+                return true;
+            }
+            if (!AeroCoreLogic.handleFallShockwave(player, source)) {
+                return false;
+            }
+
+            if (!IllusionCoreLogic.handleMirrorImage(player, source)) {
+                return false;
             }
             return true;
         });
@@ -70,7 +77,7 @@ public class PlayerEvents {
         ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
             if (entity instanceof ServerPlayer serverPlayer) {
                 CoreDeathLogic.executeDeathDrop(serverPlayer);
-                BerserkerCorePassivLogic.handleBloodlust(serverPlayer, damageSource);
+                BerserkerCoreLogic.handleBloodlust(serverPlayer, damageSource);
             }
         });
 
@@ -81,7 +88,7 @@ public class PlayerEvents {
                 PlayerData data = AstralCores.PLAYER_DATA.get(serverPlayer);
 
                 if (data != null && data.getEquippedCore() == CoreType.SHADOW_CORE) {
-                    ShadowCore.revealPlayer(serverPlayer);
+                    ShadowCoreLogic.revealPlayer(serverPlayer);
                 }
             }
             return InteractionResult.PASS;
@@ -93,16 +100,12 @@ public class PlayerEvents {
 
                     if (entity instanceof ServerPlayer serverPlayer) {
 
-                        IllusionCorePassiveLogic.handleMirrorImage(serverPlayer, source);
-
-                        ShadowCorePassiveLogic.handleDamageReveal(serverPlayer, source);
+                        ShadowCoreLogic.handleDamageReveal(serverPlayer, source);
                     }
 
 
-                    if (source.getEntity() instanceof ServerPlayer attacker
-                            && FrostCore.armedPlayers.remove(attacker.getUUID())) {
-
-                        FrostCore.tryLockEntity(attacker, entity);
+                    if (source.getEntity() instanceof ServerPlayer attacker) {
+                        FrostCoreLogic.handleFrostLock(attacker, entity);
                     }
                 }
         );

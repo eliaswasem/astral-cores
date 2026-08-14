@@ -1,6 +1,7 @@
 package de.ep.astralcores.mixin;
 
-import de.ep.astralcores.core.cores.MagnetCore;
+import com.llamalad7.mixinextras.sugar.Local;
+import de.ep.astralcores.core.cores.logic.MagnetCoreLogic;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -10,7 +11,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import com.llamalad7.mixinextras.sugar.Local;
 
 @Mixin(Player.class)
 public class PlayerEntityMixin {
@@ -40,6 +40,6 @@ public class PlayerEntityMixin {
             return;
         }
 
-        MagnetCore.executeMagneticDisarm(attacker, victim);
+        MagnetCoreLogic.executeMagneticDisarm(attacker, victim);
     }
 }

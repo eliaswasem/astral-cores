@@ -2,7 +2,7 @@ package de.ep.astralcores.mixin;
 
 import com.mojang.datafixers.util.Pair;
 import de.ep.astralcores.AstralCores;
-import de.ep.astralcores.core.cores.ShadowCore;
+import de.ep.astralcores.core.cores.logic.ShadowCoreLogic;
 import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -58,7 +58,7 @@ public class ClientboundSetEquipmentPacketMixin {
         }
 
         // Stops execution if the target player is not hidden by the shadow core
-        if (!ShadowCore.isPlayerHidden(targetPlayer.getUUID())) {
+        if (!ShadowCoreLogic.isPlayerHidden(targetPlayer)) {
             return;
         }
 

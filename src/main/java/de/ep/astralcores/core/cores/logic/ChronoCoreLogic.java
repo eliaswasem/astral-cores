@@ -1,9 +1,9 @@
-package de.ep.astralcores.event.logic;
+package de.ep.astralcores.core.cores.logic;
 
+import com.mojang.datafixers.util.Pair;
 import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreRegistry;
 import de.ep.astralcores.core.CoreType;
-import de.ep.astralcores.core.cores.ChronoCore;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
@@ -14,21 +14,37 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.DeathProtection;
-import com.mojang.datafixers.util.Pair;
-import java.util.List;
 
-public class ChronoCorePassiveLogic {
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.WeakHashMap;
+
+public class ChronoCoreLogic {
+
+    // Tracks which players currently have this core's passive effect active
+    public static final Set<ServerPlayer> activePlayers = Collections.newSetFromMap(new WeakHashMap<>());
+
+    public static void applyPassive(ServerPlayer player) {
+        // Marks this player as having the core active
+        activePlayers.add(player);
+    }
+
+    public static void onRemoved(ServerPlayer player) {
+        // Removes the player from the active map when unequipped
+        activePlayers.remove(player);
+    }
 
     // Evaluates if the chrono core is equipped and rolls a 50% chance to prevent death
     public static boolean handleSecondTimeline(ServerPlayer player, DamageSource damageSource, float damageAmount) {
         // Stops execution immediately if the player does not have the ChronoCore active in the map
-        if (!ChronoCore.activePlayers.contains(player)) {
+        if (!activePlayers.contains(player)) {
             return true;
         }
 
@@ -99,4 +115,5 @@ public class ChronoCorePassiveLogic {
                 List.of(Pair.of(EquipmentSlot.OFFHAND, player.getItemInHand(net.minecraft.world.InteractionHand.OFF_HAND)))
         ));
     }
+
 }

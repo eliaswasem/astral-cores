@@ -22,8 +22,8 @@ public class CoreActivateManager {
             return new ActivationResult(false, Component.literal("§cYou do not have a core equipped."));
         }
 
-        Core relic = CoreRegistry.get(targetedType).orElse(null);
-        if (relic == null) {
+        Core core = CoreRegistry.get(targetedType).orElse(null);
+        if (core == null) {
             return new ActivationResult(false, Component.literal("§cCritical: Stored core type mapping resolution failure."));
         }
 
@@ -31,15 +31,15 @@ public class CoreActivateManager {
         if (!CooldownManager.isActiveReady(data, targetedType)) {
             int remaining = CooldownManager.getActiveRemaining(data, targetedType);
 
-            String abilityName = relic.getActiveAbilityName();
+            String abilityName = core.getActiveAbilityName();
             return new ActivationResult(false, Component.literal("§c" + abilityName + " §cis on cooldown for another " + remaining + "s."));
         }
 
         // Executes the custom capability features bound to the target core instance
-        relic.activate(player);
+        core.activate(player);
 
         // Commits the core cooldown parameters directly into active tracker memory lines
-        CooldownManager.startActiveCooldown(data, targetedType, relic.getActiveCooldown());
+        CooldownManager.startActiveCooldown(data, targetedType, core.getActiveCooldown());
 
         // Re-renders the action bar layout immediately to display updated timers on the HUD
         ActionBarManager.tick(player, data);
