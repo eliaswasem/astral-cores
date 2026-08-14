@@ -41,4 +41,9 @@ public class MagnetCore extends Core {
     public void activate(ServerPlayer player) {
         MagnetCoreLogic.activate(player);
     }
+
+    @Override
+    public void tick(ServerPlayer player) {
+        MagnetCoreLogic.tick(player);
+    }
 }
