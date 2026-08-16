@@ -32,7 +32,7 @@ public class PlayerEvents {
                 (handler, server) -> server.execute(() -> {
                     ServerPlayer player = handler.player;
 
-                    PlayerData data = AstralCores.PLAYER_DATA.get(player)
+                    PlayerData data = AstralCores.PLAYER_DATA.get(player);
                     if (data != null){
                         Core core = data.getEquippedCore;
                         if (core != null) {
