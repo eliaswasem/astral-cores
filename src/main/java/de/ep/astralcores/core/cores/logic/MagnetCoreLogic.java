@@ -10,6 +10,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -29,8 +31,8 @@ public final class MagnetCoreLogic {
             Collections.newSetFromMap(new WeakHashMap<>());
 
     // Thread-safe weak reference tracking structures mapping the core timers per item.
-    private static final Map<ItemEntity, TickTimer> trackedItems = new ConcurrentHashMap<>();
-    private static final Map<ItemEntity, ServerPlayer> itemTargets = new ConcurrentHashMap<>();
+    private static final Map<Entity, TickTimer> trackedItems = new ConcurrentHashMap<>();
+    private static final Map<Entity, ServerPlayer> itemTargets = new ConcurrentHashMap<>();
 
     private static final double PULL_RADIUS = 15.0;
     private static final double PULL_SPEED = 0.55;
@@ -59,14 +61,16 @@ public final class MagnetCoreLogic {
         ServerLevel level = (ServerLevel) player.level();
         AABB searchBox = player.getBoundingBox().inflate(PULL_RADIUS);
 
-        List<ItemEntity> targetItems = level.getEntitiesOfClass(
-                ItemEntity.class,
+        List<Entity> targetItems = level.getEntitiesOfClass(
+                Entity.class,
                 searchBox,
-                entity -> entity.isAlive()
+                entity -> entity.isAlive() && (entity instanceof ItemEntity || entity instanceof ExperienceOrb)
         );
 
-        for (ItemEntity item : targetItems) {
-            item.noPhysics = true;
+        for (Entity item : targetItems) {
+            if (item instanceof ItemEntity itemEntity) {
+                itemEntity.noPhysics = true;
+            }
             trackedItems.put(item, new TickTimer(MAX_PULL_DURATION_TICKS));
             itemTargets.put(item, player);
         }
@@ -93,25 +97,25 @@ public final class MagnetCoreLogic {
         }
 
         ServerLevel level = (ServerLevel) player.level();
-        Iterator<Map.Entry<ItemEntity, ServerPlayer>> iterator = itemTargets.entrySet().iterator();
+        Iterator<Map.Entry<Entity, ServerPlayer>> iterator = itemTargets.entrySet().iterator();
 
         boolean playerIsPulling = false;
         int lowestTicksLeft = MAX_PULL_DURATION_TICKS;
 
         while (iterator.hasNext()) {
-            Map.Entry<ItemEntity, ServerPlayer> entry = iterator.next();
+            Map.Entry<Entity, ServerPlayer> entry = iterator.next();
             ServerPlayer targetPlayer = entry.getValue();
 
             if (!targetPlayer.equals(player)) {
                 continue;
             }
 
-            ItemEntity item = entry.getKey();
+            Entity item = entry.getKey();
             TickTimer timer = trackedItems.get(item);
 
             // Purges broken or nonexistent entity listings instantly from tracking arrays.
             if (item == null || !item.isAlive() || timer == null) {
-                if (item != null) item.noPhysics = false;
+                if (item instanceof ItemEntity itemEntity) itemEntity.noPhysics = false;
                 trackedItems.remove(item);
                 iterator.remove();
                 continue;
@@ -123,14 +127,18 @@ public final class MagnetCoreLogic {
 
             // Re-enables block clipping and releases targets if limits are reached.
             if (distance < 1.2 || timer.tick()) {
-                item.noPhysics = false;
+                if (item instanceof ItemEntity itemEntity) {
+                    itemEntity.noPhysics = false;
+                }
                 trackedItems.remove(item);
                 iterator.remove();
                 continue;
             }
 
             // Sets customized acceleration values directing items directly to the caster.
-            item.noPhysics = true;
+            if (item instanceof ItemEntity itemEntity) {
+                itemEntity.noPhysics = true;
+            }
             Vec3 direction = playerPos.subtract(itemPos).normalize();
             item.setDeltaMovement(direction.scale(PULL_SPEED));
 
@@ -202,13 +210,15 @@ public final class MagnetCoreLogic {
 
     // Restores default world environment rules when player network tunnels drop out.
     private static void clearItemsForPlayer(ServerPlayer player) {
-        Iterator<Map.Entry<ItemEntity, ServerPlayer>> iterator = itemTargets.entrySet().iterator();
+        Iterator<Map.Entry<Entity, ServerPlayer>> iterator = itemTargets.entrySet().iterator();
         while (iterator.hasNext()) {
-            Map.Entry<ItemEntity, ServerPlayer> entry = iterator.next();
+            Map.Entry<Entity, ServerPlayer> entry = iterator.next();
             if (entry.getValue().equals(player)) {
-                ItemEntity item = entry.getKey();
+                Entity item = entry.getKey();
                 if (item != null && item.isAlive()) {
-                    item.noPhysics = false;
+                    if (item instanceof ItemEntity itemEntity) {
+                        itemEntity.noPhysics = false;
+                    }
                 }
                 trackedItems.remove(item);
                 iterator.remove();
