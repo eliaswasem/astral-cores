@@ -4,15 +4,22 @@ import com.mojang.datafixers.util.Pair;
 import de.ep.astralcores.util.Effects;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,7 +52,7 @@ public final class ShadowCoreLogic {
                 player.blockPosition()
         );
 
-        // Check whether there is currently sky light at the player's position.
+        // Check whether there is currently skylight at the player's position.
         boolean isOutdoors = player.level().getBrightness(
                 LightLayer.SKY,
                 player.blockPosition()
@@ -146,9 +153,54 @@ public final class ShadowCoreLogic {
     }
 
     public static void activate(ServerPlayer player) {
-        // Shadow Core currently has no active ability.
-    }
+        if (!player.isAlive() || player.isRemoved()) {
+            return;
+        }
 
+        ServerLevel level = player.level();
+        Vec3 pos = player.position();
+
+        // Spawn particels
+        level.sendParticles(
+                ParticleTypes.SQUID_INK,
+                pos.x,
+                pos.y + 1.5,
+                pos.z,
+                3000,
+                6.0,
+                3.0,
+                6.0,
+                0.0
+        );
+
+        // Spawn particels
+        level.sendParticles(
+                new DustParticleOptions(0x000000, 1.5F),
+                pos.x,
+                pos.y + 1.5,
+                pos.z,
+                3000,
+                6.0,
+                3.0,
+                6.0,
+                0.0
+        );
+
+        Effects.applyEffect(player, MobEffects.SPEED, 200, 2, false, false, false);
+
+        AABB boundingBox =
+                player.getBoundingBox().inflate(6);
+
+        List<LivingEntity> targets =
+                player.level().getEntitiesOfClass(
+                        LivingEntity.class,
+                        boundingBox,
+                        entity -> entity != player
+                );
+        for (LivingEntity target : targets) {
+            Effects.applyEffect(target, MobEffects.BLINDNESS, 200, 1, false, false, false);
+        }
+    }
     public static void tick(ServerPlayer player) {
         // Shadow Core currently has no separate per-tick active ability.
     }
