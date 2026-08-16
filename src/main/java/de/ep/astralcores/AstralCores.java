@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 public class AstralCores implements ModInitializer {
 
-	public static final String MOD_ID = "astral_relics";
+	public static final String MOD_ID = "astral_cores";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	// Persistent SQLite data processor instance
@@ -22,7 +22,7 @@ public class AstralCores implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		LOGGER.info("Initializing AstralRelics Mod...");
+		LOGGER.info("Initializing AstralCores...");
 
 		// Registers server event listeners
 		ServerLifecycleEventsListener.register();

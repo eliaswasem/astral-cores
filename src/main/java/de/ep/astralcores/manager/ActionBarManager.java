@@ -25,10 +25,10 @@ public class ActionBarManager {
         }
 
         CoreType equippedType = data.getEquippedCore();
-        Core relic = CoreRegistry.get(equippedType).orElse(null);
+        Core core = CoreRegistry.get(equippedType).orElse(null);
 
         // Shows empty slots if the core registry fails
-        if (relic == null) {
+        if (core == null) {
             switch (mode) {
                 case ICON -> sendPacket(player, "\uE000");
                 case TEXT -> sendPacket(player, "§cNone");
@@ -37,8 +37,8 @@ public class ActionBarManager {
         }
 
         // Checks if the core has active or passive abilities
-        boolean hasPassiveFeature = relic.getPassiveCooldown() > 0;
-        boolean hasActiveFeature = relic.getActiveCooldown() > 0;
+        boolean hasPassiveFeature = core.getPassiveCooldown() > 0;
+        boolean hasActiveFeature = core.getActiveCooldown() > 0;
 
         boolean activeReady = CooldownManager.isActiveReady(data, equippedType);
         boolean passiveReady = CooldownManager.isPassiveReady(data, equippedType);
@@ -61,9 +61,9 @@ public class ActionBarManager {
         // Selects the center text or icon based on player settings
         String centerModule;
         switch (mode) {
-            case ICON -> centerModule = relic.getCustomChar();
-            case TEXT -> centerModule = relic.getName();
-            default -> centerModule = relic.getName();
+            case ICON -> centerModule = core.getCustomChar();
+            case TEXT -> centerModule = core.getName();
+            default -> centerModule = core.getName();
         }
 
         // Sends the combined text to the player action bar
