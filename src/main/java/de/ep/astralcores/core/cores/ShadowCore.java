@@ -38,11 +38,6 @@ public class ShadowCore extends Core {
     }
 
     @Override
-    public void tick(ServerPlayer player) {
-        ShadowCoreLogic.tick(player);
-    }
-
-    @Override
     public void onRemoved(ServerPlayer player) {
         ShadowCoreLogic.onRemoved(player);
     }

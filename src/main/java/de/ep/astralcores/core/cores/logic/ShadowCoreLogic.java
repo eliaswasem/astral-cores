@@ -1,6 +1,8 @@
 package de.ep.astralcores.core.cores.logic;
 
 import com.mojang.datafixers.util.Pair;
+import de.ep.astralcores.AstralCores;
+import de.ep.astralcores.playerdata.PlayerData;
 import de.ep.astralcores.util.Effects;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.ChatFormatting;
@@ -16,21 +18,15 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.WeakHashMap;
+import java.util.*;
 
 public final class ShadowCoreLogic {
 
-    // Thread-safe weak mappings to automatically drop entries when a player disconnects.
+    // Weak mappings allow player state to be garbage-collected once the ServerPlayer is no longer strongly referenced.
     private static final Map<ServerPlayer, Integer> sneakTimers =
             Collections.synchronizedMap(new WeakHashMap<>());
 
@@ -188,16 +184,21 @@ public final class ShadowCoreLogic {
 
         Effects.applyEffect(player, MobEffects.SPEED, 200, 2, false, false, false);
 
-        AABB boundingBox =
-                player.getBoundingBox().inflate(6);
+        AABB boundingBox = player.getBoundingBox().inflate(6);
+
+        PlayerData data = AstralCores.PLAYER_DATA.get(player);
+
 
         List<LivingEntity> targets =
-                player.level().getEntitiesOfClass(
+                level.getEntitiesOfClass(
                         LivingEntity.class,
                         boundingBox,
                         entity -> entity != player
                 );
         for (LivingEntity target : targets) {
+            if (data != null && data.isTrusted(target.getUUID())) {
+                continue;
+            }
             Effects.applyEffect(target, MobEffects.BLINDNESS, 200, 1, false, false, false);
         }
     }
