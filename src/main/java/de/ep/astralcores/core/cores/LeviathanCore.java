@@ -33,7 +33,5 @@ public class LeviathanCore extends Core {
     }
 
     @Override
-    public void activate(ServerPlayer player) {
-
-    }
+    public void activate(ServerPlayer player) {LeviathanCoreLogic.activate(player);}
 }
