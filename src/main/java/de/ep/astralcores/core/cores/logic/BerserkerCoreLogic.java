@@ -15,7 +15,7 @@ import java.util.WeakHashMap;
 
 public class BerserkerCoreLogic {
 
-    public static final Set<ServerPlayer> activePlayers = Collections.newSetFromMap(new WeakHashMap<>());
+    private static final Set<ServerPlayer> activePlayers = Collections.newSetFromMap(new WeakHashMap<>());
 
     private static final Map<ServerPlayer, TickTimer> ragePlayers = new WeakHashMap<>();
 

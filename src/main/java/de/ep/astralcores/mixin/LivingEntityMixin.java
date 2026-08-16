@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LivingEntity.class)
-public class MixinLivingEntity {
+public class LivingEntityMixin {
 
     @Inject(method = "heal", at = @At("HEAD"), cancellable = true)
     private void astralcores$disableRageHealing(float amount, CallbackInfo ci) {
