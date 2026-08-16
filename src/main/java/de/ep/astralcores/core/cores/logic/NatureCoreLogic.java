@@ -13,12 +13,17 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.Collections;
+import java.util.Set;
+import java.util.WeakHashMap;
+
 public final class NatureCoreLogic {
 
-    private NatureCoreLogic() {
-    }
+    public static final Set<ServerPlayer> activePlayers = Collections.newSetFromMap(new WeakHashMap<>());
 
     public static void applyPassive(ServerPlayer player) {
+        activePlayers.add(player);
+
         if (!BiomeUtils.isInNatureBiome(player)) {
             return;
         }
@@ -47,6 +52,7 @@ public final class NatureCoreLogic {
     }
 
     public static void activate(ServerPlayer player) {
+        activePlayers.add(player);
 
         ServerLevel level = player.level();
         Vec3 pos = player.position();
@@ -60,12 +66,12 @@ public final class NatureCoreLogic {
         AreaEffectCloud cloud = new AreaEffectCloud(
                 level,
                 pos.x,
-                pos.y,
+                pos.y + 0.5,
                 pos.z
         );
         cloud.setOwner(player);
         cloud.setRadius(radius);
-        cloud.setDuration(200);
+        cloud.setDuration(120);
         cloud.setWaitTime(0);
 
         cloud.addEffect(
@@ -85,7 +91,7 @@ public final class NatureCoreLogic {
     }
 
     public static void onRemoved(ServerPlayer player) {
-        // No persistent state to clean up.
+        activePlayers.remove(player);
     }
 
     private static void handleFoodHealing(ServerPlayer player) {
@@ -100,5 +106,9 @@ public final class NatureCoreLogic {
         player.setHealth(
                 Math.min(maxHealth, currentHealth + healing)
         );
+    }
+
+    public static boolean hasNatureCore(ServerPlayer player) {
+        return activePlayers.contains(player);
     }
 }
