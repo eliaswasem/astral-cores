@@ -8,21 +8,28 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
 
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.WeakHashMap;
 
 public final class IllusionCoreLogic {
 
     private static final double TRIGGER_CHANCE = 0.20;
 
-    private static final Set<ServerPlayer> activePlayers = Collections.newSetFromMap(new WeakHashMap<>());
+    private static final Set<ServerPlayer> activePlayers = new HashSet<>();
 
     public static void applyPassive(ServerPlayer player) {
         activePlayers.add(player);
     }
 
     public static void onRemoved(ServerPlayer player) {
+        cleanup(player);
+    }
+
+    public static void onPlayerDisconnect(ServerPlayer player) {
+        cleanup(player);
+    }
+
+    private static void cleanup(ServerPlayer player) {
         activePlayers.remove(player);
     }
 

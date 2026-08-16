@@ -41,4 +41,9 @@ public class BerserkerCore extends Core {
     public void onRemoved(ServerPlayer player) {
         BerserkerCoreLogic.onRemoved(player);
     }
+
+    @Override
+    public void onPlayerDisconnect(ServerPlayer player) {
+        BerserkerCoreLogic.onPlayerDisconnect(player);
+    }
 }

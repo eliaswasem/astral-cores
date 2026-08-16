@@ -8,16 +8,16 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.WeakHashMap;
 
 public class BerserkerCoreLogic {
 
-    private static final Set<ServerPlayer> activePlayers = Collections.newSetFromMap(new WeakHashMap<>());
+    private static final Set<ServerPlayer> activePlayers = new HashSet<>();
 
-    private static final Map<ServerPlayer, TickTimer> ragePlayers = new WeakHashMap<>();
+    private static final Map<ServerPlayer, TickTimer> ragePlayers = new HashMap<>();
 
     public static boolean allowHealing = false;
 
@@ -57,6 +57,14 @@ public class BerserkerCoreLogic {
     }
 
     public static void onRemoved(ServerPlayer player) {
+        cleanup(player);
+    }
+
+    public static void onPlayerDisconnect(ServerPlayer player) {
+        cleanup(player);
+    }
+
+    private static void cleanup(ServerPlayer player) {
         activePlayers.remove(player);
         ragePlayers.remove(player);
     }

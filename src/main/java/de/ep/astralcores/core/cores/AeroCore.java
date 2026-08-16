@@ -46,4 +46,10 @@ public class AeroCore extends Core {
     public void tick(ServerPlayer player) {
         AeroCoreLogic.tick(player);
     }
+
+    @Override
+    public void onPlayerDisconnect(ServerPlayer player) {
+        AeroCoreLogic.onPlayerDisconnect(player);
+    }
 }
+

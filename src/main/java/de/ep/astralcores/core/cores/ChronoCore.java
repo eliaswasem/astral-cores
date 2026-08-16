@@ -41,4 +41,9 @@ public class ChronoCore extends Core {
     public void activate(ServerPlayer player) {
         // Will be implemented later
     }
+
+    @Override
+    public void onPlayerDisconnect(ServerPlayer player) {
+        ChronoCoreLogic.onPlayerDisconnect(player);
+    }
 }

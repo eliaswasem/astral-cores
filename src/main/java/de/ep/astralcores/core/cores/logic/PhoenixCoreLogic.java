@@ -23,9 +23,6 @@ public final class PhoenixCoreLogic {
                     "phoenix_flameborn"
             );
 
-    private PhoenixCoreLogic() {
-    }
-
     public static void applyPassive(ServerPlayer player) {
         // Base fire protection.
         Effects.applyEffect(

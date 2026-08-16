@@ -41,4 +41,9 @@ public class NatureCore extends Core {
     public void onRemoved(ServerPlayer player) {
         NatureCoreLogic.onRemoved(player);
     }
+
+    @Override
+    public void onPlayerDisconnect(ServerPlayer player) {
+        NatureCoreLogic.onPlayerDisconnect(player);
+    }
 }

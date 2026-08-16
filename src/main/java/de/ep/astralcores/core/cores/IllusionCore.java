@@ -41,4 +41,9 @@ public class IllusionCore extends Core {
     public void activate(ServerPlayer player) {
 
     }
+
+    @Override
+    public void onPlayerDisconnect(ServerPlayer player) {
+        IllusionCoreLogic.onPlayerDisconnect(player);
+    }
 }

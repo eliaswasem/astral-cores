@@ -21,18 +21,24 @@ import java.util.*;
 public class AeroCoreLogic {
 
     // Players that currently have the Aero Core passive active.
-    public static final Set<ServerPlayer> activePlayers =
-            Collections.newSetFromMap(new WeakHashMap<>());
+    public static final Set<ServerPlayer> activePlayers = new HashSet<>();
 
     // Active Tornado Lift timers.
-    private static final Map<ServerPlayer, TickTimer> tornadoTimers =
-            Collections.synchronizedMap(new WeakHashMap<>());
+    private static final Map<ServerPlayer, TickTimer> tornadoTimers = new HashMap<>();
 
     public static void applyPassive(ServerPlayer player) {
         activePlayers.add(player);
     }
 
     public static void onRemoved(ServerPlayer player) {
+        cleanup(player);
+    }
+
+    public static void onPlayerDisconnect(ServerPlayer player) {
+        cleanup(player);
+    }
+
+    private static void cleanup(ServerPlayer player) {
         activePlayers.remove(player);
         tornadoTimers.remove(player);
     }

@@ -188,20 +188,30 @@ public final class ShadowCoreLogic {
 
         PlayerData data = AstralCores.PLAYER_DATA.get(player);
 
-
         List<LivingEntity> targets =
                 level.getEntitiesOfClass(
                         LivingEntity.class,
                         boundingBox,
                         entity -> entity != player
                 );
+
         for (LivingEntity target : targets) {
             if (data != null && data.isTrusted(target.getUUID())) {
                 continue;
             }
-            Effects.applyEffect(target, MobEffects.BLINDNESS, 200, 1, false, false, false);
+
+            Effects.applyEffect(
+                    target,
+                    MobEffects.BLINDNESS,
+                    200,
+                    1,
+                    false,
+                    false,
+                    false
+            );
         }
     }
+
     public static void tick(ServerPlayer player) {
         // Shadow Core currently has no separate per-tick active ability.
     }
@@ -237,10 +247,18 @@ public final class ShadowCoreLogic {
     }
 
     public static void onRemoved(ServerPlayer player) {
-        // Cancel any concealment countdown when the core is removed.
+        cleanup(player);
+    }
+
+    public static void onPlayerDisconnect(ServerPlayer player) {
+        cleanup(player);
+    }
+
+    private static void cleanup(ServerPlayer player) {
+        // Cancel any active concealment countdown.
         sneakTimers.remove(player);
 
-        // Clean up all hidden-state effects and restore the player's equipment.
+        // Remove hidden state and restore the player's equipment/effects.
         if (hiddenPlayers.remove(player)) {
             player.removeEffect(MobEffects.INVISIBILITY);
             player.removeEffect(MobEffects.NIGHT_VISION);

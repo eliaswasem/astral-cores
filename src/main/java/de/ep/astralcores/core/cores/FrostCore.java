@@ -48,4 +48,8 @@ public final class FrostCore extends Core {
         FrostCoreLogic.tick(player);
     }
 
+    @Override
+    public void onPlayerDisconnect(ServerPlayer player) {
+        FrostCoreLogic.onPlayerDisconnect(player);
+    }
 }

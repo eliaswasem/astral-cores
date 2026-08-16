@@ -13,9 +13,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.WeakHashMap;
 
 public final class GravityCoreLogic {
 
@@ -25,12 +24,8 @@ public final class GravityCoreLogic {
                     "gravity_heavy_presence"
             );
 
-    // Thread-safe weak mapping to automatically drop entries when a player disconnects.
-    private static final Map<ServerPlayer, TickTimer> activePulls =
-            Collections.synchronizedMap(new WeakHashMap<>());
-
-    private GravityCoreLogic() {
-    }
+    // Active Gravity Pull timers.
+    private static final Map<ServerPlayer, TickTimer> activePulls = new HashMap<>();
 
     public static void applyPassive(ServerPlayer player) {
         AttributeInstance attribute =
@@ -50,6 +45,14 @@ public final class GravityCoreLogic {
     }
 
     public static void onRemoved(ServerPlayer player) {
+        cleanup(player);
+    }
+
+    public static void onPlayerDisconnect(ServerPlayer player) {
+        cleanup(player);
+    }
+
+    private static void cleanup(ServerPlayer player) {
         AttributeInstance attribute =
                 player.getAttribute(Attributes.KNOCKBACK_RESISTANCE);
 

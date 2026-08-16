@@ -46,4 +46,9 @@ public class MagnetCore extends Core {
     public void tick(ServerPlayer player) {
         MagnetCoreLogic.tick(player);
     }
+
+    @Override
+    public void onPlayerDisconnect(ServerPlayer player) {
+        MagnetCoreLogic.onPlayerDisconnect(player);
+    }
 }

@@ -127,7 +127,7 @@ public abstract class Core {
     }
 
     // Runs if a Player disconnects
-    public void onPlayerDisconnect(Serverplayer player) {
+    public void onPlayerDisconnect(ServerPlayer player) {
 
     }
 

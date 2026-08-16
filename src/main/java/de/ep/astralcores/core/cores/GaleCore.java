@@ -53,4 +53,9 @@ public class GaleCore extends Core {
     public void onRemoved(ServerPlayer player) {
         GaleCoreLogic.onRemoved(player);
     }
+
+    @Override
+    public void onPlayerDisconnect(ServerPlayer player) {
+        GaleCoreLogic.onPlayerDisconnect(player);
+    }
 }

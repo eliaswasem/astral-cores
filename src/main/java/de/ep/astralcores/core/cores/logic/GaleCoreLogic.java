@@ -11,18 +11,13 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.WeakHashMap;
 
 public final class GaleCoreLogic {
 
-    // Thread-safe weak mapping to automatically drop entries when a player disconnects.
-    private static final Map<ServerPlayer, TickTimer> explosionTimers =
-            Collections.synchronizedMap(new WeakHashMap<>());
-
-    private GaleCoreLogic() {
-    }
+    // Active Sonic Dash timers.
+    private static final Map<ServerPlayer, TickTimer> explosionTimers = new HashMap<>();
 
     public static void applyPassive(ServerPlayer player) {
         if (player.isSprinting()) {
@@ -81,6 +76,14 @@ public final class GaleCoreLogic {
     }
 
     public static void onRemoved(ServerPlayer player) {
+        cleanup(player);
+    }
+
+    public static void onPlayerDisconnect(ServerPlayer player) {
+        cleanup(player);
+    }
+
+    private static void cleanup(ServerPlayer player) {
         // Cancel any Sonic Dash that is currently waiting for its explosion.
         explosionTimers.remove(player);
     }

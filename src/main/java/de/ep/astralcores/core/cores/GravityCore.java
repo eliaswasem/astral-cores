@@ -47,4 +47,9 @@ public final class GravityCore extends Core {
     public void onRemoved(ServerPlayer player) {
         GravityCoreLogic.onRemoved(player);
     }
+
+    @Override
+    public void onPlayerDisconnect(ServerPlayer player) {
+        GravityCoreLogic.onPlayerDisconnect(player);
+    }
 }

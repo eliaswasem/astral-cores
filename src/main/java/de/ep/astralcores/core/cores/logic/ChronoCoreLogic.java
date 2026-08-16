@@ -21,15 +21,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.DeathProtection;
 
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.WeakHashMap;
 
 public class ChronoCoreLogic {
 
     // Tracks which players currently have this core's passive effect active
-    public static final Set<ServerPlayer> activePlayers = Collections.newSetFromMap(new WeakHashMap<>());
+    public static final Set<ServerPlayer> activePlayers = new HashSet<>();
 
     public static void applyPassive(ServerPlayer player) {
         // Marks this player as having the core active
@@ -37,7 +36,14 @@ public class ChronoCoreLogic {
     }
 
     public static void onRemoved(ServerPlayer player) {
-        // Removes the player from the active map when unequipped
+        cleanup(player);
+    }
+
+    public static void onPlayerDisconnect(ServerPlayer player) {
+        cleanup(player);
+    }
+
+    private static void cleanup(ServerPlayer player) {
         activePlayers.remove(player);
     }
 

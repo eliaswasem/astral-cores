@@ -34,4 +34,14 @@ public class LeviathanCore extends Core {
 
     @Override
     public void activate(ServerPlayer player) {LeviathanCoreLogic.activate(player);}
+
+    @Override
+    public void onPlayerDisconnect(ServerPlayer player) {
+        LeviathanCoreLogic.onPlayerDisconnect(player);
+    }
+
+    @Override
+    public void tick(ServerPlayer player) {
+        LeviathanCoreLogic.tick(player);
+    }
 }

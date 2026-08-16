@@ -2,6 +2,7 @@ package de.ep.astralcores.event;
 
 import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.core.CoreFactory;
+import de.ep.astralcores.core.CoreRegistry;
 import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.core.cores.logic.*;
 import de.ep.astralcores.event.logic.CoreDeathLogic;
@@ -34,10 +35,8 @@ public class PlayerEvents {
 
                     PlayerData data = AstralCores.PLAYER_DATA.get(player);
                     if (data != null){
-                        Core core = data.getEquippedCore;
-                        if (core != null) {
-                            core.onPlayerDisconnect();
-                        }
+                        CoreType coreType = data.getEquippedCore();
+                        CoreRegistry.get(coreType).ifPresent(core -> core.onPlayerDisconnect(player));
                     }
                     if (AstralCores.PLAYER_DATA != null) {
                         AstralCores.PLAYER_DATA.unload(player);

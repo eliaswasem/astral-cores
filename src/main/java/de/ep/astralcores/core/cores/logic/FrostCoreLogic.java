@@ -18,10 +18,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.WeakHashMap;
 
 public class FrostCoreLogic {
 
@@ -29,10 +29,10 @@ public class FrostCoreLogic {
     private static final Identifier FROST_MODIFIER_ID = Identifier.fromNamespaceAndPath("astralcores", "frost_lock_resistance");
 
     // Players whose next valid attack will trigger Frost Lock.
-    public static final Set<ServerPlayer> armedPlayers = Collections.newSetFromMap(new WeakHashMap<>());
+    public static final Set<ServerPlayer> armedPlayers = new HashSet<>();
 
     // Currently frozen entities.
-    private static final Map<LivingEntity, FrostLock> activeLocks = Collections.synchronizedMap(new WeakHashMap<>());
+    private static final Map<LivingEntity, FrostLock> activeLocks = new HashMap<>();
 
     public static void applyPassive(ServerPlayer player) {
         PlayerData data = AstralCores.PLAYER_DATA.get(player);
@@ -64,6 +64,14 @@ public class FrostCoreLogic {
     }
 
     public static void onRemoved(ServerPlayer player) {
+        cleanup(player);
+    }
+
+    public static void onPlayerDisconnect(ServerPlayer player) {
+        cleanup(player);
+    }
+
+    private static void cleanup(ServerPlayer player) {
         // Cancel a pending Frost Lock activation.
         armedPlayers.remove(player);
     }
@@ -201,6 +209,5 @@ public class FrostCoreLogic {
             return display;
         }
     }
-
 
 }

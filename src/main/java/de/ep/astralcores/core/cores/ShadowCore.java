@@ -41,4 +41,9 @@ public class ShadowCore extends Core {
     public void onRemoved(ServerPlayer player) {
         ShadowCoreLogic.onRemoved(player);
     }
+
+    @Override
+    public void onPlayerDisconnect(ServerPlayer player) {
+        ShadowCoreLogic.onPlayerDisconnect(player);
+    }
 }
