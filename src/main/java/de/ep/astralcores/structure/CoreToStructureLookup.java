@@ -8,15 +8,40 @@ import java.util.Optional;
 
 public final class CoreToStructureLookup {
 
-    private static final Map<CoreType, Identifier> BY_CORE = Map.of(
-            CoreType.PHOENIX_CORE,
-            Identifier.fromNamespaceAndPath("astralcores", "phoenix_meteor"),
+    private static final Map<CoreType, Identifier> BY_CORE = Map.ofEntries(
 
-            CoreType.FROST_CORE,
-            Identifier.fromNamespaceAndPath("astralcores", "frost_shrine"),
+            Map.entry(CoreType.AERO_CORE,
+                    Identifier.fromNamespaceAndPath("astralcores", "")),
 
-            CoreType.SHADOW_CORE,
-            Identifier.fromNamespaceAndPath("astralcores", "shadow_temple")
+            Map.entry(CoreType.GALE_CORE,
+                    Identifier.fromNamespaceAndPath("astralcores", "")),
+
+            Map.entry(CoreType.CHRONO_CORE,
+                    Identifier.fromNamespaceAndPath("astralcores", "")),
+
+            Map.entry(CoreType.FROST_CORE,
+                    Identifier.fromNamespaceAndPath("astralcores", "frost_shrine")),
+
+            Map.entry(CoreType.PHOENIX_CORE,
+                    Identifier.fromNamespaceAndPath("astralcores", "phoenix_meteor")),
+
+            Map.entry(CoreType.LEVIATHAN_CORE,
+                    Identifier.fromNamespaceAndPath("astralcores", "")),
+
+            Map.entry(CoreType.SHADOW_CORE,
+                    Identifier.fromNamespaceAndPath("astralcores", "shadow_temple")),
+
+            Map.entry(CoreType.BERSERKER_CORE,
+                    Identifier.fromNamespaceAndPath("astralcores", "")),
+
+            Map.entry(CoreType.ILLUSION_CORE,
+                    Identifier.fromNamespaceAndPath("astralcores", "")),
+
+            Map.entry(CoreType.NATURE_CORE,
+                    Identifier.fromNamespaceAndPath("astralcores", "")),
+
+            Map.entry(CoreType.MAGNET_CORE,
+                    Identifier.fromNamespaceAndPath("astralcores", ""))
     );
 
     public static Optional<Identifier> get(CoreType coreType) {
