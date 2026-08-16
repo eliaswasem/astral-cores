@@ -30,8 +30,17 @@ public class PlayerEvents {
         // Unloads player profile data from RAM when they disconnect from the server
         ServerPlayConnectionEvents.DISCONNECT.register(
                 (handler, server) -> server.execute(() -> {
+                    ServerPlayer player = handler.player;
+
+                    PlayerData data = AstralCores.PLAYER_DATA.get(player)
+                    if (data != null){
+                        Core core = data.getEquippedCore;
+                        if (core != null) {
+                            core.onPlayerDisconnect();
+                        }
+                    }
                     if (AstralCores.PLAYER_DATA != null) {
-                        AstralCores.PLAYER_DATA.unload(handler.player);
+                        AstralCores.PLAYER_DATA.unload(player);
                     }
                 })
         );

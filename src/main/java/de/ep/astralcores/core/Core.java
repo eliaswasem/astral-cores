@@ -126,6 +126,11 @@ public abstract class Core {
     public void onRemoved(ServerPlayer player) {
     }
 
+    // Runs if a Player disconnects
+    public void onPlayerDisconnect(Serverplayer player) {
+
+    }
+
     // Applies permanent background attributes or continuous buff checks
     public void applyPassive(ServerPlayer player){
 
