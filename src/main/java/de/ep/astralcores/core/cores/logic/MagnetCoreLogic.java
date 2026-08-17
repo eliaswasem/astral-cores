@@ -17,32 +17,27 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.UUID;
 
 public final class MagnetCoreLogic {
 
-    // Tracks players actively wearing the core.
-    public static final Set<ServerPlayer> activePlayers =
-            new HashSet<>();
-
-    // Tracks active item pull timers and their targets.
+    // Stores the remaining pull duration for each tracked entity.
     private static final Map<Entity, TickTimer> trackedItems =
             new HashMap<>();
 
-    private static final Map<Entity, ServerPlayer> itemTargets =
+    // Associates each tracked entity with the player currently pulling it.
+    private static final Map<Entity, UUID> itemCasters =
             new HashMap<>();
 
-    private static final double PULL_RADIUS = 15.0;
-    private static final double PULL_SPEED = 0.55;
+    private static final double PULL_RADIUS = 15.0D;
+    private static final double PULL_SPEED = 0.55D;
     private static final int MAX_PULL_DURATION_TICKS = 40;
 
-    // Registers the specific player reference inside the active core passive cache.
     public static void applyPassive(ServerPlayer player) {
-        activePlayers.add(player);
+        // Handles passive effects while the core is equipped.
     }
 
     public static void onRemoved(ServerPlayer player) {
@@ -54,28 +49,34 @@ public final class MagnetCoreLogic {
     }
 
     private static void cleanup(ServerPlayer player) {
-        activePlayers.remove(player);
-        clearItemsForPlayer(player);
+        clearItemsForPlayer(player.getUUID());
     }
 
-    // Gathers loose item objects in proximity and overrides their collision grids.
     public static void activate(ServerPlayer player) {
         if (!player.isAlive() || player.isRemoved()) {
             return;
         }
 
-        ServerLevel level = (ServerLevel) player.level();
-        AABB searchBox = player.getBoundingBox().inflate(PULL_RADIUS);
+        ServerLevel level = player.level();
 
-        List<Entity> targetItems = level.getEntitiesOfClass(
-                Entity.class,
-                searchBox,
-                entity -> entity.isAlive()
-                        && (entity instanceof ItemEntity
-                        || entity instanceof ExperienceOrb)
-        );
+        AABB searchBox =
+                player.getBoundingBox().inflate(PULL_RADIUS);
+
+        List<Entity> targetItems =
+                level.getEntitiesOfClass(
+                        Entity.class,
+                        searchBox,
+                        entity ->
+                                entity.isAlive()
+                                        && (entity instanceof ItemEntity
+                                        || entity instanceof ExperienceOrb)
+                );
+
+        UUID casterUUID =
+                player.getUUID();
 
         for (Entity item : targetItems) {
+
             if (item instanceof ItemEntity itemEntity) {
                 itemEntity.noPhysics = true;
             }
@@ -85,32 +86,42 @@ public final class MagnetCoreLogic {
                     new TickTimer(MAX_PULL_DURATION_TICKS)
             );
 
-            itemTargets.put(item, player);
+            itemCasters.put(
+                    item,
+                    casterUUID
+            );
         }
 
-        Vec3 origin = player.position();
+        Vec3 origin =
+                player.position();
 
         for (int i = 0; i < 40; i++) {
-            double angle = (Math.PI * 2 * i) / 40;
-            double xOffset = Math.cos(angle) * PULL_RADIUS;
-            double zOffset = Math.sin(angle) * PULL_RADIUS;
 
-            // Spawns an instant expanding dust shell line to notify the user of reach.
+            double angle =
+                    Math.PI * 2.0D * i / 40.0D;
+
+            double x =
+                    origin.x
+                            + Math.cos(angle) * PULL_RADIUS;
+
+            double z =
+                    origin.z
+                            + Math.sin(angle) * PULL_RADIUS;
+
             level.sendParticles(
                     ParticleTypes.CLOUD,
-                    origin.x + xOffset,
-                    origin.y + 0.15,
-                    origin.z + zOffset,
+                    x,
+                    origin.y + 0.15D,
+                    z,
                     1,
-                    0.0,
-                    0.01,
-                    0.0,
-                    0.005
+                    0.0D,
+                    0.01D,
+                    0.0D,
+                    0.005D
             );
         }
     }
 
-    // Computes relative physical movement vectors for pulled drops over server frames.
     public static void tick(ServerPlayer player) {
         if (!player.isAlive()
                 || player.isRemoved()
@@ -118,40 +129,53 @@ public final class MagnetCoreLogic {
             return;
         }
 
-        ServerLevel level = (ServerLevel) player.level();
+        ServerLevel level =
+                player.level();
 
-        Iterator<Map.Entry<Entity, ServerPlayer>> iterator =
-                itemTargets.entrySet().iterator();
+        UUID playerUUID =
+                player.getUUID();
+
+        Iterator<Map.Entry<Entity, UUID>> iterator =
+                itemCasters.entrySet().iterator();
 
         boolean playerIsPulling = false;
-        int lowestTicksLeft = MAX_PULL_DURATION_TICKS;
+
+        int lowestTicksLeft =
+                MAX_PULL_DURATION_TICKS;
 
         while (iterator.hasNext()) {
-            Map.Entry<Entity, ServerPlayer> entry =
+
+            Map.Entry<Entity, UUID> entry =
                     iterator.next();
 
-            ServerPlayer targetPlayer = entry.getValue();
+            Entity item =
+                    entry.getKey();
 
-            if (!targetPlayer.equals(player)) {
+            UUID casterUUID =
+                    entry.getValue();
+
+            if (!casterUUID.equals(playerUUID)) {
                 continue;
             }
 
-            Entity item = entry.getKey();
-            TickTimer timer = trackedItems.get(item);
+            TickTimer timer =
+                    trackedItems.get(item);
 
-            // Purges broken or nonexistent entity listings instantly from tracking arrays.
-            if (item == null || !item.isAlive() || timer == null) {
-                if (item instanceof ItemEntity itemEntity) {
-                    itemEntity.noPhysics = false;
-                }
+            if (item == null
+                    || !item.isAlive()
+                    || timer == null) {
+
+                resetItem(item);
 
                 trackedItems.remove(item);
                 iterator.remove();
+
                 continue;
             }
 
             Vec3 playerPos =
-                    player.position().add(0, 0.5, 0);
+                    player.position()
+                            .add(0.0D, 0.5D, 0.0D);
 
             Vec3 itemPos =
                     item.position();
@@ -159,18 +183,17 @@ public final class MagnetCoreLogic {
             double distance =
                     playerPos.distanceTo(itemPos);
 
-            // Re-enables block clipping and releases targets if limits are reached.
-            if (distance < 1.2 || timer.tick()) {
-                if (item instanceof ItemEntity itemEntity) {
-                    itemEntity.noPhysics = false;
-                }
+            if (distance < 1.2D
+                    || timer.tick()) {
+
+                resetItem(item);
 
                 trackedItems.remove(item);
                 iterator.remove();
+
                 continue;
             }
 
-            // Sets customized acceleration values directing items directly to the caster.
             if (item instanceof ItemEntity itemEntity) {
                 itemEntity.noPhysics = true;
             }
@@ -186,72 +209,72 @@ public final class MagnetCoreLogic {
 
             playerIsPulling = true;
 
-            if (timer.getRemaining() < lowestTicksLeft) {
-                lowestTicksLeft = timer.getRemaining();
-            }
+            lowestTicksLeft =
+                    Math.min(
+                            lowestTicksLeft,
+                            timer.getRemaining()
+                    );
 
-            // Spawns tiny static electrical charge indicators right above the drops.
             level.sendParticles(
                     ParticleTypes.ELECTRIC_SPARK,
                     itemPos.x,
-                    itemPos.y + 0.2,
+                    itemPos.y + 0.2D,
                     itemPos.z,
                     1,
-                    0.0,
-                    0.0,
-                    0.0,
-                    0.0
+                    0.0D,
+                    0.0D,
+                    0.0D,
+                    0.0D
             );
         }
 
-        if (playerIsPulling) {
-            Vec3 center =
-                    player.position();
+        if (!playerIsPulling) {
+            return;
+        }
 
-            double fieldRadius =
-                    PULL_RADIUS
-                            * ((double) lowestTicksLeft
-                            / MAX_PULL_DURATION_TICKS);
+        Vec3 center =
+                player.position();
 
-            if (fieldRadius > 1.0) {
-                for (int i = 0; i < 24; i++) {
-                    double angle =
-                            (Math.PI * 2 * i) / 24;
+        double fieldRadius =
+                PULL_RADIUS
+                        * ((double) lowestTicksLeft
+                        / MAX_PULL_DURATION_TICKS);
 
-                    double x =
-                            center.x
-                                    + Math.cos(angle) * fieldRadius;
+        if (fieldRadius <= 1.0D) {
+            return;
+        }
 
-                    double z =
-                            center.z
-                                    + Math.sin(angle) * fieldRadius;
+        for (int i = 0; i < 24; i++) {
 
-                    // Outlines a collapsing gravitational suction border ring along the ground.
-                    level.sendParticles(
-                            ParticleTypes.PORTAL,
-                            x,
-                            center.y + 0.15,
-                            z,
-                            1,
-                            0.0,
-                            0.0,
-                            0.0,
-                            0.0
-                    );
-                }
-            }
+            double angle =
+                    Math.PI * 2.0D * i / 24.0D;
+
+            double x =
+                    center.x
+                            + Math.cos(angle) * fieldRadius;
+
+            double z =
+                    center.z
+                            + Math.sin(angle) * fieldRadius;
+
+            level.sendParticles(
+                    ParticleTypes.PORTAL,
+                    x,
+                    center.y + 0.15D,
+                    z,
+                    1,
+                    0.0D,
+                    0.0D,
+                    0.0D,
+                    0.0D
+            );
         }
     }
 
-    // Handles damage listener sweeps to stall offensive enemy swing capabilities.
     public static void executeMagneticDisarm(
             ServerPlayer attacker,
             ServerPlayer victim
     ) {
-        if (!activePlayers.contains(attacker)) {
-            return;
-        }
-
         PlayerData data =
                 AstralCores.PLAYER_DATA.get(attacker);
 
@@ -283,27 +306,33 @@ public final class MagnetCoreLogic {
         );
     }
 
-    // Restores default world environment rules when player network tunnels drop out.
-    private static void clearItemsForPlayer(ServerPlayer player) {
-        Iterator<Map.Entry<Entity, ServerPlayer>> iterator =
-                itemTargets.entrySet().iterator();
+    private static void clearItemsForPlayer(UUID playerUUID) {
+
+        Iterator<Map.Entry<Entity, UUID>> iterator =
+                itemCasters.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Map.Entry<Entity, ServerPlayer> entry =
+
+            Map.Entry<Entity, UUID> entry =
                     iterator.next();
 
-            if (entry.getValue().equals(player)) {
-                Entity item = entry.getKey();
-
-                if (item != null && item.isAlive()) {
-                    if (item instanceof ItemEntity itemEntity) {
-                        itemEntity.noPhysics = false;
-                    }
-                }
-
-                trackedItems.remove(item);
-                iterator.remove();
+            if (!entry.getValue().equals(playerUUID)) {
+                continue;
             }
+
+            Entity item =
+                    entry.getKey();
+
+            resetItem(item);
+
+            trackedItems.remove(item);
+            iterator.remove();
+        }
+    }
+
+    private static void resetItem(Entity item) {
+        if (item instanceof ItemEntity itemEntity) {
+            itemEntity.noPhysics = false;
         }
     }
 }

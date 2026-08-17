@@ -1,5 +1,6 @@
 package de.ep.astralcores.core.cores.logic;
 
+import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.util.Effects;
 import de.ep.astralcores.util.TickTimer;
 import net.minecraft.server.level.ServerPlayer;
@@ -8,16 +9,13 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class BerserkerCoreLogic {
 
-    private static final Set<ServerPlayer> activePlayers = new HashSet<>();
+    private static final Set<UUID> activePlayers = new HashSet<>();
 
-    private static final Map<ServerPlayer, TickTimer> ragePlayers = new HashMap<>();
+    private static final Map<UUID, TickTimer> ragePlayers = new HashMap<>();
 
     public static boolean allowHealing = false;
 
@@ -28,14 +26,14 @@ public class BerserkerCoreLogic {
         }
 
         // Mark this player as having the core active
-        activePlayers.add(player);
+        activePlayers.add(player.getUUID());
     }
 
     public static void activate(ServerPlayer player) {
         player.setHealth(player.getMaxHealth());
 
         // Assign a 10-second timer to the player
-        ragePlayers.put(player, new TickTimer(200));
+        ragePlayers.put(player.getUUID(), new TickTimer(200));
 
         Effects.applyEffect(player, MobEffects.STRENGTH, 200, 1);
         Effects.applyEffect(player, MobEffects.SPEED, 1800, 1);
@@ -49,8 +47,11 @@ public class BerserkerCoreLogic {
         ragePlayers.entrySet().removeIf(entry -> {
             boolean isFinished = entry.getValue().tick();
             if (isFinished) {
-                ServerPlayer player = entry.getKey();
-                player.removeEffect(MobEffects.STRENGTH);
+                UUID uuid = entry.getKey();
+                ServerPlayer player = AstralCores.getServer().getPlayerList().getPlayer(uuid);
+                if (player != null) {
+                    player.removeEffect(MobEffects.STRENGTH);
+                }
             }
             return isFinished;
         });
@@ -65,15 +66,15 @@ public class BerserkerCoreLogic {
     }
 
     private static void cleanup(ServerPlayer player) {
-        activePlayers.remove(player);
-        ragePlayers.remove(player);
+        activePlayers.remove(player.getUUID());
+        ragePlayers.remove(player.getUUID());
     }
 
     public static void handleBloodlust(ServerPlayer victim, DamageSource source) {
 
         Entity attacker = source.getEntity();
 
-        if (attacker instanceof ServerPlayer killer && activePlayers.contains(killer)) {
+        if (attacker instanceof ServerPlayer killer && activePlayers.contains(killer.getUUID())) {
             // Send a sound
             killer.playSound(SoundEvents.WARDEN_HEARTBEAT, 1.0f, 1.2f);
             // Apply Effects using your utility
@@ -89,6 +90,6 @@ public class BerserkerCoreLogic {
     }
 
     public static boolean isInRage(ServerPlayer player) {
-        return ragePlayers.containsKey(player);
+        return ragePlayers.containsKey(player.getUUID());
     }
 }

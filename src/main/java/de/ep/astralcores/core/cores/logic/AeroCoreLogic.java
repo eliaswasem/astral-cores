@@ -21,13 +21,13 @@ import java.util.*;
 public class AeroCoreLogic {
 
     // Players that currently have the Aero Core passive active.
-    public static final Set<ServerPlayer> activePlayers = new HashSet<>();
+    public static final Set<UUID> activePlayers = new HashSet<>();
 
     // Active Tornado Lift timers.
-    private static final Map<ServerPlayer, TickTimer> tornadoTimers = new HashMap<>();
+    private static final Map<UUID, TickTimer> tornadoTimers = new HashMap<>();
 
     public static void applyPassive(ServerPlayer player) {
-        activePlayers.add(player);
+        activePlayers.add(player.getUUID());
     }
 
     public static void onRemoved(ServerPlayer player) {
@@ -39,8 +39,8 @@ public class AeroCoreLogic {
     }
 
     private static void cleanup(ServerPlayer player) {
-        activePlayers.remove(player);
-        tornadoTimers.remove(player);
+        activePlayers.remove(player.getUUID());
+        tornadoTimers.remove(player.getUUID());
     }
 
     public static boolean handleFallShockwave(
@@ -48,7 +48,7 @@ public class AeroCoreLogic {
             DamageSource source
     ) {
         // Ignore the event if the player does not have Aero Core.
-        if (!activePlayers.contains(player)) {
+        if (!activePlayers.contains(player.getUUID())) {
             return true;
         }
 
@@ -229,7 +229,7 @@ public class AeroCoreLogic {
 
         // The visual tornado lasts 25 ticks.
         tornadoTimers.put(
-                player,
+                player.getUUID(),
                 new TickTimer(25)
         );
     }
@@ -237,7 +237,7 @@ public class AeroCoreLogic {
     public static void tick(ServerPlayer player) {
 
         TickTimer timer =
-                tornadoTimers.get(player);
+                tornadoTimers.get(player.getUUID());
 
         // No active Tornado Lift.
         if (timer == null) {
@@ -246,7 +246,7 @@ public class AeroCoreLogic {
 
         // Cancel the visual if the player is no longer valid.
         if (!player.isAlive() || player.isRemoved()) {
-            tornadoTimers.remove(player);
+            tornadoTimers.remove(player.getUUID());
             return;
         }
 
@@ -254,7 +254,7 @@ public class AeroCoreLogic {
 
         // Remove the timer when it expires.
         if (timer.tick()) {
-            tornadoTimers.remove(player);
+            tornadoTimers.remove(player.getUUID());
         }
     }
 

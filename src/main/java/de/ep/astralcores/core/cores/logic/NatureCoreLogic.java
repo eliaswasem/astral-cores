@@ -15,22 +15,21 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 public final class NatureCoreLogic {
 
-    // Players that currently have the Nature Core passive active.
-    public static final Set<ServerPlayer> activePlayers = new HashSet<>();
+    // Stores UUIDs of players that currently have the Nature Core active.
+    private static final Set<UUID> activePlayers =
+            new HashSet<>();
 
     public static void applyPassive(ServerPlayer player) {
-        // Register the player while the core is equipped.
-        activePlayers.add(player);
+        activePlayers.add(player.getUUID());
 
-        // Nature bonuses only apply inside a nature biome.
         if (!BiomeUtils.isInNatureBiome(player)) {
             return;
         }
 
-        // Grants temporary regeneration while in a nature biome.
         Effects.applyEffect(
                 player,
                 MobEffects.REGENERATION,
@@ -38,7 +37,6 @@ public final class NatureCoreLogic {
                 1
         );
 
-        // Grants temporary speed while in a nature biome.
         Effects.applyEffect(
                 player,
                 MobEffects.SPEED,
@@ -46,31 +44,25 @@ public final class NatureCoreLogic {
                 1
         );
 
-        // Slowly grows nearby crops.
         CropUtils.growNearbyCrops(
                 player,
                 4,
                 0.05f
         );
 
-        // Heals the player after finishing a food item.
         handleFoodHealing(player);
     }
 
     public static void activate(ServerPlayer player) {
-        activePlayers.add(player);
-
         ServerLevel level = player.level();
         Vec3 pos = player.position();
 
-        // The ability has increased range inside a nature biome.
         float radius = 4.0f;
 
         if (BiomeUtils.isInNatureBiome(player)) {
             radius = 6.0f;
         }
 
-        // Creates the temporary nature field around the player.
         AreaEffectCloud cloud = new AreaEffectCloud(
                 level,
                 pos.x,
@@ -83,7 +75,6 @@ public final class NatureCoreLogic {
         cloud.setDuration(120);
         cloud.setWaitTime(0);
 
-        // Applies extreme slowness to entities inside the field.
         cloud.addEffect(
                 new MobEffectInstance(
                         MobEffects.SLOWNESS,
@@ -92,7 +83,6 @@ public final class NatureCoreLogic {
                 )
         );
 
-        // Uses tinted leaf particles for the nature-themed field.
         cloud.setCustomParticle(
                 ColorParticleOption.create(
                         ParticleTypes.TINTED_LEAVES,
@@ -112,12 +102,10 @@ public final class NatureCoreLogic {
     }
 
     private static void cleanup(ServerPlayer player) {
-        // Remove the player from the active passive cache.
-        activePlayers.remove(player);
+        activePlayers.remove(player.getUUID());
     }
 
     private static void handleFoodHealing(ServerPlayer player) {
-        // Only heal once the player has completely finished eating.
         if (!FoodUtils.isFinishedEating(player)) {
             return;
         }
@@ -126,7 +114,6 @@ public final class NatureCoreLogic {
         float maxHealth = player.getMaxHealth();
         float healing = 8.0f;
 
-        // Restore up to four hearts without exceeding maximum health.
         player.setHealth(
                 Math.min(
                         maxHealth,
@@ -136,6 +123,6 @@ public final class NatureCoreLogic {
     }
 
     public static boolean hasNatureCore(ServerPlayer player) {
-        return activePlayers.contains(player);
+        return activePlayers.contains(player.getUUID());
     }
 }

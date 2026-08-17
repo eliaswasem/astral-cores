@@ -18,10 +18,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class FrostCoreLogic {
 
@@ -29,7 +26,7 @@ public class FrostCoreLogic {
     private static final Identifier FROST_MODIFIER_ID = Identifier.fromNamespaceAndPath("astralcores", "frost_lock_resistance");
 
     // Players whose next valid attack will trigger Frost Lock.
-    public static final Set<ServerPlayer> armedPlayers = new HashSet<>();
+    public static final Set<UUID> armedPlayers = new HashSet<>();
 
     // Currently frozen entities.
     private static final Map<LivingEntity, FrostLock> activeLocks = new HashMap<>();
@@ -59,7 +56,7 @@ public class FrostCoreLogic {
     public static void activate(ServerPlayer player) {
         if (player.isAlive() && !player.isRemoved()) {
             // The next valid player hit will trigger Frost Lock.
-            armedPlayers.add(player);
+            armedPlayers.add(player.getUUID());
         }
     }
 
@@ -73,7 +70,7 @@ public class FrostCoreLogic {
 
     private static void cleanup(ServerPlayer player) {
         // Cancel a pending Frost Lock activation.
-        armedPlayers.remove(player);
+        armedPlayers.remove(player.getUUID());
     }
 
     public static void tick(ServerPlayer player) {
@@ -82,7 +79,7 @@ public class FrostCoreLogic {
     }
 
     public static void handleFrostLock(ServerPlayer attacker, LivingEntity entity) {
-        if (armedPlayers.remove(attacker)) {
+        if (armedPlayers.remove(attacker.getUUID())) {
             tryLockEntity(attacker, entity);
         }
     }

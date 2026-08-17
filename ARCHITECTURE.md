@@ -223,27 +223,46 @@ Directly handles SQL database queries, local transaction tasks, and active mappi
 
 ---
 
-## Memory & State Management
+# Memory & State Management
 
-### 1. No `UUID` Tracking Maps
-**Do not use `java.util.UUID` as keys for temporary trackers or task timers.**
-* `UUID` objects are persistent identifiers detached from the server level lifecycle.
-* If a player disconnects unexpectedly during a core task, a normal `HashMap<UUID, Data>` keeps the reference, causing a memory leak.
+## 1. UUID Tracking for Temporary Runtime State
 
-### 2. Using `WeakHashMap` with `ServerPlayer`
-Always store temporary fields, players, and active timers using direct **`ServerPlayer`** or **`LivingEntity`** instances inside weak collections:
+Temporary core state may use `UUID` as a key when the tracked object must remain identifiable independently of the current `ServerPlayer` instance.
+
+Examples include:
 
 ```java
-// Safe background tracking for passives
-public static final Set<ServerPlayer> armedPlayers =
-        Collections.newSetFromMap(new WeakHashMap<>());
+private static final Map<UUID, TickTimer> pullTimers =
+        new HashMap<>();
 
-// Thread-safe weak map for active targets or entities
-private static final Map<LivingEntity, FrostLock> activeLocks =
-        Collections.synchronizedMap(new WeakHashMap<>());
+private static final Map<UUID, UUID> pullCasters =
+        new HashMap<>();
 ```
-#### How it works:
-When a player leaves the server, Minecraft discards their current `ServerPlayer` instance. Java's Garbage Collector then cleans up the weak reference—**wiping the entry from the map without needing any manual cleanup code.**
+
+### Mandatory Cleanup Guidelines
+To prevent severe memory leaks, any temporary runtime state mapped to a player's `UUID` must be explicitly cleared when the player leaves the server or when their entity is removed from the world.
+
+Always implement dedicated hook methods—such as `onRemoved` and `onPlayerDisconnect`—to invoke a centralized cleanup routine inside your core logic implementations within the `de.ep.astralcores.core.cores.logic` package.
+
+```java
+public static void onRemoved(ServerPlayer player) {
+    cleanup(player);
+}
+
+public static void onPlayerDisconnect(ServerPlayer player) {
+    cleanup(player);
+}
+
+private static void cleanup(ServerPlayer player) {
+    UUID playerUUID = player.getUUID();
+
+    // Clear active effects hosted or targeted by this player
+    clearPullsByCaster(playerUUID);
+
+    pullTimers.remove(playerUUID);
+    pullCasters.remove(playerUUID);
+}
+```
 
 ### 3. Optimization via 1-Second Passive Loops
 To save server performance, expensive background checks (like checking light values for `ShadowCoreLogic`) **must run on a 1-second interval (every 20 ticks) instead of firing on every server tick.**
@@ -256,6 +275,7 @@ To save server performance, expensive background checks (like checking light val
 int secondsPassed = sneakTimers.getOrDefault(player, 0) + 1;
 sneakTimers.put(player, secondsPassed);
 ```
+
 
 ---
 
@@ -339,7 +359,7 @@ Generic features used by multiple cores (like applying safe potion durations or 
          │                             │
          ▼                             ▼
  ┌───────────────┐             ┌───────────────┐
- │ Core.tick()   │             │ Core.passive()│ (Background evaluation loops)
+ │ Core.tick()   │             │ Core.applyPassive()│ (Background evaluation loops)
  └───────┬───────┘             └───────┬───────┘
          │                             │
          ▼                             ▼

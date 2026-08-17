@@ -12,33 +12,20 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.UUID;
 
 public final class LeviathanCoreLogic {
 
-    // Players that currently have the Leviathan Core passive active.
-    public static final Set<ServerPlayer> activePlayers = new HashSet<>();
+    private static final Map<UUID, TickTimer> pullTimers = new HashMap<>();
+    private static final Map<UUID, UUID> pullCasters = new HashMap<>();
 
-    // Remaining pull duration for each player currently being pulled.
-    private static final Map<ServerPlayer, TickTimer> trackedPlayers =
-            new HashMap<>();
-
-    // Maps each pulled player to the Leviathan Core user pulling them.
-    private static final Map<ServerPlayer, ServerPlayer> playerTargets =
-            new HashMap<>();
-
-    private static final double PULL_SPEED = 0.65;
+    private static final double PULL_SPEED = 0.65D;
     private static final int MAX_PULL_DURATION_TICKS = 40;
 
     public static void applyPassive(ServerPlayer player) {
-        // Register the player while the core is equipped.
-        activePlayers.add(player);
-
-        // Stronger underwater utility effects while fully submerged.
         if (player.isInWater()) {
             Effects.applyEffect(
                     player,
@@ -71,7 +58,6 @@ public final class LeviathanCoreLogic {
             );
         }
 
-        // Combat and regeneration bonuses while in water or rain.
         if (player.isInWaterOrRain()) {
             Effects.applyEffect(
                     player,
@@ -114,15 +100,12 @@ public final class LeviathanCoreLogic {
     }
 
     private static void cleanup(ServerPlayer player) {
-        // Remove the player from the active passive cache.
-        activePlayers.remove(player);
+        UUID playerUUID = player.getUUID();
 
-        // Cancel every pull controlled by this player.
-        clearTargetsForPlayer(player);
+        clearPullsByCaster(playerUUID);
 
-        // Stop the player from being pulled by another Leviathan.
-        trackedPlayers.remove(player);
-        playerTargets.remove(player);
+        pullTimers.remove(playerUUID);
+        pullCasters.remove(playerUUID);
     }
 
     public static void activate(ServerPlayer player) {
@@ -130,271 +113,283 @@ public final class LeviathanCoreLogic {
             return;
         }
 
-        ServerLevel level = (ServerLevel) player.level();
+        ServerLevel level = player.level();
 
-        // The ability has a larger pull radius while the caster is in water or rain.
+        boolean empowered =
+                player.isInWaterOrRain();
+
         double pullRadius =
-                player.isInWaterOrRain() ? 6.0 : 4.0;
+                empowered ? 6.0D : 4.0D;
 
-        double adjustPullRadius =
-                player.isInWaterOrRain() ? 2.0 : 1.0;
+        double particleRadius =
+                empowered ? 4.0D : 3.0D;
 
         AABB searchBox =
                 player.getBoundingBox().inflate(pullRadius);
 
-        List<ServerPlayer> targetPlayers =
+        List<ServerPlayer> targets =
                 level.getEntitiesOfClass(
                         ServerPlayer.class,
                         searchBox,
-                        entity ->
-                                entity.isAlive()
-                                        && !entity.equals(player)
+                        target ->
+                                target.isAlive()
+                                        && !target.equals(player)
                 );
 
-        // PlayerData is fetched once for this activation instead of once per target.
         PlayerData data =
                 AstralCores.PLAYER_DATA.get(player);
 
-        for (ServerPlayer target : targetPlayers) {
+        UUID casterUUID =
+                player.getUUID();
 
-            // Trusted players are completely ignored by the pull.
-            if (data != null && data.isTrusted(target.getUUID())) {
+        for (ServerPlayer target : targets) {
+
+            UUID targetUUID =
+                    target.getUUID();
+
+            if (data != null
+                    && data.isTrusted(targetUUID)) {
                 continue;
             }
 
-            // Start a fresh 2-second pull on the target.
-            trackedPlayers.put(
-                    target,
+            pullTimers.put(
+                    targetUUID,
                     new TickTimer(MAX_PULL_DURATION_TICKS)
             );
 
-            // Remember which Leviathan user owns this pull.
-            playerTargets.put(target, player);
+            pullCasters.put(
+                    targetUUID,
+                    casterUUID
+            );
         }
 
-        Vec3 pos = player.position();
+        Vec3 position =
+                player.position();
 
-        // Creates the large water particle burst around the caster.
+        if (player.isInWater()) {
+            return;
+        }
+
         for (int i = 0; i < 40; i++) {
 
-           if (player.isInWater()) {
-               return;
-           }
-
-           level.sendParticles(
+            level.sendParticles(
                     ParticleTypes.DRIPPING_DRIPSTONE_WATER,
-                    pos.x,
-                    pos.y,
-                    pos.z,
+                    position.x,
+                    position.y,
+                    position.z,
                     100,
-                    pullRadius - adjustPullRadius,
-                    0.25,
-                    pullRadius - adjustPullRadius,
-                    0.05
+                    particleRadius,
+                    0.25D,
+                    particleRadius,
+                    0.05D
             );
 
             level.sendParticles(
                     ParticleTypes.UNDERWATER,
-                    pos.x,
-                    pos.y,
-                    pos.z,
+                    position.x,
+                    position.y,
+                    position.z,
                     100,
-                    pullRadius - adjustPullRadius,
-                    0.25,
-                    pullRadius - adjustPullRadius,
-                    0.05
+                    particleRadius,
+                    0.25D,
+                    particleRadius,
+                    0.05D
             );
 
             level.sendParticles(
                     ParticleTypes.FALLING_WATER,
-                    pos.x,
-                    pos.y,
-                    pos.z,
+                    position.x,
+                    position.y,
+                    position.z,
                     100,
-                    pullRadius - adjustPullRadius,
-                    0.25,
-                    pullRadius - adjustPullRadius,
-                    0.05
+                    particleRadius,
+                    0.25D,
+                    particleRadius,
+                    0.05D
             );
         }
     }
 
-    public static void tick(ServerPlayer player) {
-        if (!player.isAlive()
-                || player.isRemoved()
-                || trackedPlayers.isEmpty()) {
+    public static void tick(ServerPlayer caster) {
+        if (!caster.isAlive()
+                || caster.isRemoved()
+                || pullTimers.isEmpty()) {
             return;
         }
 
         ServerLevel level =
-                (ServerLevel) player.level();
+                caster.level();
 
-        // Fetch PlayerData once per tick and reuse it for every target.
+        UUID casterUUID =
+                caster.getUUID();
+
         PlayerData data =
-                AstralCores.PLAYER_DATA.get(player);
+                AstralCores.PLAYER_DATA.get(caster);
 
-        Iterator<Map.Entry<ServerPlayer, ServerPlayer>> iterator =
-                playerTargets.entrySet().iterator();
+        Iterator<Map.Entry<UUID, UUID>> iterator =
+                pullCasters.entrySet().iterator();
 
-        boolean playerIsPulling = false;
-        int lowestTicksLeft = MAX_PULL_DURATION_TICKS;
+        boolean isPulling = false;
+        int lowestTicksLeft =
+                MAX_PULL_DURATION_TICKS;
 
         while (iterator.hasNext()) {
 
-            Map.Entry<ServerPlayer, ServerPlayer> entry =
+            Map.Entry<UUID, UUID> entry =
                     iterator.next();
 
-            ServerPlayer casterPlayer =
+            UUID targetUUID =
+                    entry.getKey();
+
+            UUID ownerUUID =
                     entry.getValue();
 
-            // This target belongs to another Leviathan user.
-            if (!casterPlayer.equals(player)) {
+            if (!ownerUUID.equals(casterUUID)) {
                 continue;
             }
 
-            ServerPlayer target =
-                    entry.getKey();
-
             TickTimer timer =
-                    trackedPlayers.get(target);
+                    pullTimers.get(targetUUID);
 
-            // Remove invalid or already-expired pull entries.
+            ServerPlayer target =
+                    AstralCores.getServer()
+                            .getPlayerList()
+                            .getPlayer(targetUUID);
+
             if (target == null
                     || !target.isAlive()
                     || target.isRemoved()
                     || timer == null) {
 
-                trackedPlayers.remove(target);
+                pullTimers.remove(targetUUID);
                 iterator.remove();
                 continue;
             }
 
-            // Trusted players are ignored even if they became trusted
-            // after the ability was activated.
-            if (data != null && data.isTrusted(target.getUUID())) {
-                trackedPlayers.remove(target);
+            if (data != null
+                    && data.isTrusted(targetUUID)) {
+
+                pullTimers.remove(targetUUID);
                 iterator.remove();
                 continue;
             }
 
-            Vec3 playerPos =
-                    player.position().add(0, 0.5, 0);
+            Vec3 casterPosition =
+                    caster.position()
+                            .add(0.0D, 0.5D, 0.0D);
 
-            Vec3 targetPos =
+            Vec3 targetPosition =
                     target.position();
 
             double distance =
-                    playerPos.distanceTo(targetPos);
+                    casterPosition.distanceTo(targetPosition);
 
-            // Stop pulling once the target is close enough or the timer expires.
-            if (distance < 1.8 || timer.tick()) {
-                trackedPlayers.remove(target);
+            if (distance < 1.8D
+                    || timer.tick()) {
+
+                pullTimers.remove(targetUUID);
                 iterator.remove();
                 continue;
             }
 
-            // Calculate the direction from the target toward the caster.
             Vec3 direction =
-                    playerPos
-                            .subtract(targetPos)
+                    casterPosition
+                            .subtract(targetPosition)
                             .normalize();
 
-            // Apply constant movement toward the Leviathan user.
-            Vec3 motion =
-                    direction.scale(PULL_SPEED);
+            target.setDeltaMovement(
+                    direction.scale(PULL_SPEED)
+            );
 
-            target.setDeltaMovement(motion);
             target.hurtMarked = true;
 
-            playerIsPulling = true;
+            isPulling = true;
 
-            // Used to calculate the shrinking visual pull radius.
-            if (timer.getRemaining() < lowestTicksLeft) {
-                lowestTicksLeft =
-                        timer.getRemaining();
-            }
+            lowestTicksLeft =
+                    Math.min(
+                            lowestTicksLeft,
+                            timer.getRemaining()
+                    );
 
-            // Small electrical particles show which entities are currently being pulled.
             level.sendParticles(
                     ParticleTypes.ELECTRIC_SPARK,
-                    targetPos.x,
-                    targetPos.y + 1.0,
-                    targetPos.z,
+                    targetPosition.x,
+                    targetPosition.y + 1.0D,
+                    targetPosition.z,
                     1,
-                    0.0,
-                    0.0,
-                    0.0,
-                    0.0
+                    0.0D,
+                    0.0D,
+                    0.0D,
+                    0.0D
             );
         }
 
-        // The pull radius depends on the caster's current environment.
-        double pullRadius = 4.0;
-
-        if (player.isInWaterOrRain()) {
-            pullRadius = 6.0;
+        if (!isPulling) {
+            return;
         }
 
-        if (playerIsPulling) {
+        double pullRadius =
+                caster.isInWaterOrRain()
+                        ? 6.0D
+                        : 4.0D;
 
-            Vec3 center =
-                    player.position();
+        Vec3 center =
+                caster.position();
 
-            // The visual field contracts as the pull approaches its end.
-            double fieldRadius =
-                    pullRadius
-                            * ((double) lowestTicksLeft
-                            / MAX_PULL_DURATION_TICKS);
+        double fieldRadius =
+                pullRadius
+                        * ((double) lowestTicksLeft
+                        / MAX_PULL_DURATION_TICKS);
 
-            if (fieldRadius > 1.0) {
+        if (fieldRadius <= 1.0D) {
+            return;
+        }
 
-                // Draw the shrinking portal ring around the caster.
-                for (int i = 0; i < 24; i++) {
+        for (int i = 0; i < 24; i++) {
 
-                    double angle =
-                            (Math.PI * 2 * i) / 24;
+            double angle =
+                    Math.PI * 2.0D * i / 24.0D;
 
-                    double x =
-                            center.x
-                                    + Math.cos(angle) * fieldRadius;
+            double x =
+                    center.x
+                            + Math.cos(angle)
+                            * fieldRadius;
 
-                    double z =
-                            center.z
-                                    + Math.sin(angle) * fieldRadius;
+            double z =
+                    center.z
+                            + Math.sin(angle)
+                            * fieldRadius;
 
-                    level.sendParticles(
-                            ParticleTypes.PORTAL,
-                            x,
-                            center.y + 0.15,
-                            z,
-                            1,
-                            0.0,
-                            0.0,
-                            0.0,
-                            0.0
-                    );
-                }
-            }
+            level.sendParticles(
+                    ParticleTypes.PORTAL,
+                    x,
+                    center.y + 0.15D,
+                    z,
+                    1,
+                    0.0D,
+                    0.0D,
+                    0.0D,
+                    0.0D
+            );
         }
     }
 
-    private static void clearTargetsForPlayer(ServerPlayer player) {
+    private static void clearPullsByCaster(UUID casterUUID) {
 
-        // Remove every target whose pull is controlled by this player.
-        Iterator<Map.Entry<ServerPlayer, ServerPlayer>> iterator =
-                playerTargets.entrySet().iterator();
+        Iterator<Map.Entry<UUID, UUID>> iterator =
+                pullCasters.entrySet().iterator();
 
         while (iterator.hasNext()) {
 
-            Map.Entry<ServerPlayer, ServerPlayer> entry =
+            Map.Entry<UUID, UUID> entry =
                     iterator.next();
 
-            if (entry.getValue().equals(player)) {
+            if (entry.getValue().equals(casterUUID)) {
 
-                ServerPlayer target =
+                UUID targetUUID =
                         entry.getKey();
 
-                trackedPlayers.remove(target);
+                pullTimers.remove(targetUUID);
                 iterator.remove();
             }
         }

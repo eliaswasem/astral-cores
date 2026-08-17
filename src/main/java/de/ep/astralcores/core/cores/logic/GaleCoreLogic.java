@@ -13,11 +13,12 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public final class GaleCoreLogic {
 
     // Active Sonic Dash timers.
-    private static final Map<ServerPlayer, TickTimer> explosionTimers = new HashMap<>();
+    private static final Map<UUID, TickTimer> explosionTimers = new HashMap<>();
 
     public static void applyPassive(ServerPlayer player) {
         if (player.isSprinting()) {
@@ -48,14 +49,14 @@ public final class GaleCoreLogic {
 
         // Starts a 10-tick timer before the Sonic Dash explosion.
         explosionTimers.put(
-                player,
+                player.getUUID(),
                 new TickTimer(10)
         );
     }
 
     public static void tick(ServerPlayer player) {
         // Query the active dash timer directly via the ServerPlayer instance.
-        TickTimer timer = explosionTimers.get(player);
+        TickTimer timer = explosionTimers.get(player.getUUID());
 
         // The player has no active Sonic Dash.
         if (timer == null) {
@@ -64,13 +65,13 @@ public final class GaleCoreLogic {
 
         // Cancels the ability if the player is no longer valid.
         if (!player.isAlive() || player.isRemoved()) {
-            explosionTimers.remove(player);
+            explosionTimers.remove(player.getUUID());
             return;
         }
 
         // Explode when the timer reaches zero.
         if (timer.tick()) {
-            explosionTimers.remove(player);
+            explosionTimers.remove(player.getUUID());
             explode(player);
         }
     }
@@ -85,7 +86,7 @@ public final class GaleCoreLogic {
 
     private static void cleanup(ServerPlayer player) {
         // Cancel any Sonic Dash that is currently waiting for its explosion.
-        explosionTimers.remove(player);
+        explosionTimers.remove(player.getUUID());
     }
 
     private static void explode(ServerPlayer player) {

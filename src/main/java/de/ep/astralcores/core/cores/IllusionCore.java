@@ -38,8 +38,7 @@ public class IllusionCore extends Core {
     }
 
     @Override
-    public void activate(ServerPlayer player) {
-
+    public void activate(ServerPlayer player) { IllusionCoreLogic.activate(player);
     }
 
     @Override

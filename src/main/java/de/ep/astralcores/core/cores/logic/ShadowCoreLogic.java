@@ -26,22 +26,25 @@ import java.util.*;
 
 public final class ShadowCoreLogic {
 
-    // Weak mappings allow player state to be garbage-collected once the ServerPlayer is no longer strongly referenced.
-    private static final Map<ServerPlayer, Integer> sneakTimers =
-            Collections.synchronizedMap(new WeakHashMap<>());
+    // Stores the number of seconds each player has been crouching in darkness.
+    private static final Map<UUID, Integer> sneakTimers =
+            new HashMap<>();
 
-    private static final Set<ServerPlayer> hiddenPlayers =
-            Collections.newSetFromMap(new WeakHashMap<>());
+    // Stores players that are currently concealed by the Shadow Core.
+    private static final Set<UUID> hiddenPlayers =
+            new HashSet<>();
 
     private static final int MAX_LIGHT_LEVEL = 0;
 
-    // Threshold configured directly in seconds because applyPassive fires once per second.
+    // The player must remain crouched in darkness for this many seconds.
     private static final int TIME_THRESHOLD_SECONDS = 5;
 
     private ShadowCoreLogic() {
     }
 
     public static void applyPassive(ServerPlayer player) {
+        UUID uuid = player.getUUID();
+
         // Get the block light level at the player's current position.
         int blockLight = player.level().getBrightness(
                 LightLayer.BLOCK,
@@ -60,8 +63,8 @@ public final class ShadowCoreLogic {
                         && (!isOutdoors || player.level().isDarkOutside());
 
         // Maintain the effects while the player is already hidden.
-        if (hiddenPlayers.contains(player)) {
-            // Keep duration at 300 ticks (15s) to stay above the 200 tick (10s) flicker limit!
+        if (hiddenPlayers.contains(uuid)) {
+            // Keep duration above the flicker limit.
             Effects.applyEffect(
                     player,
                     MobEffects.INVISIBILITY,
@@ -86,14 +89,15 @@ public final class ShadowCoreLogic {
 
         // Start counting while the player remains crouched in darkness.
         if (player.isCrouching() && isDarkEnough) {
-            // Increments cleanly by 1 second on every execution cycle.
-            int secondsPassed = sneakTimers.getOrDefault(player, 0) + 1;
-            sneakTimers.put(player, secondsPassed);
+            int secondsPassed =
+                    sneakTimers.getOrDefault(uuid, 0) + 1;
 
-            // The player has crouched in darkness for the required duration (5 seconds).
+            sneakTimers.put(uuid, secondsPassed);
+
+            // The player has crouched in darkness for the required duration.
             if (secondsPassed >= TIME_THRESHOLD_SECONDS) {
-                hiddenPlayers.add(player);
-                sneakTimers.remove(player);
+                hiddenPlayers.add(uuid);
+                sneakTimers.remove(uuid);
 
                 Effects.applyEffect(
                         player,
@@ -120,10 +124,11 @@ public final class ShadowCoreLogic {
                 );
 
             } else {
-                // Calculate real remaining seconds accurately.
-                int remainingSeconds = TIME_THRESHOLD_SECONDS - secondsPassed;
+                // Calculate the remaining time before concealment.
+                int remainingSeconds =
+                        TIME_THRESHOLD_SECONDS - secondsPassed;
 
-                // Passing 'true' prints this cleanly to the Action Bar instead of clogging chat history.
+                // Show the countdown in the action bar.
                 player.sendSystemMessage(
                         Component.literal(
                                 "[Living Shadow] Dissolving in "
@@ -135,9 +140,8 @@ public final class ShadowCoreLogic {
             }
 
         } else {
-            // Cancel the concealment countdown if the player stops crouching
-            // or the environment is no longer dark enough.
-            if (sneakTimers.remove(player) != null) {
+            // Cancel the concealment countdown if the conditions are no longer met.
+            if (sneakTimers.remove(uuid) != null) {
                 player.sendSystemMessage(
                         Component.literal(
                                 "[Living Shadow] Dissolving canceled!"
@@ -156,7 +160,7 @@ public final class ShadowCoreLogic {
         ServerLevel level = player.level();
         Vec3 pos = player.position();
 
-        // Spawn particels
+        // Spawn a large cloud of shadow particles around the player.
         level.sendParticles(
                 ParticleTypes.SQUID_INK,
                 pos.x,
@@ -169,7 +173,7 @@ public final class ShadowCoreLogic {
                 0.0
         );
 
-        // Spawn particels
+        // Spawn dark dust particles around the player.
         level.sendParticles(
                 new DustParticleOptions(0x000000, 1.5F),
                 pos.x,
@@ -182,12 +186,24 @@ public final class ShadowCoreLogic {
                 0.0
         );
 
-        Effects.applyEffect(player, MobEffects.SPEED, 200, 2, false, false, false);
+        // Grants temporary speed after activating the ability.
+        Effects.applyEffect(
+                player,
+                MobEffects.SPEED,
+                200,
+                2,
+                false,
+                false,
+                false
+        );
 
-        AABB boundingBox = player.getBoundingBox().inflate(6);
+        AABB boundingBox =
+                player.getBoundingBox().inflate(6);
 
-        PlayerData data = AstralCores.PLAYER_DATA.get(player);
+        PlayerData data =
+                AstralCores.PLAYER_DATA.get(player);
 
+        // Find all living entities within the ability radius.
         List<LivingEntity> targets =
                 level.getEntitiesOfClass(
                         LivingEntity.class,
@@ -196,10 +212,13 @@ public final class ShadowCoreLogic {
                 );
 
         for (LivingEntity target : targets) {
-            if (data != null && data.isTrusted(target.getUUID())) {
+            // Trusted entities are ignored.
+            if (data != null
+                    && data.isTrusted(target.getUUID())) {
                 continue;
             }
 
+            // Blind nearby entities.
             Effects.applyEffect(
                     target,
                     MobEffects.BLINDNESS,
@@ -212,16 +231,12 @@ public final class ShadowCoreLogic {
         }
     }
 
-    public static void tick(ServerPlayer player) {
-        // Shadow Core currently has no separate per-tick active ability.
-    }
-
     public static void handleDamageReveal(
             ServerPlayer player,
             DamageSource source
     ) {
         // Ignore damage if the player is not currently hidden.
-        if (!hiddenPlayers.contains(player)) {
+        if (!hiddenPlayers.contains(player.getUUID())) {
             return;
         }
 
@@ -255,11 +270,13 @@ public final class ShadowCoreLogic {
     }
 
     private static void cleanup(ServerPlayer player) {
+        UUID uuid = player.getUUID();
+
         // Cancel any active concealment countdown.
-        sneakTimers.remove(player);
+        sneakTimers.remove(uuid);
 
         // Remove hidden state and restore the player's equipment/effects.
-        if (hiddenPlayers.remove(player)) {
+        if (hiddenPlayers.remove(uuid)) {
             player.removeEffect(MobEffects.INVISIBILITY);
             player.removeEffect(MobEffects.NIGHT_VISION);
 
@@ -268,7 +285,9 @@ public final class ShadowCoreLogic {
     }
 
     public static void revealPlayer(ServerPlayer player) {
-        if (hiddenPlayers.remove(player)) {
+        UUID uuid = player.getUUID();
+
+        if (hiddenPlayers.remove(uuid)) {
             // Remove the visual effects applied by Living Shadow.
             player.removeEffect(MobEffects.INVISIBILITY);
             player.removeEffect(MobEffects.NIGHT_VISION);
@@ -285,11 +304,11 @@ public final class ShadowCoreLogic {
         }
 
         // Always clear the active concealment countdown.
-        sneakTimers.remove(player);
+        sneakTimers.remove(uuid);
     }
 
     public static boolean isPlayerHidden(ServerPlayer player) {
-        return hiddenPlayers.contains(player);
+        return hiddenPlayers.contains(player.getUUID());
     }
 
     private static void sendFakeEquipmentPackets(

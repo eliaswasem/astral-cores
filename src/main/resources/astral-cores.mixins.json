@@ -9,6 +9,7 @@
     "HopperBlockEntityMixin",
     "ItemEntityMixin",
     "LivingEntityMixin",
+    "MannequinAccessor",
     "MobMixin",
     "PlayerEntityMixin",
     "ServerExplosionMixin",

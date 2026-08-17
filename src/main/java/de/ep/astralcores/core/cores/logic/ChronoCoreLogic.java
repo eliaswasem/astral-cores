@@ -24,15 +24,16 @@ import net.minecraft.world.item.component.DeathProtection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 public class ChronoCoreLogic {
 
     // Tracks which players currently have this core's passive effect active
-    public static final Set<ServerPlayer> activePlayers = new HashSet<>();
+    public static final Set<UUID> activePlayers = new HashSet<>();
 
     public static void applyPassive(ServerPlayer player) {
         // Marks this player as having the core active
-        activePlayers.add(player);
+        activePlayers.add(player.getUUID());
     }
 
     public static void onRemoved(ServerPlayer player) {
@@ -44,13 +45,13 @@ public class ChronoCoreLogic {
     }
 
     private static void cleanup(ServerPlayer player) {
-        activePlayers.remove(player);
+        activePlayers.remove(player.getUUID());
     }
 
     // Evaluates if the chrono core is equipped and rolls a 50% chance to prevent death
     public static boolean handleSecondTimeline(ServerPlayer player, DamageSource damageSource, float damageAmount) {
         // Stops execution immediately if the player does not have the ChronoCore active in the map
-        if (!activePlayers.contains(player)) {
+        if (!activePlayers.contains(player.getUUID())) {
             return true;
         }
 

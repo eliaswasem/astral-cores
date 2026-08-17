@@ -15,6 +15,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public final class GravityCoreLogic {
 
@@ -25,7 +26,7 @@ public final class GravityCoreLogic {
             );
 
     // Active Gravity Pull timers.
-    private static final Map<ServerPlayer, TickTimer> activePulls = new HashMap<>();
+    private static final Map<UUID, TickTimer> activePulls = new HashMap<>();
 
     public static void applyPassive(ServerPlayer player) {
         AttributeInstance attribute =
@@ -63,7 +64,7 @@ public final class GravityCoreLogic {
         }
 
         // Cancel any active Gravity Pull.
-        activePulls.remove(player);
+        activePulls.remove(player.getUUID());
     }
 
     public static void activate(ServerPlayer player) {
@@ -73,21 +74,21 @@ public final class GravityCoreLogic {
 
         // 40 ticks = 2 seconds.
         activePulls.put(
-                player,
+                player.getUUID(),
                 new TickTimer(40)
         );
     }
 
     public static void tick(ServerPlayer player) {
         // Query the active pull timer directly via the ServerPlayer instance.
-        TickTimer timer = activePulls.get(player);
+        TickTimer timer = activePulls.get(player.getUUID());
 
         if (timer == null) {
             return;
         }
 
         if (!player.isAlive() || player.isRemoved()) {
-            activePulls.remove(player);
+            activePulls.remove(player.getUUID());
             return;
         }
 
@@ -118,7 +119,7 @@ public final class GravityCoreLogic {
         }
 
         if (timer.tick()) {
-            activePulls.remove(player);
+            activePulls.remove(player.getUUID());
         }
     }
 
