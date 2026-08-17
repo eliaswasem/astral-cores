@@ -1,6 +1,7 @@
 package de.ep.astralcores.manager;
 
 import de.ep.astralcores.AstralCores;
+import de.ep.astralcores.actionbar.ActionBarManager;
 import de.ep.astralcores.playerdata.PlayerData;
 import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreRegistry;

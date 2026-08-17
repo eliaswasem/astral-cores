@@ -1,9 +1,9 @@
 package de.ep.astralcores.command.actionbar;
 
 import de.ep.astralcores.AstralCores;
-import de.ep.astralcores.manager.ActionBarManager;
+import de.ep.astralcores.actionbar.ActionBarManager;
+import de.ep.astralcores.actionbar.ActionBarMode;
 import de.ep.astralcores.playerdata.PlayerData;
-import de.ep.astralcores.playerdata.PlayerData.ActionBarMode;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;

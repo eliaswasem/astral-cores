@@ -1,8 +1,9 @@
-package de.ep.astralcores.manager;
+package de.ep.astralcores.actionbar;
 
 import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreRegistry;
 import de.ep.astralcores.core.CoreType;
+import de.ep.astralcores.manager.CooldownManager;
 import de.ep.astralcores.playerdata.PlayerData;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
@@ -13,7 +14,7 @@ public class ActionBarManager {
     // Updates the player action bar text based on their equipped core and cooldown status
     public static void tick(ServerPlayer player, PlayerData data) {
         // Gets the player preferred display mode
-        PlayerData.ActionBarMode mode = (data != null) ? data.getActionBarMode() : PlayerData.ActionBarMode.ICON;
+        ActionBarMode mode = (data != null) ? data.getActionBarMode() : ActionBarMode.ICON;
 
         // Shows empty slots if no core is equipped
         if (data == null || data.getEquippedCore() == null) {

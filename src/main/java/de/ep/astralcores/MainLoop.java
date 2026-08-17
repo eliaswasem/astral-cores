@@ -2,7 +2,7 @@ package de.ep.astralcores;
 
 import de.ep.astralcores.manager.CooldownManager;
 import de.ep.astralcores.manager.CoreTickManager;
-import de.ep.astralcores.manager.ActionBarManager;
+import de.ep.astralcores.actionbar.ActionBarManager;
 import de.ep.astralcores.playerdata.PlayerData;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import org.jspecify.annotations.NonNull;

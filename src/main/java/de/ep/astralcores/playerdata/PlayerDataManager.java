@@ -1,10 +1,10 @@
 package de.ep.astralcores.playerdata;
 
-import de.ep.astralcores.AstralCores;
-import de.ep.astralcores.core.CoreType;
-import de.ep.astralcores.playerdata.PlayerData.ActionBarMode;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import de.ep.astralcores.AstralCores;
+import de.ep.astralcores.actionbar.ActionBarMode;
+import de.ep.astralcores.core.CoreType;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.io.File;

@@ -3,7 +3,7 @@ package de.ep.astralcores.command.actionbar;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import de.ep.astralcores.playerdata.PlayerData.ActionBarMode;
+import de.ep.astralcores.actionbar.ActionBarMode;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.level.ServerPlayer;

@@ -1,19 +1,11 @@
 package de.ep.astralcores.playerdata;
 
+import de.ep.astralcores.actionbar.ActionBarMode;
 import de.ep.astralcores.core.CoreType;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+
+import java.util.*;
 
 public class PlayerData {
-
-    // Supported rendering configurations for the action bar interface
-    public enum ActionBarMode {
-        TEXT,
-        ICON
-    }
 
     // Stores the currently equipped core type (null means empty slot)
     private CoreType equippedCore;
