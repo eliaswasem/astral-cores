@@ -55,12 +55,12 @@ public class CooldownManager {
         }
     }
 
-    public static void resetCooldowns(PlayerData cooldown) {
-            if (cooldown == null) {
+    public static void resetCooldowns(PlayerData data) {
+            if (data == null) {
                 return;
             }
 
-            cooldown.getActiveCooldownsMap().clear();
-            cooldown.getPassiveCooldownsMap().clear();
+            data.getActiveCooldownsMap().clear();
+            data.getPassiveCooldownsMap().clear();
     }
 }

@@ -7,15 +7,24 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
-public class DebugCommandsLogic {
+public class DebugCommandLogic {
 
     public static int execute(
             CommandSourceStack source,
-            ServerPlayer player
+            ServerPlayer player,
+            DebugCommandType debugCommandType
     ) {
+
+        return switch (debugCommandType) {
+            case DebugCommandType.COOLDOWN -> executeCooldownCommand(source, player);
+            default -> 0;
+        };
+    }
+
+    private static int executeCooldownCommand(CommandSourceStack source, ServerPlayer player) {
         PlayerData data = AstralCores.PLAYER_DATA.get(player);
 
-      CooldownManager.resetCooldowns(data);
+        CooldownManager.resetCooldowns(data);
 
         source.sendSuccess(
                 () -> Component.literal("All Core Cooldowns have been reset."),
@@ -23,5 +32,9 @@ public class DebugCommandsLogic {
         );
 
         return 1;
+    }
+
+    public enum DebugCommandType {
+        COOLDOWN
     }
 }

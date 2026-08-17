@@ -13,8 +13,16 @@ import java.util.Locale;
 public class CoreCommandLogic {
 
     // Resolves a matching core instance by string id and transfers it to the target player
-    public static int execute(CommandSourceStack source, ServerPlayer target, String astralId) {
+    public static int execute(CommandSourceStack source, ServerPlayer target, String astralId, CoreCommandType coreCommandType) {
 
+        return switch (coreCommandType) {
+            case CoreCommandType.GIVE -> executeGive(source, target, astralId);
+            default -> 0;
+        };
+
+    }
+
+    private static int executeGive(CommandSourceStack source, ServerPlayer target, String astralId) {
         try {
             // Looks up the requested core inside the registry mapping
             Core core = CoreRegistry.getByCoreId(
@@ -64,5 +72,9 @@ public class CoreCommandLogic {
 
             return 0;
         }
+    }
+
+    public enum CoreCommandType{
+        GIVE
     }
 }
