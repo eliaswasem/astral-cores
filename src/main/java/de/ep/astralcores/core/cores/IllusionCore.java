@@ -19,7 +19,7 @@ public class IllusionCore extends Core {
                         "§f[Active: Mirror Swap]"
                 ),
                 10011,
-                0,
+                600,
                 0,
                 "Mirror Swap",
                 "Mirror Image",
