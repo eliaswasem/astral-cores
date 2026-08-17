@@ -35,6 +35,21 @@ public class CoreCommand {
                                                         )
                                         )
                         )
+                        .then(
+                                Commands.literal("set")
+                                        .then(
+                                                Commands.argument("target", EntityArgument.player())
+                                                        .then(
+                                                                Commands.argument("coreId", StringArgumentType.word())
+                                                                        // Populates tab suggestions with all registered core id strings
+                                                                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(
+                                                                                CoreRegistry.getAll().keySet(),
+                                                                                builder
+                                                                        ))
+                                                                        .executes(context -> route(CoreCommandLogic.CoreCommandType.SET, context))
+                                                        )
+                                        )
+                        )
         );
     }
 
