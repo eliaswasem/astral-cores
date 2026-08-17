@@ -18,7 +18,7 @@ public class DebugCommandsLogic {
       CooldownManager.resetCooldowns(data);
 
         source.sendSuccess(
-                () -> Component.literal("All Core cooldowns have been reset."),
+                () -> Component.literal("All Core Cooldowns have been reset."),
                 false
         );
 
