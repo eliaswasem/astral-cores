@@ -39,7 +39,7 @@ public class ChronoCore extends Core {
 
     @Override
     public void activate(ServerPlayer player) {
-        // Will be implemented later
+        ChronoCoreLogic.activate(player);
     }
 
     @Override

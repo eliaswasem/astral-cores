@@ -21,19 +21,52 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.DeathProtection;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class ChronoCoreLogic {
 
-    // Tracks which players currently have this core's passive effect active
+    // Tracks which players currently have this core's passive effect active.
     public static final Set<UUID> activePlayers = new HashSet<>();
 
+    // Stores up to 10 positions for each player.
+    private static final int MAX_POSITION_HISTORY = 10;
+
+    // Keeps each player's position history separate.
+    private static final Map<UUID, Deque<PositionSnapshot>> positionHistory = new HashMap<>();
+
+    // Stores a player's position and rotation.
+    private record PositionSnapshot(
+            double x,
+            double y,
+            double z,
+            float yaw,
+            float pitch
+    ) {}
+
+    // applyPassive runs once per second and is used as the position history loop.
     public static void applyPassive(ServerPlayer player) {
-        // Marks this player as having the core active
-        activePlayers.add(player.getUUID());
+        UUID uuid = player.getUUID();
+
+        // Mark the player as active.
+        activePlayers.add(uuid);
+
+        // Get or create this player's history.
+        Deque<PositionSnapshot> history =
+                positionHistory.computeIfAbsent(uuid, ignored -> new ArrayDeque<>());
+
+        // Save the player's current position.
+        history.addLast(new PositionSnapshot(
+                player.getX(),
+                player.getY(),
+                player.getZ(),
+                player.getYRot(),
+                player.getXRot()
+        ));
+
+        // Remove the oldest position when the history is full.
+        if (history.size() > MAX_POSITION_HISTORY) {
+            history.removeFirst();
+        }
     }
 
     public static void onRemoved(ServerPlayer player) {
@@ -45,24 +78,80 @@ public class ChronoCoreLogic {
     }
 
     private static void cleanup(ServerPlayer player) {
+        // Remove the player from the active list.
         activePlayers.remove(player.getUUID());
+
+        // Remove the player's stored position history.
+        positionHistory.remove(player.getUUID());
     }
 
-    // Evaluates if the chrono core is equipped and rolls a 50% chance to prevent death
+    public static void activate(ServerPlayer player) {
+        UUID uuid = player.getUUID();
+
+        // Check if the Chrono Core is active.
+        if (!activePlayers.contains(uuid)) {
+            return;
+        }
+
+        PositionSnapshot target = getReturnPosition(player);
+
+        // Check if enough position history exists.
+        if (target == null) {
+            player.sendSystemMessage(
+                    Component.literal("[Chrono Core] Not enough time history!")
+                            .withStyle(ChatFormatting.RED)
+            );
+            return;
+        }
+
+        // Teleport the player to their position from 5 seconds ago.
+        player.teleportTo(
+                player.level(),
+                target.x(),
+                target.y(),
+                target.z(),
+                Set.of(),
+                target.yaw(),
+                target.pitch(),
+                true
+        );
+
+        // Tell the player that Time Return was activated.
+        player.sendSystemMessage(
+                Component.literal("[Chrono Core] Time Return activated!")
+                        .withStyle(ChatFormatting.AQUA)
+        );
+    }
+
+    private static PositionSnapshot getReturnPosition(ServerPlayer player) {
+        Deque<PositionSnapshot> history = positionHistory.get(player.getUUID());
+
+        // Return nothing if the player has less than 5 seconds of history.
+        if (history == null || history.size() < 6) {
+            return null;
+        }
+
+        PositionSnapshot[] snapshots = history.toArray(new PositionSnapshot[0]);
+
+        // Return the snapshot from approximately 5 seconds ago.
+        return snapshots[snapshots.length - 6];
+    }
+
+    // Evaluates if the chrono core is equipped and rolls a 50% chance to prevent death.
     public static boolean handleSecondTimeline(ServerPlayer player, DamageSource damageSource, float damageAmount) {
-        // Stops execution immediately if the player does not have the ChronoCore active in the map
+        // Stops execution immediately if the player does not have the ChronoCore active in the map.
         if (!activePlayers.contains(player.getUUID())) {
             return true;
         }
 
-        // Rolls a 50% success chance to trigger the death cheat mechanic
+        // Rolls a 50% success chance to trigger the death cheat mechanic.
         if (player.getRandom().nextBoolean()) {
 
-            // Restores the player to maximum health and resets their combat state
+            // Restores the player to maximum health and resets their combat state.
             player.setHealth(player.getMaxHealth());
             player.getCombatTracker().recheckStatus();
 
-            // Triggers visual and audio totem activation effects
+            // Triggers visual and audio totem activation effects.
             playDeathCheatEffects(player);
 
             player.sendSystemMessage(Component.literal("[Chrono Core] Second Timeline activated! You have been healed.")
@@ -78,9 +167,9 @@ public class ChronoCoreLogic {
         }
     }
 
-    // Handles the particles, sounds, and fake item packets for the death prevention animation
+    // Handles the particles, sounds, and fake item packets for the death prevention animation.
     private static void playDeathCheatEffects(ServerPlayer player) {
-        // Plays the vanilla totem activation sound at the player position
+        // Plays the vanilla totem activation sound at the player position.
         player.level().playSound(
                 null,
                 player.getX(), player.getY(), player.getZ(),
@@ -89,7 +178,7 @@ public class ChronoCoreLogic {
                 1.0F, 1.0F
         );
 
-        // Spawns totem particles around the player location
+        // Spawns totem particles around the player location.
         if (player.level() instanceof ServerLevel serverLevel) {
             serverLevel.sendParticles(
                     ParticleTypes.TOTEM_OF_UNDYING,
@@ -98,25 +187,25 @@ public class ChronoCoreLogic {
             );
         }
 
-        // Fetches the core base item or defaults to a clock item if missing
+        // Fetches the core base item or defaults to a clock item if missing.
         Item registeredItem = CoreRegistry.get(CoreType.CHRONO_CORE)
                 .map(Core::getBaseItem)
                 .orElse(Items.CLOCK);
 
-        // Builds a temporary item stack configured with death protection attributes
+        // Builds a temporary item stack configured with death protection attributes.
         ItemStack fakeCoreItem = new ItemStack(registeredItem);
         fakeCoreItem.set(DataComponents.DEATH_PROTECTION, new DeathProtection(List.of()));
 
-        // Sends a fake packet showing the item in the player off-hand slot
+        // Sends a fake packet showing the item in the player off-hand slot.
         player.connection.send(new ClientboundSetEquipmentPacket(
                 player.getId(),
                 List.of(Pair.of(EquipmentSlot.OFFHAND, fakeCoreItem))
         ));
 
-        // Triggers entity event status 35 to force the client totem screen animation
+        // Triggers entity event status 35 to force the client totem screen animation.
         player.connection.send(new ClientboundEntityEventPacket(player, (byte) 35));
 
-        // Instantly restores the real server off-hand item data to correct the client HUD display
+        // Instantly restores the real server off-hand item data to correct the client HUD display.
         player.connection.send(new ClientboundSetEquipmentPacket(
                 player.getId(),
                 List.of(Pair.of(EquipmentSlot.OFFHAND, player.getItemInHand(net.minecraft.world.InteractionHand.OFF_HAND)))
