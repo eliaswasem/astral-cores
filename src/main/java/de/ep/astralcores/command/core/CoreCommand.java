@@ -31,7 +31,7 @@ public class CoreCommand {
                                                                                 CoreRegistry.getAll().keySet(),
                                                                                 builder
                                                                         ))
-                                                                        .executes(CoreCommand::route)
+                                                                        .executes(context -> route(CoreCommandLogic.CoreCommandType.GIVE, context))
                                                         )
                                         )
                         )
@@ -40,6 +40,7 @@ public class CoreCommand {
 
     // Resolves the targeted player and core id string from command arguments
     private static int route(
+            CoreCommandLogic.CoreCommandType coreCommandType,
             CommandContext<CommandSourceStack> context
     ) throws CommandSyntaxException {
 
@@ -50,7 +51,8 @@ public class CoreCommand {
         return CoreCommandLogic.execute(
                 context.getSource(),
                 target,
-                coreId
+                coreId,
+                coreCommandType
         );
     }
 }
