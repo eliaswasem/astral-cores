@@ -136,6 +136,9 @@ public final class LeviathanCoreLogic {
         double pullRadius =
                 player.isInWaterOrRain() ? 6.0 : 4.0;
 
+        double adjustPullRadius =
+                player.isInWaterOrRain() ? 2.0 : 1.0;
+
         AABB searchBox =
                 player.getBoundingBox().inflate(pullRadius);
 
@@ -174,15 +177,19 @@ public final class LeviathanCoreLogic {
         // Creates the large water particle burst around the caster.
         for (int i = 0; i < 40; i++) {
 
-            level.sendParticles(
+           if (player.isInWater()) {
+               return;
+           }
+
+           level.sendParticles(
                     ParticleTypes.DRIPPING_DRIPSTONE_WATER,
                     pos.x,
                     pos.y,
                     pos.z,
                     100,
-                    pullRadius - 1,
+                    pullRadius - adjustPullRadius,
                     0.25,
-                    pullRadius - 1,
+                    pullRadius - adjustPullRadius,
                     0.05
             );
 
@@ -192,9 +199,9 @@ public final class LeviathanCoreLogic {
                     pos.y,
                     pos.z,
                     100,
-                    pullRadius - 1,
+                    pullRadius - adjustPullRadius,
                     0.25,
-                    pullRadius - 1,
+                    pullRadius - adjustPullRadius,
                     0.05
             );
 
@@ -204,9 +211,9 @@ public final class LeviathanCoreLogic {
                     pos.y,
                     pos.z,
                     100,
-                    pullRadius - 1,
+                    pullRadius - adjustPullRadius,
                     0.25,
-                    pullRadius - 1,
+                    pullRadius - adjustPullRadius,
                     0.05
             );
         }
