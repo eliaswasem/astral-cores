@@ -21,8 +21,98 @@ public class CoreCommandLogic {
         return switch (coreCommandType) {
             case CoreCommandType.GIVE -> executeGive(source, target, astralId);
             case CoreCommandType.SET -> executeSet(source, target, astralId);
-            default -> 0;
+            case CoreCommandType.CLEAR -> executeClear(source, target);
+            case CoreCommandType.CLEAR_INV -> executeClearInv(source, target, astralId);
         };
+
+    }
+
+    private static int executeClearInv(CommandSourceStack source, ServerPlayer target, String astralId) {
+        PlayerData data = AstralCores.PLAYER_DATA.get(target);
+        if (data == null) {
+            source.sendFailure(Component.literal("§cFailed to resolve internal data container for the target player."));
+            return 0;
+        }
+
+        int removedCount = 0;
+        boolean clearAll = astralId.equals("*");
+
+        Core targetCore = null;
+        if (!clearAll) {
+            Optional<Core> coreOptional = CoreRegistry.getByCoreId(astralId.toLowerCase(Locale.ROOT));
+            if (coreOptional.isEmpty()) {
+                source.sendFailure(Component.literal("§cUnknown Core identifier: " + astralId));
+                return 0;
+            }
+            targetCore = coreOptional.get();
+        }
+
+        // Iterate through the player's entire inventory container
+        for (int i = 0; i < target.getInventory().getContainerSize(); i++) {
+            ItemStack stack = target.getInventory().getItem(i);
+
+            // Validate if the current item stack is a registered core
+            if (CoreFactory.isCore(stack)) {
+                if (clearAll) {
+                    // Remove the item using the player inventory's internal reference clear
+                    target.getInventory().removeItem(stack);
+                    removedCount++;
+                } else {
+                    Optional<Core> foundCore = CoreFactory.getCoreFromItem(stack);
+                    // Check if the extracted core id matches the specified target core id
+                    if (foundCore.isPresent() && foundCore.get().getCoreId().equalsIgnoreCase(targetCore.getCoreId())) {
+                        target.getInventory().removeItem(stack);
+                        removedCount++;
+                    }
+                }
+            }
+        }
+
+        // Create final copies of variables to safely pass them into the lambda expressions below
+        final int finalRemovedCount = removedCount;
+
+        // Send success feedback message without modifying the equipped core state
+        if (clearAll) {
+            source.sendSuccess(
+                    () -> Component.literal("§aSuccessfully cleared all cores from " + target.getScoreboardName() + "'s inventory (Removed: " + finalRemovedCount + ")"),
+                    true
+            );
+        } else {
+            final Core finalTargetCore = targetCore;
+            source.sendSuccess(
+                    () -> Component.literal("§aSuccessfully cleared core " + finalTargetCore.getName() + " from " + target.getScoreboardName() + "'s inventory (Removed: " + finalRemovedCount + ")"),
+                    true
+            );
+        }
+
+        // Synchronize the client inventory layout to prevent ghost items
+        target.containerMenu.broadcastChanges();
+        return 1;
+    }
+
+    private static int executeClear(CommandSourceStack source, ServerPlayer target) {
+        // Fetch the target player's data profile
+        PlayerData data = AstralCores.PLAYER_DATA.get(target);
+        if (data == null) {
+            source.sendFailure(Component.literal("§cFailed to resolve internal data container for the target player."));
+            return 0;
+        }
+
+        // Equips the shared instance to the player
+        // (This links the player to the global core object)
+        data.clearEquippedCore();
+
+        // Confirms success in chat
+        source.sendSuccess(
+                () -> Component.literal(
+                        "§aSuccessfully cleared "
+                                + target.getScoreboardName()
+                                + "'s core"
+                ),
+                true
+        );
+
+        return 1;
 
     }
 
@@ -119,6 +209,8 @@ public class CoreCommandLogic {
 
     public enum CoreCommandType{
         GIVE,
-        SET
+        SET,
+        CLEAR,
+        CLEAR_INV
     }
 }

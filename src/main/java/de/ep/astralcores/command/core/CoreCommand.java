@@ -11,6 +11,9 @@ import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.server.level.ServerPlayer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CoreCommand {
 
     // Registers the core give command, checks permissions, and generates tab completions from the registry
@@ -39,14 +42,32 @@ public class CoreCommand {
                                 Commands.literal("set")
                                         .then(
                                                 Commands.argument("target", EntityArgument.player())
+
+                                                        .executes(context -> route(CoreCommandLogic.CoreCommandType.SET, context))
+
+                                        )
+                        )
+                        .then(
+                                Commands.literal("clear")
+                                        .then(
+                                                Commands.argument("target", EntityArgument.player())
+
+                                                        .executes(context -> route(CoreCommandLogic.CoreCommandType.CLEAR, context))
+
+                                        )
+                        )
+                        .then(
+                                Commands.literal("clearInv")
+                                        .then(
+                                                Commands.argument("target", EntityArgument.player())
                                                         .then(
                                                                 Commands.argument("coreId", StringArgumentType.word())
-                                                                        // Populates tab suggestions with all registered core id strings
-                                                                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(
-                                                                                CoreRegistry.getAll().keySet(),
-                                                                                builder
-                                                                        ))
-                                                                        .executes(context -> route(CoreCommandLogic.CoreCommandType.SET, context))
+                                                                        .suggests((context, builder) -> {
+                                                                            List<String> suggestions = new ArrayList<>(CoreRegistry.getAll().keySet());
+                                                                            suggestions.add("*");
+                                                                            return SharedSuggestionProvider.suggest(suggestions, builder);
+                                                                        })
+                                                                        .executes(context -> route(CoreCommandLogic.CoreCommandType.CLEAR_INV, context))
                                                         )
                                         )
                         )

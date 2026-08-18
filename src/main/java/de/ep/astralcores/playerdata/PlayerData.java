@@ -78,6 +78,11 @@ public class PlayerData {
         this.equippedCore = core;
     }
 
+    // Clears equipped core
+    public void clearEquippedCore() {
+        this.equippedCore = null;
+    }
+
     // --- TRUSTED PLAYERS UTILITIES ---
 
     // Gets the full list of trusted player UUIDs
