@@ -34,7 +34,7 @@ public class StructureDataManager extends SavedData {
     public static final SavedDataType<StructureDataManager> TYPE =
             new SavedDataType<>(
                     Identifier.fromNamespaceAndPath(
-                            "astralcores",
+                            "astral_cores",
                             "structures"
                     ),
                     StructureDataManager::new,
