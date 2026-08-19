@@ -12,5 +12,11 @@ public class Config {
     public static class General {
         @Comment("Should the equipped core be removed from the slot when a player dies?")
         public boolean drop_core_on_death = true;
+
+        @Comment("How many structures of each type should exist")
+        public int structures_per_core = 1;
+
+        @Comment("Maximum random spawn radius")
+        public int structure_spawn_radius = 5000;
     }
 }

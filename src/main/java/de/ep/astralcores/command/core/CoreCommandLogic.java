@@ -4,6 +4,7 @@ import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreFactory;
 import de.ep.astralcores.core.CoreRegistry;
+import de.ep.astralcores.core.CoreStackResult;
 import de.ep.astralcores.playerdata.PlayerData;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
@@ -125,8 +126,11 @@ public class CoreCommandLogic {
                     () -> new IllegalArgumentException("Invalid Core ID")
             );
 
-            // Generates the physical item stack for the requested core
-            ItemStack itemStack = CoreFactory.createStack(core);
+            // Generates the physical item stack and unique UUID for the requested core
+            CoreStackResult result = CoreFactory.createStack(core);
+
+            // Gets the configured ItemStack from the creation result
+            ItemStack itemStack = result.stack();
 
             // Adds the item stack directly to the player inventory or drops it if full
             if (!target.getInventory().add(itemStack)) {

@@ -1,6 +1,6 @@
 {
 	"schemaVersion": 1,
-	"id": "astral-cores",
+	"id": "astral_cores",
 	"version": "${version}",
 	"name": "Astral Cores",
 	"description": "This is an example description! Tell everyone what your mod is about!",
@@ -13,7 +13,7 @@
 		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/astral-cores/icon.png",
+	"icon": "assets/astral_cores/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
@@ -24,9 +24,9 @@
 		]
 	},
 	"mixins": [
-		"astral-cores.mixins.json",
+      "astral_cores.mixins.json",
 		{
-			"config": "astral-cores.client.mixins.json",
+			"config": "astral_cores.client.mixins.json",
 			"environment": "client"
 		}
 	],

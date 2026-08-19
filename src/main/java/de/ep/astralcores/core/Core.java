@@ -4,6 +4,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 
 import java.util.List;
+import java.util.Locale;
 
 // Abstract base class for all custom core modules
 public abstract class Core {
@@ -70,7 +71,7 @@ public abstract class Core {
 
     // Converts the core enum name to a lowercase string key
     public String getCoreId() {
-        return type.name().toLowerCase();
+        return type.name().toLowerCase(Locale.ROOT);
     }
 
     // Gets the core display name

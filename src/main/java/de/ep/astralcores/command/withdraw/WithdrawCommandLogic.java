@@ -2,11 +2,8 @@ package de.ep.astralcores.command.withdraw;
 
 import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.actionbar.ActionBarManager;
+import de.ep.astralcores.core.*;
 import de.ep.astralcores.playerdata.PlayerData;
-import de.ep.astralcores.core.CoreFactory;
-import de.ep.astralcores.core.Core;
-import de.ep.astralcores.core.CoreRegistry;
-import de.ep.astralcores.core.CoreType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -37,9 +34,11 @@ public class WithdrawCommandLogic {
         // Cleans up passive buffs or modifiers before the core gets unequipped
         core.onRemoved(player);
 
-        // Generates the physical item stack for the core item
-        ItemStack coreStack = CoreFactory.createStack(core);
+        // Generates the physical item stack and unique UUID for the requested core
+        CoreStackResult result = CoreFactory.createStack(core);
 
+        // Gets the configured ItemStack from the creation result
+        ItemStack coreStack = result.stack();
         // Clears the equipped core reference from the player profile data
         data.setEquippedCore(null);
 
