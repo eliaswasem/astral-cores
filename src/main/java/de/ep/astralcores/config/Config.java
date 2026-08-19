@@ -18,5 +18,7 @@ public class Config {
 
         @Comment("Maximum random spawn radius")
         public int structure_spawn_radius = 5000;
+
+        public boolean randomized_structure_spawn = true;
     }
 }
