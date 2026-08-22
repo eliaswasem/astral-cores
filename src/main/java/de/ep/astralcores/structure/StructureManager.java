@@ -49,7 +49,7 @@ public final class StructureManager {
                 continue;
             }
 
-            long existing = data.countActiveStructures(type);
+            long existing = data.countLinkedStructures(type);
 
             // Resolve the core once instead of once per spawned structure
             CoreType coreType = CoreToStructureLookup
@@ -150,7 +150,7 @@ public final class StructureManager {
             boolean tooClose = data.getStructures()
                     .values()
                     .stream()
-                    .filter(StructureDataManager.StructureInstance::active)
+                    .filter(StructureDataManager.StructureInstance::has_linked_core)
                     .anyMatch(instance ->
                             horizontalDistanceSq(
                                     instance.position(),
@@ -207,23 +207,23 @@ public final class StructureManager {
     // Replaces a structure after its core has been removed or destroyed
     public static void onCoreRemoved(
             ServerLevel level,
-            UUID uuid
+            UUID coreUuid
     ) {
         StructureDataManager data = StructureDataManager.get(level);
 
         // Find the structure associated with the removed core
         StructureDataManager.StructureInstance instance =
-                data.getStructure(uuid);
+                data.getStructure(coreUuid);
 
         if (instance == null) {
             return;
         }
 
-        // Preserve the old position before deactivating the structure
+        // Preserve the old position before delinking the structure
         BlockPos oldPosition = instance.position();
 
         // Mark the destroyed structure as inactive
-        data.deactivateStructureByUUID(uuid);
+        data.delinkStructureByUUID(coreUuid);
 
         StructureDefinition definition =
                 StructureRegistry.get(instance.type());

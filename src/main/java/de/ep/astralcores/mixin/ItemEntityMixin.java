@@ -1,6 +1,7 @@
 package de.ep.astralcores.mixin;
 
 import de.ep.astralcores.core.CoreFactory;
+import de.ep.astralcores.structure.StructureManager;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -11,6 +12,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.Optional;
+import java.util.UUID;
 
 @Mixin(ItemEntity.class)
 public abstract class ItemEntityMixin {
@@ -41,11 +45,20 @@ public abstract class ItemEntityMixin {
             return;
         }
 
-        // Remove entity and trigger core respawn logic
+        // Core falls into the void
         if (source == entity.damageSources().fellOutOfWorld()) {
+
+            Optional<UUID> coreUuid =
+                    CoreFactory.getCoreUuid(stack);
+
             entity.discard();
 
-            // TODO: Call custom random structure generation system here
+            coreUuid.ifPresent(uuid ->
+                    StructureManager.onCoreRemoved(
+                            level,
+                            uuid
+                    )
+            );
 
             cir.setReturnValue(false);
             return;

@@ -59,7 +59,8 @@ public final class StructureSpawner {
 
         // Creates the placement settings used when inserting the template
         StructurePlaceSettings settings =
-                new StructurePlaceSettings();
+                new StructurePlaceSettings()
+                        .setKnownShape(true);
 
         // Places the NBT structure at the calculated world origin
         boolean placed = template.placeInWorld(
@@ -100,7 +101,7 @@ public final class StructureSpawner {
 
         // Registers the generated structure for persistence and distance tracking
         StructureDataManager.get(level).addStructure(
-                itemEntity.getUUID(),
+                coreStack.uuid(),
                 type,
                 origin
         );

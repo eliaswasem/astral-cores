@@ -178,10 +178,10 @@ public class StructureDataManager extends SavedData {
                     new CompoundTag();
 
 
-            // Saves the unique structure UUID
+            // Saves the unique core UUID corresponding to the structure
             structureTag.putString(
-                    "uuid",
-                    instance.uuid().toString()
+                    "core_uuid",
+                    instance.coreUuid().toString()
             );
 
 
@@ -206,8 +206,8 @@ public class StructureDataManager extends SavedData {
 
             // Saves whether the structure is currently active
             structureTag.putBoolean(
-                    "active",
-                    instance.active()
+                    "has_linked_core",
+                    instance.has_linked_core
             );
 
 
@@ -230,15 +230,15 @@ public class StructureDataManager extends SavedData {
 
     // Adds a newly spawned structure to the persistent data
     public void addStructure(
-            UUID uuid,
+            UUID coreUuid,
             StructureType type,
             BlockPos position
     ) {
 
         structures.put(
-                uuid,
+                coreUuid,
                 new StructureInstance(
-                        uuid,
+                        coreUuid,
                         type,
                         position,
                         true
@@ -252,12 +252,12 @@ public class StructureDataManager extends SavedData {
 
 
     // Disables a structure without deleting its persistent data
-    public void deactivateStructureByUUID(
-            UUID uuid
+    public void delinkStructureByUUID(
+            UUID coreUuid
     ) {
 
         StructureInstance instance =
-                structures.get(uuid);
+                structures.get(coreUuid);
 
 
         if (instance == null) {
@@ -266,9 +266,9 @@ public class StructureDataManager extends SavedData {
 
 
         structures.put(
-                uuid,
+                coreUuid,
                 new StructureInstance(
-                        instance.uuid(),
+                        instance.coreUuid(),
                         instance.type(),
                         instance.position(),
                         false
@@ -283,11 +283,11 @@ public class StructureDataManager extends SavedData {
 
     // Removes a structure completely from persistent data
     public void removeStructure(
-            UUID uuid
+            UUID coreUuid
     ) {
 
         structures.remove(
-                uuid
+                coreUuid
         );
 
 
@@ -297,14 +297,14 @@ public class StructureDataManager extends SavedData {
 
 
     // Returns the amount of active structures of a specific type
-    public long countActiveStructures(
+    public long countLinkedStructures(
             StructureType type
     ) {
 
         return structures.values()
                 .stream()
                 .filter(instance ->
-                        instance.active()
+                        instance.has_linked_core
                                 &&
                                 instance.type() == type
                 )
@@ -314,11 +314,11 @@ public class StructureDataManager extends SavedData {
 
     // Returns the stored structure for a specific UUID
     public StructureInstance getStructure(
-            UUID uuid
+            UUID coreUuid
     ) {
 
         return structures.get(
-                uuid
+                coreUuid
         );
     }
 
@@ -332,10 +332,10 @@ public class StructureDataManager extends SavedData {
 
     // Defines the data format of one structure instance
     public record StructureInstance(
-            UUID uuid,
+            UUID coreUuid,
             StructureType type,
             BlockPos position,
-            boolean active
+            boolean has_linked_core
     ) {
         // Resolves the associated CoreType mapping for this specific instance
         public CoreType coreType() {

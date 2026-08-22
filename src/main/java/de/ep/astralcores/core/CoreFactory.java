@@ -146,4 +146,41 @@ public class CoreFactory {
         // Checks the copied NBT structure for the core key without creating an Optional wrapper
         return customData.copyTag().contains("core_id");
     }
+
+    public static Optional<UUID> getCoreUuid(ItemStack stack) {
+
+        if (stack == null
+                || stack.isEmpty()
+                || !stack.has(DataComponents.CUSTOM_DATA)) {
+            return Optional.empty();
+        }
+
+        CustomData customData =
+                stack.get(DataComponents.CUSTOM_DATA);
+
+        if (customData == null) {
+            return Optional.empty();
+        }
+
+        CompoundTag tag =
+                customData.copyTag();
+
+        Optional<String> uuidString =
+                tag.getString("core_uuid");
+
+        if (uuidString.isEmpty()) {
+            return Optional.empty();
+        }
+
+        try {
+
+            return Optional.of(
+                    UUID.fromString(uuidString.get())
+            );
+
+        } catch (IllegalArgumentException exception) {
+
+            return Optional.empty();
+        }
+    }
 }
