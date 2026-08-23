@@ -20,7 +20,7 @@ public class Config {
         public int structures_per_core = 1;
 
         @Comment("Maximum spawn radius")
-        public int structure_spawn_radius = 2500;
+        public int structure_spawn_radius = 5000;
 
         @Comment("Should structures spawn at randomized positions per spawn")
         public boolean randomized_structure_spawn = true;
