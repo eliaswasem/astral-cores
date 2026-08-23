@@ -30,7 +30,7 @@ public final class StructureManager {
         StructureDataManager data = StructureDataManager.get(level);
 
         // Cache configuration values for this generation pass
-        int amount = ConfigManager.get().general.structures_per_core;
+        int amount = ConfigManager.get().structure.structures_per_core;
 
         Identifier currentDimension = level.dimension().identifier();
         RandomSource random = createInitialRandom(level);
@@ -97,7 +97,7 @@ public final class StructureManager {
     ) {
         // ConfigManager guarantees that structure_spawn_radius is at least 1500
         int configuredRadius =
-                ConfigManager.get().general.structure_spawn_radius;
+                ConfigManager.get().structure.structure_spawn_radius;
 
         // Keep the candidate origin 200 blocks inside the configured spawn radius
         int radius = configuredRadius - 200;
@@ -196,7 +196,7 @@ public final class StructureManager {
     // Creates the RNG used for initial structure generation
     private static RandomSource createInitialRandom(ServerLevel level) {
         // Random mode uses Minecraft's runtime random source
-        if (ConfigManager.get().general.randomized_structure_spawn) {
+        if (ConfigManager.get().structure.randomized_structure_spawn) {
             return level.getRandom();
         }
 

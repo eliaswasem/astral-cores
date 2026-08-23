@@ -36,10 +36,10 @@ public class ConfigManager {
             config = jankson.fromJson(jsonObject, Config.class);
 
             // Enforce the minimum structure spawn radius
-            if (config.general.structure_spawn_radius < 1500) {
-                int oldRadius = config.general.structure_spawn_radius;
+            if (config.structure.structure_spawn_radius < 1500) {
+                int oldRadius = config.structure.structure_spawn_radius;
 
-                config.general.structure_spawn_radius = 1500;
+                config.structure.structure_spawn_radius = 1500;
 
                 AstralCores.LOGGER.warn(
                         "Invalid structure_spawn_radius value {} detected. " +

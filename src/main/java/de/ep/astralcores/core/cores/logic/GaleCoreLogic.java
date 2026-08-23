@@ -94,7 +94,7 @@ public final class GaleCoreLogic {
             return;
         }
 
-        ServerLevel level = (ServerLevel) player.level();
+        ServerLevel level = player.level();
         Vec3 pos = player.position();
 
         // Creates the visual/audio explosion without block damage.

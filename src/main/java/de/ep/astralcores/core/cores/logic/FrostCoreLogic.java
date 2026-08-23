@@ -23,7 +23,7 @@ import java.util.*;
 public class FrostCoreLogic {
 
     // Temporary modifier that prevents knockback while Frost Lock is active.
-    private static final Identifier FROST_MODIFIER_ID = Identifier.fromNamespaceAndPath("astralcores", "frost_lock_resistance");
+    private static final Identifier FROST_MODIFIER_ID = Identifier.fromNamespaceAndPath("astral_cores", "frost_lock_resistance");
 
     // Players whose next valid attack will trigger Frost Lock.
     public static final Set<UUID> armedPlayers = new HashSet<>();

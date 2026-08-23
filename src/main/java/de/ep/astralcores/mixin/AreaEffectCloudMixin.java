@@ -3,7 +3,6 @@ package de.ep.astralcores.mixin;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import de.ep.astralcores.AstralCores;
-import de.ep.astralcores.core.cores.logic.NatureCoreLogic;
 import de.ep.astralcores.playerdata.PlayerData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -38,11 +37,8 @@ public abstract class AreaEffectCloudMixin {
 
         // Protect the owner if they have the Nature Core.
         if (target == owner) {
-            if (NatureCoreLogic.hasNatureCore(owner)) {
-                return false;
-            }
+            return false;
 
-            return original.call(target, effect, source);
         }
 
         // Protect trusted entities of the cloud owner.

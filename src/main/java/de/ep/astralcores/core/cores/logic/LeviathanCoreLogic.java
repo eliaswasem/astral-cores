@@ -115,14 +115,14 @@ public final class LeviathanCoreLogic {
 
         ServerLevel level = player.level();
 
-        boolean empowered =
+        boolean inWaterOrRain =
                 player.isInWaterOrRain();
 
         double pullRadius =
-                empowered ? 6.0D : 4.0D;
+                inWaterOrRain ? 6.0D : 4.0D;
 
         double particleRadius =
-                empowered ? 4.0D : 3.0D;
+                inWaterOrRain ? 4.0D : 3.0D;
 
         AABB searchBox =
                 player.getBoundingBox().inflate(pullRadius);

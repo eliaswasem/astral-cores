@@ -21,7 +21,7 @@ public final class GravityCoreLogic {
 
     private static final Identifier GRAVITY_MODIFIER_ID =
             Identifier.fromNamespaceAndPath(
-                    "astralcores",
+                    "astral_cores",
                     "gravity_heavy_presence"
             );
 
