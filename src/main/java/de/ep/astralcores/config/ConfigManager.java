@@ -16,7 +16,7 @@ public class ConfigManager {
 
     // Target configuration file path within the system directories
     private static final File configFile = FabricLoader.getInstance().getConfigDir()
-            .resolve("astral_cores").resolve("config.json5").toFile();
+            .resolve("astralcores").resolve("config.json5").toFile();
 
     // Configuration file engine parser library builder instance
     private static final Jankson jankson = Jankson.builder().build();

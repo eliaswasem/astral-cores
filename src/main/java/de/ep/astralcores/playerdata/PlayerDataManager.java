@@ -27,7 +27,7 @@ public class PlayerDataManager {
 
     // Initializes database folders and patches table schemas
     public PlayerDataManager(File worldFolder) {
-        File dataFolder = new File(worldFolder, "astral_cores");
+        File dataFolder = new File(worldFolder, "astralcores");
         if (!dataFolder.exists()) dataFolder.mkdirs();
 
         try {

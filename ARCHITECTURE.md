@@ -19,7 +19,6 @@ core/
 * **Core Subclasses** define the item's identity, metadata, and core parameters.
 * **CoreLogic Classes** handle the actual feature implementation, events, tasks, and state tracking.
 
-This keeps all features for a specific core inside a single logic class, rather than breaking them apart based on how they are triggered (Active vs. Passive vs. Event).
 
 ---
 
@@ -126,7 +125,7 @@ src/main/java/de/ep/astralcores/
 ---
 
 ## core/Core.java
-`Core` is the base abstract class for all cores. It holds global item configurations and API metadata:
+`Core` is the base abstract class for all cores. It holds the default core structure and basic functions:
 
 * `CoreType` identifier
 * Custom display names and lore lists

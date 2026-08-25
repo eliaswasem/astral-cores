@@ -19,7 +19,7 @@ loom {
 	splitEnvironmentSourceSets()
 
 	mods {
-		"astral_cores" {
+		"astralcores" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}

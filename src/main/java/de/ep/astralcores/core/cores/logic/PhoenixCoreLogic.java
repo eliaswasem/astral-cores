@@ -19,7 +19,7 @@ public final class PhoenixCoreLogic {
 
     private static final Identifier BURNING_TIME_MODIFIER_ID =
             Identifier.fromNamespaceAndPath(
-                    "astral_cores",
+                    "astralcores",
                     "phoenix_flameborn"
             );
 

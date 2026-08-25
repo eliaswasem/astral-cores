@@ -16,7 +16,7 @@ public record StructureDefinition(
     // Returns the resource identifier of the structure NBT template
     public Identifier structureId() {
         return Identifier.fromNamespaceAndPath(
-                "astral_cores",
+                "astralcores",
                 type.name().toLowerCase()
         );
     }

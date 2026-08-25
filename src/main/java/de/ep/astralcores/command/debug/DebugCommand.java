@@ -10,7 +10,7 @@ public class DebugCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
-                Commands.literal("astral_cores-debug")
+                Commands.literal("astralcores-debug")
                         .requires(Commands.hasPermission(Commands.LEVEL_MODERATORS))
                         .then(Commands.literal("resetCooldowns")
                                 .executes(context -> route(DebugCommandLogic.DebugCommandType.COOLDOWN, context))

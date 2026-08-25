@@ -1,4 +1,4 @@
 # Astral Cores
- A fabric Minecraft smp mod.
+ A Minecraft smp mod.
 
 [Astral Cores Architecture Documentation](ARCHITECTURE.md)
