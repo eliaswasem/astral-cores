@@ -6,6 +6,7 @@ import net.minecraft.resources.Identifier;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 // Stores the static parameters and metrics for all available structures
 public final class StructureRegistry {
@@ -94,5 +95,12 @@ public final class StructureRegistry {
         return STRUCTURES.values().stream()
                 .map(definition -> definition.structureId().toString())
                 .toList();
+    }
+
+    public static Optional<StructureType> getByStructureType(Identifier structureType) {
+        return STRUCTURES.values().stream()
+                .map(StructureDefinition::type)
+                .filter(type -> type.name().equals(structureType.getPath().toUpperCase()))
+                .findFirst();
     }
 }

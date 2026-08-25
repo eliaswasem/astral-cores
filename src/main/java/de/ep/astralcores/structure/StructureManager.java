@@ -1,9 +1,7 @@
 package de.ep.astralcores.structure;
 
 import de.ep.astralcores.config.ConfigManager;
-import de.ep.astralcores.core.Core;
-import de.ep.astralcores.core.CoreRegistry;
-import de.ep.astralcores.core.CoreType;
+import de.ep.astralcores.structure.spawners.MeteorSpawner;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
@@ -18,18 +16,14 @@ import java.util.UUID;
 
 public final class StructureManager {
 
-    // Minimum horizontal distance allowed between structures
     private static final long MIN_STRUCTURE_DISTANCE = 200L;
 
-    // Squared minimum distance used to avoid square root calculations
     private static final long MIN_STRUCTURE_DISTANCE_SQ =
             MIN_STRUCTURE_DISTANCE * MIN_STRUCTURE_DISTANCE;
 
-    // Generates the configured amount of every valid structure type
     public static void serverStart(ServerLevel level) {
         StructureDataManager data = StructureDataManager.get(level);
 
-        // Cache configuration values for this generation pass
         int amount = ConfigManager.get().structure.structures_per_core;
 
         Identifier currentDimension = level.dimension().identifier();
@@ -38,30 +32,16 @@ public final class StructureManager {
         for (StructureType type : StructureType.values()) {
             StructureDefinition definition = StructureRegistry.get(type);
 
-            // Ignore structure types without a registered definition
             if (definition == null) {
                 continue;
             }
 
-            // Ignore structures that are not allowed in the current dimension
             if (!definition.allowedDimensions().isEmpty()
                     && !definition.allowedDimensions().contains(currentDimension)) {
                 continue;
             }
 
             long existing = data.countLinkedStructures(type);
-
-            // Resolve the core once instead of once per spawned structure
-            CoreType coreType = CoreToStructureLookup
-                    .getCoreType(type)
-                    .orElseThrow(() -> new IllegalStateException(
-                            "Missing core type mapping for structure: " + type
-                    ));
-
-            Core core = CoreRegistry.get(coreType)
-                    .orElseThrow(() -> new IllegalStateException(
-                            "Failed to load core instance for type: " + coreType
-                    ));
 
             while (existing < amount) {
                 Optional<BlockPos> positionOpt = findValidPosition(
@@ -72,20 +52,23 @@ public final class StructureManager {
                         null
                 );
 
-                // Stop if no valid position could be found
                 if (positionOpt.isEmpty()) {
                     break;
                 }
 
                 BlockPos position = positionOpt.get();
 
-                // Place the structure and spawn its core
-                StructureSpawner.spawn(level, type, position, core);
+                MeteorSpawner.spawn(
+                        level,
+                        definition,
+                        position
+                );
 
                 existing++;
             }
         }
     }
+
 
     // Searches for a valid position while respecting biome, radius and distance restrictions
     private static Optional<BlockPos> findValidPosition(
@@ -243,20 +226,10 @@ public final class StructureManager {
                 random,
                 oldPosition
         ).ifPresent(newPos -> {
-
-            // Resolve the core associated with the destroyed structure
-            Core core = CoreRegistry.get(instance.coreType())
-                    .orElseThrow(() -> new IllegalStateException(
-                            "Failed to load core instance for type: "
-                                    + instance.coreType()
-                    ));
-
-            // Spawn the replacement at the newly selected position
-            StructureSpawner.spawn(
+            MeteorSpawner.spawn(
                     level,
-                    instance.type(),
-                    newPos,
-                    core
+                    definition,
+                    newPos
             );
         });
     }
