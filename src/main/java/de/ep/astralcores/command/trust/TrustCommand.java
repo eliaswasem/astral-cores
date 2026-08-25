@@ -12,8 +12,11 @@ public class TrustCommand {
 
     // Registers the trust command and its player argument into the game command tree
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("trust")
-                .then(Commands.argument("player", EntityArgument.player())
+        dispatcher.register(
+                Commands.literal("trust")
+                        .requires(source -> source.getEntity() instanceof ServerPlayer)
+                .then(
+                        Commands.argument("player", EntityArgument.player())
                         .executes(TrustCommand::route)));
     }
 

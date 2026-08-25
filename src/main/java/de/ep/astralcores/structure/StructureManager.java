@@ -133,7 +133,7 @@ public final class StructureManager {
             boolean tooClose = data.getStructures()
                     .values()
                     .stream()
-                    .filter(StructureDataManager.StructureInstance::has_linked_core)
+                    .filter(StructureInstance::hasLinkedCore)
                     .anyMatch(instance ->
                             horizontalDistanceSq(
                                     instance.position(),
@@ -195,7 +195,7 @@ public final class StructureManager {
         StructureDataManager data = StructureDataManager.get(level);
 
         // Find the structure associated with the removed core
-        StructureDataManager.StructureInstance instance =
+        StructureInstance instance =
                 data.getStructure(coreUuid);
 
         if (instance == null) {

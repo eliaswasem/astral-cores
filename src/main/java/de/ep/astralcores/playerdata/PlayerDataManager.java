@@ -127,11 +127,7 @@ public class PlayerDataManager {
     }
     // Fetches active RAM cached data profiles instantly for runtime checking
     public PlayerData get(ServerPlayer player) {
-        PlayerData data = cache.get(player.getUUID());
-        if (data == null) {
-            throw new IllegalStateException("RAM cache missed runtime check for active player entity: " + player.getUUID());
-        }
-        return data;
+        return cache.get(player.getUUID());
     }
 
     // Serializes and commits active RAM cached parameters down into the database file

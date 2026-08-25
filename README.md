@@ -1,4 +1,4 @@
 # Astral Cores
- A Minecraft smp mod.
 
-[Astral Cores Architecture Documentation](ARCHITECTURE.md)
+### [Cores](docs/CORES.md)
+### [Project Tree](docs/PROJECT_TREE.md)

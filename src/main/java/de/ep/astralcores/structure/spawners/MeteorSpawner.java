@@ -1,10 +1,7 @@
 package de.ep.astralcores.structure.spawners;
 
 import de.ep.astralcores.core.*;
-import de.ep.astralcores.structure.CoreToStructureLookup;
-import de.ep.astralcores.structure.StructureDataManager;
-import de.ep.astralcores.structure.StructureDefinition;
-import de.ep.astralcores.structure.StructureSpawner;
+import de.ep.astralcores.structure.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -15,14 +12,14 @@ import java.util.Optional;
 public final class MeteorSpawner {
 
     // Spawns the meteor structure and its associated core
-    public static StructureSpawner.StructureSpawnResult spawn(
+    public static StructureSpawnResult spawn(
             ServerLevel level,
             StructureDefinition definition,
             BlockPos origin
     ) {
 
         // Places the meteor structure itself
-        StructureSpawner.StructureSpawnResult result =
+        StructureSpawnResult result =
                 StructureSpawner.spawn(
                         level,
                         definition,

@@ -70,11 +70,4 @@ public final class StructureSpawner {
                 origin
         );
     }
-
-    // Contains the results generated during structure spawning
-    public record StructureSpawnResult(
-            StructureType type,
-            BlockPos origin
-    ) {
-    }
 }

@@ -12,11 +12,15 @@ public class ActionBarCommand {
 
     // Registers the actionbar command and its text/icon sub-arguments into the game command tree
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("actionbar")
-                .then(Commands.literal("text")
-                        .executes(context -> route(context, ActionBarMode.TEXT)))
-                .then(Commands.literal("icon")
-                        .executes(context -> route(context, ActionBarMode.ICON)))
+        dispatcher.register(
+                Commands.literal("actionbar")
+                        .requires(source -> source.getEntity() instanceof ServerPlayer)
+                        .then(
+                                Commands.literal("text")
+                                .executes(context -> route(context, ActionBarMode.TEXT)))
+                        .then(
+                                Commands.literal("icon")
+                                .executes(context -> route(context, ActionBarMode.ICON)))
         );
     }
 

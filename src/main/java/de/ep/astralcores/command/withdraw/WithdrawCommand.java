@@ -11,7 +11,9 @@ public class WithdrawCommand {
 
     // Registers the base withdraw command into the game command tree
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("withdraw")
+        dispatcher.register(
+                Commands.literal("withdraw")
+                        .requires(source -> source.getEntity() instanceof ServerPlayer)
                 // Runs the command directly when no additional arguments are provided
                 .executes(WithdrawCommand::route)
         );

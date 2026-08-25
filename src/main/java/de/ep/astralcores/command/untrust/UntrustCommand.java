@@ -12,8 +12,11 @@ public class UntrustCommand {
 
     // Registers the untrust command and its player argument into the game command tree
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("untrust")
-                .then(Commands.argument("player", EntityArgument.player())
+        dispatcher.register(
+                Commands.literal("untrust")
+                        .requires(source -> source.getEntity() instanceof ServerPlayer)
+                .then(
+                        Commands.argument("player", EntityArgument.player())
                         .executes(UntrustCommand::route)));
     }
 

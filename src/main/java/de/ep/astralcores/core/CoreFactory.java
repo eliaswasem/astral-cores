@@ -119,32 +119,41 @@ public class CoreFactory {
         return coreId.flatMap(CoreRegistry::getByCoreId);
     }
 
-    // Determines if the given item stack contains a valid core identifier tag
+
+    // Determines whether the given item stack represents a valid core.
     public static boolean isCore(ItemStack stack) {
-        if (stack == null || stack.isEmpty() || !stack.has(DataComponents.CUSTOM_DATA)) {
+        if (stack == null) {
             return false;
         }
 
+        // Get the custom data component
         CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
 
-        // Checks the copied NBT structure for the core key without any object creation overhead
-        return customData != null && customData.copyTag().contains("core_id");
+        // Check if customData is null OR if it doesn't contain the "core_id" tag
+        if (customData == null || !customData.copyTag().contains("core_id")) {
+            return false;
+        }
+
+        // Verify the item is actually a core by attempting to retrieve it
+        return getCoreFromItem(stack).isPresent();
     }
 
-    // Determines if the given item stack template contains a valid core identifier tag
-    public static boolean isCore(ItemStackTemplate template) {
-        if (template == null) {
+    // Determines whether the given item stack template represents a valid core.
+    public static boolean isCore(ItemStackTemplate stackTemplate) {
+        if (stackTemplate == null) {
             return false;
         }
 
-        // Direct fetch from the template - returns null if the component is missing
-        CustomData customData = template.get(DataComponents.CUSTOM_DATA);
-        if (customData == null) {
+        // Get the custom data component
+        CustomData customData = stackTemplate.get(DataComponents.CUSTOM_DATA);
+
+        // Check if customData is null OR if it doesn't contain the "core_id" tag
+        if (customData == null || !customData.copyTag().contains("core_id")) {
             return false;
         }
 
-        // Checks the copied NBT structure for the core key without creating an Optional wrapper
-        return customData.copyTag().contains("core_id");
+        // Verify the item is actually a core by attempting to retrieve it
+        return getCoreFromItem(stackTemplate.create()).isPresent();
     }
 
     public static Optional<UUID> getCoreUuid(ItemStack stack) {

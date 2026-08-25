@@ -11,7 +11,9 @@ public class ActivateCommand {
 
     // Registers the base activate command into the game command tree
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("activate")
+        dispatcher.register(
+                Commands.literal("activate")
+                        .requires(source -> source.getEntity() instanceof ServerPlayer)
                 // Runs the command directly when no additional arguments are provided
                 .executes(ActivateCommand::route)
         );

@@ -2,7 +2,6 @@ package de.ep.astralcores.structure;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
-import de.ep.astralcores.core.CoreType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -207,7 +206,7 @@ public class StructureDataManager extends SavedData {
             // Saves whether the structure is currently active
             structureTag.putBoolean(
                     "has_linked_core",
-                    instance.has_linked_core
+                    instance.hasLinkedCore()
             );
 
 
@@ -304,7 +303,7 @@ public class StructureDataManager extends SavedData {
         return structures.values()
                 .stream()
                 .filter(instance ->
-                        instance.has_linked_core
+                        instance.hasLinkedCore()
                                 &&
                                 instance.type() == type
                 )
@@ -327,20 +326,5 @@ public class StructureDataManager extends SavedData {
     public Map<UUID, StructureInstance> getStructures() {
 
         return structures;
-    }
-
-
-    // Defines the data format of one structure instance
-    public record StructureInstance(
-            UUID coreUuid,
-            StructureType type,
-            BlockPos position,
-            boolean has_linked_core
-    ) {
-        // Resolves the associated CoreType mapping for this specific instance
-        public CoreType coreType() {
-            return CoreToStructureLookup.getCoreType(this.type)
-                    .orElseThrow(() -> new IllegalStateException("Missing core type mapping for structure: " + this.type));
-        }
     }
 }
