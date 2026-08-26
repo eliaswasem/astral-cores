@@ -18,7 +18,7 @@ The following guidelines apply to **all contributions**.
 
 ## AI Usage
 
-AI tools may be used for assistance, but should **only be used when they are actually needed**. Code should preferably be written without AI assistance whenever possible.
+AI tools may be used for assistance, but should **only be used when necessary**. Code should preferably be written without AI assistance whenever possible.
 
 If AI is used, the author remains fully responsible for the resulting code.
 
