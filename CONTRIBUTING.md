@@ -1,19 +1,76 @@
 # Contributing
 
+## General
+
+The following guidelines apply to **all contributions**.
+
+- Reuse existing functions, utilities, abstractions, APIs, and systems whenever possible.
+- Do not implement functionality that already exists elsewhere in the project.
+- Follow the existing architecture, design decisions, interfaces, and conventions.
+- Ensure all changes are functionally correct and properly tested.
+- Do not introduce security vulnerabilities or unsafe implementations.
+- Do not introduce memory leaks or other resource-management issues.
+- Consider CPU, memory, I/O, concurrency, and scalability implications.
+- Avoid unnecessary complexity, duplication, and abstractions.
+- Document code where appropriate using clear, descriptive English comments. Comments should explain non-obvious logic, decisions, constraints, or behavior rather than restating what the code already says.
+- Keep documentation up to date when behavior, APIs, or architecture change.
+- Review changes carefully before submitting them and take full responsibility for the resulting implementation.
+
 ## AI Usage
 
-The use of AI tools for assistance is generally allowed, but should be kept to a reasonable level. Code should preferably be written without AI assistance whenever possible.
+AI tools may be used for assistance, but should **only be used when they are actually needed**. Code should preferably be written without AI assistance whenever possible.
 
-If AI is used, the author remains fully responsible for the resulting code. In particular, they must ensure that:
+If AI is used, the author remains fully responsible for the resulting code.
 
-- they fully understand the generated code rather than blindly accepting it,
-- no security vulnerabilities or unsafe implementations are introduced,
-- no memory leaks or other resource management issues are introduced,
-- the code correctly interacts with existing systems and interfaces,
-- existing functions, utilities, and abstractions are reused instead of unnecessarily implementing duplicate functionality,
-- existing architectural and design decisions are respected,
-- the code is reviewed, tested, and adapted to the actual requirements of the project.
+**Do not blindly copy and paste the first solution provided by an AI tool.** AI output should be treated as a starting point that must be evaluated, adapted, and tested.
 
-AI-generated code must be reviewed and tested just like any other externally sourced code. Using an AI tool does not remove the responsibility to fully understand and take ownership of the code and its impact on the existing system.
+Before asking AI to implement or modify something, look at the relevant existing code and provide the AI with sufficient context about the project. This includes the relevant architecture, APIs, dependencies, conventions, and existing implementations.
 
-When using AI, provide it with sufficient context about the existing system. This includes relevant architecture, APIs, dependencies, conventions, and existing implementations. The goal is to prevent the AI from reimplementing functionality that already exists or suggesting solutions that conflict with the existing architecture.
+When using AI, follow the requirements in the **General** section and verify that the generated solution fits the existing codebase rather than using it unchanged.
+
+AI assistance does not replace understanding the codebase, code review, testing, or responsibility for the final implementation.
+
+## PRs & Commits
+
+PRs and commits should focus on **one thing at a time**.
+
+A PR or commit should have one clear, logical purpose and should contain only changes directly related to that purpose.
+
+Do not combine unrelated:
+
+- features,
+- bug fixes,
+- refactors,
+- dependency updates,
+- formatting changes,
+- documentation changes.
+
+If changes are independent of each other, they should be split into separate PRs or commits.
+
+PRs and commits should use a Conventional Commits-style prefix:
+
+| Prefix | Purpose | Example |
+|---|---|---|
+| `feat` | New functionality | `feat: add chrono core active ability` |
+| `fix` | Bug fix | `fix: prevent duplicate core activation` |
+| `refactor` | Code restructuring | `refactor: simplify core activation logic` |
+| `perf` | Performance improvement | `perf: reduce core tick overhead` |
+| `docs` | Documentation changes | `docs: document core creation` |
+| `test` | Test changes | `test: add chrono core tests` |
+| `build` | Build system or dependency changes | `build: update Fabric dependencies` |
+| `ci` | CI/CD changes | `ci: add mod test workflow` |
+| `chore` | Other maintenance | `chore: update development tooling` |
+| `revert` | Revert a previous change | `revert: feat: add chrono core active ability` |
+
+For **breaking changes**, suffix the type with `!`:
+
+```text
+feat!: change the Core API
+fix!: change command argument handling
+refactor!: remove the legacy CoreFactory interface
+perf!: change core tick behavior
+build!: update the required Minecraft version
+```
+The ! suffix can be used with any type and indicates that the change introduces a breaking change.
+
+PR and commit titles should follow the same convention.
