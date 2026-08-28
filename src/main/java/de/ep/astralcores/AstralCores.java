@@ -1,7 +1,8 @@
 package de.ep.astralcores;
 
 import de.ep.astralcores.command.CommandRegistry;
-import de.ep.astralcores.event.PlayerEvents;
+import de.ep.astralcores.event.PlayerEventsListener;
+import de.ep.astralcores.event.ServerChunkEventsListener;
 import de.ep.astralcores.event.ServerLifecycleEventsListener;
 import de.ep.astralcores.playerdata.PlayerDataManager;
 import de.ep.astralcores.core.CoreRegistry;
@@ -24,11 +25,14 @@ public class AstralCores implements ModInitializer {
 	public void onInitialize() {
 		LOGGER.info("Initializing AstralCores...");
 
-		// Registers server event listeners
+		// Registers server lifecycle event listeners
 		ServerLifecycleEventsListener.register();
 
+		// Registers server chunk event listeners
+		ServerChunkEventsListener.register();
+
 		// Registers the player event listeners
-		PlayerEvents.register();
+		PlayerEventsListener.register();
 
 		// Registers the custom commands
 		CommandRegistry.register();

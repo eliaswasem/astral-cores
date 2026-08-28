@@ -12,320 +12,192 @@ import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class StructureDataManager extends SavedData {
 
-    // Stores all currently known structures by their unique UUID
     private final Map<UUID, StructureInstance> structures = new HashMap<>();
+    private final List<PlannedStructure> plannedStructures = new ArrayList<>();
 
-    // Defines the data codec instance matching the required constructor type signatures
     public static final Codec<StructureDataManager> CODEC =
             CompoundTag.CODEC.flatXmap(
                     compound -> DataResult.success(StructureDataManager.load(compound)),
                     manager -> DataResult.success(manager.save(new CompoundTag()))
             );
 
-
-    // Defines the Minecraft saved data type used for loading and saving
     public static final SavedDataType<StructureDataManager> TYPE =
             new SavedDataType<>(
-                    Identifier.fromNamespaceAndPath(
-                            "astralcores",
-                            "structures"
-                    ),
+                    Identifier.fromNamespaceAndPath("astralcores", "structures"),
                     StructureDataManager::new,
                     StructureDataManager.CODEC,
                     DataFixTypes.LEVEL
             );
 
-
-    // Gets the structure data manager from the world data storage
-    public static StructureDataManager get(
-            ServerLevel level
-    ) {
-
-        // Loads existing data or creates a new data file
-        return level.getDataStorage()
-                .computeIfAbsent(TYPE);
+    public static StructureDataManager get(ServerLevel level) {
+        return level.getDataStorage().computeIfAbsent(TYPE);
     }
 
+    public static StructureDataManager load(CompoundTag tag) {
+        StructureDataManager manager = new StructureDataManager();
 
-    // Loads saved structure data from persistent world storage
-    public static StructureDataManager load(
-            CompoundTag tag
-    ) {
-
-        StructureDataManager manager =
-                new StructureDataManager();
-
-
-        // Reads the stored structure list from the NBT data
-        ListTag list = tag.getList(
-                "structures"
-        ).orElse(new ListTag());
-
-
-        // Recreates every stored structure entry
+        ListTag list = tag.getList("structures").orElse(new ListTag());
         for (int i = 0; i < list.size(); i++) {
+            CompoundTag structureTag = list.getCompound(i).orElse(new CompoundTag());
 
-            CompoundTag structureTag =
-                    list.getCompound(i)
-                            .orElse(new CompoundTag());
-
-
-            // Reads the unique structure UUID
-            String uuidString =
-                    structureTag.getString("uuid")
-                            .orElse(null);
-
-
-            if (uuidString == null) {
-                continue;
-            }
-
+            String uuidString = structureTag.getString("core_uuid").orElse(null);
+            if (uuidString == null) continue;
 
             UUID uuid;
-
             try {
-
                 uuid = UUID.fromString(uuidString);
-
-            } catch (IllegalArgumentException exception) {
-
+            } catch (IllegalArgumentException e) {
                 continue;
             }
 
-
-            // Reads the structure type
-            String typeString =
-                    structureTag.getString("type")
-                            .orElse(null);
-
-
-            if (typeString == null) {
-                continue;
-            }
-
+            String typeString = structureTag.getString("type").orElse(null);
+            if (typeString == null) continue;
 
             StructureType type;
-
             try {
-
-                type = StructureType.valueOf(
-                        typeString
-                );
-
-            } catch (IllegalArgumentException exception) {
-
+                type = StructureType.valueOf(typeString);
+            } catch (IllegalArgumentException e) {
                 continue;
             }
 
+            BlockPos position = BlockPos.CODEC
+                    .parse(NbtOps.INSTANCE, structureTag.get("position"))
+                    .result()
+                    .orElse(BlockPos.ZERO);
 
-            // Reads the structure world position safely from the compound
-            // Reads the structure world position safely by fetching the raw underlying tag element
-            BlockPos position =
-                    BlockPos.CODEC
-                            .parse(
-                                    NbtOps.INSTANCE,
-                                    structureTag.get("position")
-                            )
-                            .result()
-                            .orElse(BlockPos.ZERO);
-
-
-
-            // Reads whether the structure is currently active
-            boolean active =
-                    structureTag.getBoolean("active")
-                            .orElse(true);
-
-
-            // Adds the loaded structure back into memory
-            manager.structures.put(
-                    uuid,
-                    new StructureInstance(
-                            uuid,
-                            type,
-                            position,
-                            active
-                    )
-            );
+            boolean hasLinkedCore = structureTag.getBoolean("has_linked_core").orElse(true);
+            manager.structures.put(uuid, new StructureInstance(uuid, type, position, hasLinkedCore));
         }
 
+        ListTag plannedList = tag.getList("planned_structures").orElse(new ListTag());
+        for (int i = 0; i < plannedList.size(); i++) {
+            CompoundTag plannedTag = plannedList.getCompound(i).orElse(new CompoundTag());
+
+            String typeString = plannedTag.getString("type").orElse(null);
+            if (typeString == null) continue;
+
+            StructureType type;
+            try {
+                type = StructureType.valueOf(typeString);
+            } catch (IllegalArgumentException e) {
+                continue;
+            }
+
+            BlockPos position = BlockPos.CODEC
+                    .parse(NbtOps.INSTANCE, plannedTag.get("position"))
+                    .result()
+                    .orElse(BlockPos.ZERO);
+
+            manager.plannedStructures.add(new PlannedStructure(type, position));
+        }
 
         return manager;
     }
 
+    public CompoundTag save(CompoundTag tag) {
+        ListTag list = new ListTag();
+        for (StructureInstance instance : structures.values()) {
+            CompoundTag structureTag = new CompoundTag();
+            structureTag.putString("core_uuid", instance.coreUuid().toString());
+            structureTag.putString("type", instance.type().name());
 
-    // Saves all active and inactive structure data into NBT
-    public CompoundTag save(
-            CompoundTag tag
-    ) {
-
-        ListTag list =
-                new ListTag();
-
-
-        // Writes every stored structure into the NBT list
-        for (StructureInstance instance :
-                structures.values()) {
-
-            CompoundTag structureTag =
-                    new CompoundTag();
-
-
-            // Saves the unique core UUID corresponding to the structure
-            structureTag.putString(
-                    "core_uuid",
-                    instance.coreUuid().toString()
-            );
-
-
-            // Saves the structure type
-            structureTag.putString(
-                    "type",
-                    instance.type().name()
-            );
-
-
-            // Saves the structure world position safely using the results callback map mapping
-            BlockPos.CODEC
-                    .encodeStart(
-                            NbtOps.INSTANCE,
-                            instance.position()
-                    )
+            BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, instance.position())
                     .result()
-                    .ifPresent(nbt ->
-                            structureTag.put("position", nbt)
-                    );
+                    .ifPresent(nbt -> structureTag.put("position", nbt));
 
-
-            // Saves whether the structure is currently active
-            structureTag.putBoolean(
-                    "has_linked_core",
-                    instance.hasLinkedCore()
-            );
-
-
-            list.add(
-                    structureTag
-            );
+            structureTag.putBoolean("has_linked_core", instance.hasLinkedCore());
+            list.add(structureTag);
         }
+        tag.put("structures", list);
 
+        ListTag plannedList = new ListTag();
+        for (PlannedStructure planned : plannedStructures) {
+            CompoundTag plannedTag = new CompoundTag();
+            plannedTag.putString("type", planned.type().name());
 
-        // Stores the structure list inside the main NBT compound
-        tag.put(
-                "structures",
-                list
-        );
+            BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, planned.position())
+                    .result()
+                    .ifPresent(nbt -> plannedTag.put("position", nbt));
 
+            plannedList.add(plannedTag);
+        }
+        tag.put("planned_structures", plannedList);
 
         return tag;
     }
 
-
-    // Adds a newly spawned structure to the persistent data
-    public void addStructure(
-            UUID coreUuid,
-            StructureType type,
-            BlockPos position
-    ) {
-
-        structures.put(
-                coreUuid,
-                new StructureInstance(
-                        coreUuid,
-                        type,
-                        position,
-                        true
-                )
-        );
-
-
-        // Marks the data as changed so Minecraft saves it
+    public void addPlannedStructure(StructureType type, BlockPos position) {
+        this.plannedStructures.add(new PlannedStructure(type, position));
         setDirty();
     }
 
+    public long countPlannedStructures(StructureType type) {
+        return plannedStructures.stream().filter(p -> p.type() == type).count();
+    }
 
-    // Disables a structure without deleting its persistent data
-    public boolean delinkStructureByUUID(
-            UUID coreUuid
-    ) {
+    public List<PlannedStructure> getPlannedStructuresInChunk(int chunkX, int chunkZ) {
+        return plannedStructures.stream()
+                .filter(p -> (p.position().getX() >> 4) == chunkX && (p.position().getZ() >> 4) == chunkZ)
+                .collect(Collectors.toList());
+    }
 
-        StructureInstance instance =
-                structures.get(coreUuid);
-
-
-        if (instance == null) {
-            return false;
+    public List<BlockPos> getAllStructurePositions() {
+        List<BlockPos> positions = new ArrayList<>();
+        for (StructureInstance instance : structures.values()) {
+            if (instance.hasLinkedCore()) {
+                positions.add(instance.position());
+            }
         }
+        for (PlannedStructure planned : plannedStructures) {
+            positions.add(planned.position());
+        }
+        return positions;
+    }
 
+    public void convertPlannedToActive(PlannedStructure planned, BlockPos finalPos) {
+        this.plannedStructures.remove(planned);
+        UUID newCoreUuid = UUID.randomUUID();
+        this.structures.put(newCoreUuid, new StructureInstance(newCoreUuid, planned.type(), finalPos, true));
+        setDirty();
+    }
 
-        structures.put(
-                coreUuid,
-                new StructureInstance(
-                        instance.coreUuid(),
-                        instance.type(),
-                        instance.position(),
-                        false
-                )
-        );
+    public void removePlannedStructure(PlannedStructure planned) {
+        if (this.plannedStructures.remove(planned)) {
+            setDirty();
+        }
+    }
 
+    public Map<UUID, StructureInstance> getAllStructures() {
+        return this.structures;
+    }
 
-        // Marks the data as changed so Minecraft saves it
+    public StructureInstance getStructure(UUID coreUuid) {
+        return this.structures.get(coreUuid);
+    }
+
+    public boolean delinkStructureByUUID(UUID coreUuid) {
+        StructureInstance instance = structures.get(coreUuid);
+        if (instance == null) return false;
+
+        structures.put(coreUuid, new StructureInstance(instance.coreUuid(), instance.type(), instance.position(), false));
         setDirty();
         return true;
     }
 
-
-    // Removes a structure completely from persistent data
-    public void removeStructure(
-            UUID coreUuid
-    ) {
-
-        structures.remove(
-                coreUuid
-        );
-
-
-        // Marks the data as changed so Minecraft saves it
-        setDirty();
-    }
-
-
-    // Returns the amount of active structures of a specific type
-    public long countLinkedStructures(
-            StructureType type
-    ) {
-
-        return structures.values()
-                .stream()
-                .filter(instance ->
-                        instance.hasLinkedCore()
-                                &&
-                                instance.type() == type
-                )
+    public long countLinkedStructures(StructureType type) {
+        return structures.values().stream()
+                .filter(instance -> instance.hasLinkedCore() && instance.type() == type)
                 .count();
     }
 
-
-    // Returns the stored structure for a specific UUID
-    public StructureInstance getStructure(
-            UUID coreUuid
-    ) {
-
-        return structures.get(
-                coreUuid
-        );
+    public void addStructure(UUID coreUuid, StructureType type, BlockPos position) {
+        this.structures.put(coreUuid, new StructureInstance(coreUuid, type, position, true));
+        setDirty();
     }
 
-
-    // Returns all currently stored structures
-    public Map<UUID, StructureInstance> getStructures() {
-
-        return structures;
-    }
 }

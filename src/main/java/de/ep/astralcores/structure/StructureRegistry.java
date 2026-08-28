@@ -28,13 +28,13 @@ public final class StructureRegistry {
                     StructureType.CHRONO_CORE_METEOR,
                     new BlockPos(2, 1, 2),
                     List.of(Identifier.fromNamespaceAndPath("minecraft", "overworld")),
-                    List.of()
+                    List.of(Identifier.fromNamespaceAndPath("minecraft", "plains"), Identifier.fromNamespaceAndPath("minecraft", "desert"))
             )),
             Map.entry(StructureType.GRAVITY_CORE_METEOR, new StructureDefinition(
                     StructureType.GRAVITY_CORE_METEOR,
                     new BlockPos(2, 1, 2),
                     List.of(Identifier.fromNamespaceAndPath("minecraft", "the_nether")),
-                    List.of()
+                    List.of(Identifier.fromNamespaceAndPath("minecraft", "plains"), Identifier.fromNamespaceAndPath("minecraft", "desert"))
             )),
             Map.entry(StructureType.FROST_CORE_METEOR, new StructureDefinition(
                     StructureType.FROST_CORE_METEOR,
@@ -46,7 +46,7 @@ public final class StructureRegistry {
                     StructureType.PHOENIX_CORE_METEOR,
                     new BlockPos(2, 1, 2),
                     List.of(Identifier.fromNamespaceAndPath("minecraft", "the_nether")),
-                    List.of()
+                    List.of(Identifier.fromNamespaceAndPath("minecraft", "plains"), Identifier.fromNamespaceAndPath("minecraft", "desert"))
             )),
             Map.entry(StructureType.LEVIATHAN_CORE_METEOR, new StructureDefinition(
                     StructureType.LEVIATHAN_CORE_METEOR,
@@ -58,19 +58,19 @@ public final class StructureRegistry {
                     StructureType.SHADOW_CORE_METEOR,
                     new BlockPos(2, 1, 2),
                     List.of(Identifier.fromNamespaceAndPath("minecraft", "the_end")),
-                    List.of()
+                    List.of(Identifier.fromNamespaceAndPath("minecraft", "plains"), Identifier.fromNamespaceAndPath("minecraft", "desert"))
             )),
             Map.entry(StructureType.BERSERKER_CORE_METEOR, new StructureDefinition(
                     StructureType.BERSERKER_CORE_METEOR,
                     new BlockPos(2, 1, 2),
                     List.of(Identifier.fromNamespaceAndPath("minecraft", "overworld")),
-                    List.of()
+                    List.of(Identifier.fromNamespaceAndPath("minecraft", "plains"), Identifier.fromNamespaceAndPath("minecraft", "desert"))
             )),
             Map.entry(StructureType.ILLUSION_CORE_METEOR, new StructureDefinition(
                     StructureType.ILLUSION_CORE_METEOR,
                     new BlockPos(2, 1, 2),
                     List.of(Identifier.fromNamespaceAndPath("minecraft", "overworld")),
-                    List.of()
+                    List.of(Identifier.fromNamespaceAndPath("minecraft", "plains"), Identifier.fromNamespaceAndPath("minecraft", "desert"))
             )),
             Map.entry(StructureType.NATURE_CORE_METEOR, new StructureDefinition(
                     StructureType.NATURE_CORE_METEOR,
@@ -82,7 +82,7 @@ public final class StructureRegistry {
                     StructureType.MAGNET_CORE_METEOR,
                     new BlockPos(2, 1, 2),
                     List.of(Identifier.fromNamespaceAndPath("minecraft", "overworld")),
-                    List.of()
+                    List.of(Identifier.fromNamespaceAndPath("minecraft", "plains"), Identifier.fromNamespaceAndPath("minecraft", "desert"))
             ))
     );
 

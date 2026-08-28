@@ -16,7 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 
-public class PlayerEvents {
+public class PlayerEventsListener {
 
     // Registers game event listeners related to player actions and lifecycles
     public static void register() {
