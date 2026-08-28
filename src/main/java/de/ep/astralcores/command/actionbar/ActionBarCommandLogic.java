@@ -15,7 +15,7 @@ public class ActionBarCommandLogic {
         PlayerData data = AstralCores.PLAYER_DATA.get(player);
 
         if (data == null) {
-            source.sendFailure(Component.literal("§cFailed to access your database profile."));
+            source.sendFailure(Component.literal("Failed to access your database profile."));
             return 0;
         }
 
@@ -25,7 +25,9 @@ public class ActionBarCommandLogic {
         // Updates the action bar display text immediately
         ActionBarManager.tick(player, data);
 
-        source.sendSuccess(() -> Component.literal("§aActionbar display layout updated to: §e" + mode.name()), false);
+        source.sendSuccess(() -> Component.literal("Actionbar display layout updated to:" )
+                .append(mode.name().toLowerCase()),
+                false);
         return 1;
     }
 }

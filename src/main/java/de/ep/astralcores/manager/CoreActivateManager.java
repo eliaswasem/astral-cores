@@ -15,17 +15,17 @@ public class CoreActivateManager {
     public static ActivationResult attemptActivation(ServerPlayer player) {
         PlayerData data = AstralCores.PLAYER_DATA.get(player);
         if (data == null) {
-            return new ActivationResult(false, Component.literal("§cFailed to access your database profile."));
+            return new ActivationResult(false, Component.literal("Failed to access your database profile."));
         }
 
         CoreType targetedType = data.getEquippedCore();
         if (targetedType == null) {
-            return new ActivationResult(false, Component.literal("§cYou do not have a core equipped."));
+            return new ActivationResult(false, Component.literal("You do not have a core equipped."));
         }
 
         Core core = CoreRegistry.get(targetedType).orElse(null);
         if (core == null) {
-            return new ActivationResult(false, Component.literal("§cCritical: Stored core type mapping resolution failure."));
+            return new ActivationResult(false, Component.literal("Your stored core type doesn't exist."));
         }
 
         // Rejects execution sequence if the specific core capacity is currently locked on cooldown
@@ -33,7 +33,10 @@ public class CoreActivateManager {
             int remaining = CooldownManager.getActiveRemaining(data, targetedType);
 
             String abilityName = core.getActiveAbilityName();
-            return new ActivationResult(false, Component.literal("§c" + abilityName + " §cis on cooldown for another " + remaining + "s."));
+            return new ActivationResult(false, Component.literal(abilityName)
+                    .append(" is on cooldown for another ")
+                    .append(String.valueOf(remaining))
+                    .append("s."));
         }
 
         // Executes the custom capability features bound to the target core instance

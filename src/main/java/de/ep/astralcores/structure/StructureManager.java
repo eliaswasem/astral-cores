@@ -188,49 +188,55 @@ public final class StructureManager {
     }
 
     // Replaces a structure after its core has been removed or destroyed
-    public static void onCoreRemoved(
+    public static boolean onCoreRemoved(
             ServerLevel level,
             UUID coreUuid
     ) {
         StructureDataManager data = StructureDataManager.get(level);
 
         // Find the structure associated with the removed core
-        StructureInstance instance =
-                data.getStructure(coreUuid);
+        StructureInstance instance = data.getStructure(coreUuid);
 
         if (instance == null) {
-            return;
+            return false;
         }
 
         // Preserve the old position before delinking the structure
         BlockPos oldPosition = instance.position();
 
         // Mark the destroyed structure as inactive
-        data.delinkStructureByUUID(coreUuid);
+        if (!data.delinkStructureByUUID(coreUuid)) {
+            return false;
+        }
 
-        StructureDefinition definition =
-                StructureRegistry.get(instance.type());
+        StructureDefinition definition = StructureRegistry.get(instance.type());
 
         // Stop if the structure definition no longer exists
         if (definition == null) {
-            return;
+            return false;
         }
 
         // Replacements use a fresh runtime random source
         RandomSource random = level.getRandom();
 
-        findValidPosition(
+        Optional<BlockPos> newPosition = findValidPosition(
                 level,
                 definition,
                 data,
                 random,
                 oldPosition
-        ).ifPresent(newPos -> {
-            MeteorSpawner.spawn(
-                    level,
-                    definition,
-                    newPos
-            );
-        });
+        );
+
+        if (newPosition.isEmpty()) {
+            return false;
+        }
+
+        MeteorSpawner.spawn(
+                level,
+                definition,
+                newPosition.get()
+        );
+
+        return true;
     }
 }

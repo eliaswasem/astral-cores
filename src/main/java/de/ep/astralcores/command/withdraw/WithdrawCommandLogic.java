@@ -15,19 +15,19 @@ public class WithdrawCommandLogic {
     public static int execute(CommandSourceStack source, ServerPlayer player) {
         PlayerData data = AstralCores.PLAYER_DATA.get(player);
         if (data == null) {
-            source.sendFailure(Component.literal("§cFailed to access your database profile."));
+            source.sendFailure(Component.literal("Failed to access your database profile."));
             return 0;
         }
 
         CoreType targetedType = data.getEquippedCore();
         if (targetedType == null) {
-            source.sendFailure(Component.literal("§cYour equipment slot is currently empty."));
+            source.sendFailure(Component.literal("Your don not have a core equipped."));
             return 0;
         }
 
         Core core = CoreRegistry.get(targetedType).orElse(null);
         if (core == null) {
-            source.sendFailure(Component.literal("§cCritical: Stored core type mapping resolution failure."));
+            source.sendFailure(Component.literal("Your stored core type doesn't exist."));
             return 0;
         }
 
@@ -50,7 +50,10 @@ public class WithdrawCommandLogic {
             player.drop(coreStack, false);
         }
 
-        source.sendSuccess(() -> Component.literal("§aSuccessfully withdrew " + core.getName() + " back to your inventory."), true);
+        source.sendSuccess(() -> Component.literal("Successfully withdrew ")
+                .append(core.getName())
+                .append(" back to your inventory."),
+                true);
         return 1;
     }
 }

@@ -1,7 +1,10 @@
 package de.ep.astralcores.mixin;
 
+import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.core.CoreFactory;
 import de.ep.astralcores.structure.StructureManager;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -53,12 +56,16 @@ public abstract class ItemEntityMixin {
 
             entity.discard();
 
-            coreUuid.ifPresent(uuid ->
-                    StructureManager.onCoreRemoved(
-                            level,
-                            uuid
-                    )
-            );
+            coreUuid.ifPresent(uuid -> {
+                if (StructureManager.onCoreRemoved(level, uuid)) {
+                    AstralCores.getServer().getPlayerList().broadcastSystemMessage(
+                            Component.literal("A Core has been destroyed and will respawn somewhere in the world.")
+                                    .withStyle(ChatFormatting.RED),
+                            false
+                    );
+                }
+            });
+
 
             cir.setReturnValue(false);
             return;

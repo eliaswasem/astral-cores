@@ -251,7 +251,7 @@ public class StructureDataManager extends SavedData {
 
 
     // Disables a structure without deleting its persistent data
-    public void delinkStructureByUUID(
+    public boolean delinkStructureByUUID(
             UUID coreUuid
     ) {
 
@@ -260,7 +260,7 @@ public class StructureDataManager extends SavedData {
 
 
         if (instance == null) {
-            return;
+            return false;
         }
 
 
@@ -277,6 +277,7 @@ public class StructureDataManager extends SavedData {
 
         // Marks the data as changed so Minecraft saves it
         setDirty();
+        return true;
     }
 
 

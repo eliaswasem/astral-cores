@@ -6,6 +6,7 @@ import de.ep.astralcores.core.CoreFactory;
 import de.ep.astralcores.core.CoreRegistry;
 import de.ep.astralcores.core.CoreStackResult;
 import de.ep.astralcores.playerdata.PlayerData;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -31,7 +32,7 @@ public class CoreCommandLogic {
     private static int executeClearInv(CommandSourceStack source, ServerPlayer target, String astralId) {
         PlayerData data = AstralCores.PLAYER_DATA.get(target);
         if (data == null) {
-            source.sendFailure(Component.literal("§cFailed to resolve internal data container for the target player."));
+            source.sendFailure(Component.literal("Failed to access the target's database profile."));
             return 0;
         }
 
@@ -42,7 +43,8 @@ public class CoreCommandLogic {
         if (!clearAll) {
             Optional<Core> coreOptional = CoreRegistry.getByCoreId(astralId.toLowerCase(Locale.ROOT));
             if (coreOptional.isEmpty()) {
-                source.sendFailure(Component.literal("§cUnknown Core identifier: " + astralId));
+                source.sendFailure(Component.literal("Unknown Core identifier: ")
+                        .append(astralId));
                 return 0;
             }
             targetCore = coreOptional.get();
@@ -75,13 +77,26 @@ public class CoreCommandLogic {
         // Send success feedback message without modifying the equipped core state
         if (clearAll) {
             source.sendSuccess(
-                    () -> Component.literal("§aSuccessfully cleared all cores from " + target.getScoreboardName() + "'s inventory (Removed: " + finalRemovedCount + ")"),
+                    () -> Component.literal("Successfully cleared all cores from " + target.getScoreboardName() + "'s inventory (Removed: " + finalRemovedCount + ")")
+                            .append(target.getDisplayName())
+                            .append("'s inventory (Removed: ")
+                            .append(String.valueOf(finalRemovedCount))
+                            .append(")")
+                            .withStyle(ChatFormatting.GREEN),
                     true
             );
         } else {
             final Core finalTargetCore = targetCore;
+
             source.sendSuccess(
-                    () -> Component.literal("§aSuccessfully cleared core " + finalTargetCore.getName() + " from " + target.getScoreboardName() + "'s inventory (Removed: " + finalRemovedCount + ")"),
+                    () -> Component.literal("Successfully cleared core ")
+                            .append(finalTargetCore.getName())
+                            .append(" from ")
+                            .append(target.getDisplayName())
+                            .append("'s inventory (Removed: ")
+                            .append(String.valueOf(finalRemovedCount))
+                            .append(")")
+                            .withStyle(ChatFormatting.GREEN),
                     true
             );
         }
@@ -95,7 +110,7 @@ public class CoreCommandLogic {
         // Fetch the target player's data profile
         PlayerData data = AstralCores.PLAYER_DATA.get(target);
         if (data == null) {
-            source.sendFailure(Component.literal("§cFailed to resolve internal data container for the target player."));
+            source.sendFailure(Component.literal("Failed to access the target's database profile."));
             return 0;
         }
 
@@ -106,10 +121,10 @@ public class CoreCommandLogic {
         // Confirms success in chat
         source.sendSuccess(
                 () -> Component.literal(
-                        "§aSuccessfully cleared "
-                                + target.getScoreboardName()
-                                + "'s core"
-                ),
+                        "Successfully cleared ")
+                        .append(target.getScoreboardName())
+                        .append("'s core")
+                        .withStyle(ChatFormatting.GREEN),
                 true
         );
 
@@ -139,11 +154,11 @@ public class CoreCommandLogic {
 
             source.sendSuccess(
                     () -> Component.literal(
-                            "§aGave "
-                                    + core.getName()
-                                    + " to "
-                                    + target.getScoreboardName()
-                    ),
+                            "Gave ")
+                            .append(core.getName())
+                            .append(" to ")
+                            .append(target.getDisplayName())
+                            .withStyle(ChatFormatting.GREEN),
                     true
             );
 
@@ -154,7 +169,7 @@ public class CoreCommandLogic {
             // Fails if the requested core string id does not exist in the registry
             source.sendFailure(
                     Component.literal(
-                            "§cUnknown Core identifier."
+                            "Unknown Core identifier."
                     )
             );
 
@@ -164,7 +179,7 @@ public class CoreCommandLogic {
 
             source.sendFailure(
                     Component.literal(
-                            "§cExecution failure."
+                            "Execution failure."
                     )
             );
 
@@ -179,7 +194,7 @@ public class CoreCommandLogic {
 
         // Validate existence (if empty, the ID doesn't exist in the system)
         if (coreOptional.isEmpty()) {
-            source.sendFailure(Component.literal("§cUnknown Core identifier: " + astralId));
+            source.sendFailure(Component.literal("Unknown Core identifier: " + astralId));
             return 0;
         }
 
@@ -189,7 +204,7 @@ public class CoreCommandLogic {
         // Fetch the target player's data profile
         PlayerData data = AstralCores.PLAYER_DATA.get(target);
         if (data == null) {
-            source.sendFailure(Component.literal("§cFailed to resolve internal data container for the target player."));
+            source.sendFailure(Component.literal("Failed to resolve internal data container for the target player."));
             return 0;
         }
 
@@ -200,11 +215,11 @@ public class CoreCommandLogic {
         // 6. Confirm success in chat
         source.sendSuccess(
                 () -> Component.literal(
-                        "§aSuccessfully set "
-                                + target.getScoreboardName()
-                                + "'s equipped core to "
-                                + core.getName()
-                ),
+                        "Successfully set ")
+                        .append(target.getDisplayName())
+                        .append("'s equipped core to ")
+                        .append(core.getName())
+                        .withStyle(ChatFormatting.GREEN),
                 true
         );
 
