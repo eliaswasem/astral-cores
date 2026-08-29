@@ -34,7 +34,7 @@ public final class StructureRegistry {
                     StructureType.GRAVITY_CORE_METEOR,
                     new BlockPos(2, 1, 2),
                     List.of(Identifier.fromNamespaceAndPath("minecraft", "the_nether")),
-                    List.of(Identifier.fromNamespaceAndPath("minecraft", "plains"), Identifier.fromNamespaceAndPath("minecraft", "desert"))
+                    List.of()
             )),
             Map.entry(StructureType.FROST_CORE_METEOR, new StructureDefinition(
                     StructureType.FROST_CORE_METEOR,
@@ -46,7 +46,7 @@ public final class StructureRegistry {
                     StructureType.PHOENIX_CORE_METEOR,
                     new BlockPos(2, 1, 2),
                     List.of(Identifier.fromNamespaceAndPath("minecraft", "the_nether")),
-                    List.of(Identifier.fromNamespaceAndPath("minecraft", "plains"), Identifier.fromNamespaceAndPath("minecraft", "desert"))
+                    List.of()
             )),
             Map.entry(StructureType.LEVIATHAN_CORE_METEOR, new StructureDefinition(
                     StructureType.LEVIATHAN_CORE_METEOR,
@@ -58,7 +58,7 @@ public final class StructureRegistry {
                     StructureType.SHADOW_CORE_METEOR,
                     new BlockPos(2, 1, 2),
                     List.of(Identifier.fromNamespaceAndPath("minecraft", "the_end")),
-                    List.of(Identifier.fromNamespaceAndPath("minecraft", "plains"), Identifier.fromNamespaceAndPath("minecraft", "desert"))
+                    List.of()
             )),
             Map.entry(StructureType.BERSERKER_CORE_METEOR, new StructureDefinition(
                     StructureType.BERSERKER_CORE_METEOR,

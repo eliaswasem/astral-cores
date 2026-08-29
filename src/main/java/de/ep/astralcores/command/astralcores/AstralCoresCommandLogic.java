@@ -7,6 +7,7 @@ import de.ep.astralcores.playerdata.PlayerData;
 import de.ep.astralcores.structure.StructureDefinition;
 import de.ep.astralcores.structure.StructureRegistry;
 import de.ep.astralcores.structure.StructureType;
+import de.ep.astralcores.structure.TemplateManager;
 import de.ep.astralcores.structure.spawners.MeteorSpawner;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.IdentifierArgument;
@@ -14,6 +15,7 @@ import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import java.util.Optional;
 
@@ -50,10 +52,21 @@ public class AstralCoresCommandLogic {
         BlockPos pos =
                 BlockPosArgument.getBlockPos(context, "pos");
 
+        Optional<StructureTemplate> template =
+                TemplateManager.get(
+                        context.getSource().getLevel(),
+                        definition
+                );
+
+        if (template.isEmpty()) {
+            return 0;
+        }
+
         MeteorSpawner.spawn(
                 context.getSource().getLevel(),
                 definition,
-                pos
+                pos,
+                template.get()
         );
 
         return 1;

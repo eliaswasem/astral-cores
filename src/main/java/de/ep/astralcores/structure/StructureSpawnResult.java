@@ -1,9 +1,13 @@
-package de.ep.astralcores.structure;
+        package de.ep.astralcores.structure;
 
 import net.minecraft.core.BlockPos;
 
-// Contains the results generated during structure spawning
+import java.util.UUID;
+
+// Contains the results generated during structure spawning.
 public record StructureSpawnResult(
         StructureType type,
-        BlockPos origin
-) {}
+        BlockPos origin,
+        UUID coreUuid
+) {
+}
