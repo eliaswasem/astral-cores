@@ -4,75 +4,75 @@ import com.mojang.brigadier.context.CommandContext;
 import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.manager.CooldownManager;
 import de.ep.astralcores.playerdata.PlayerData;
-import de.ep.astralcores.structure.StructureDefinition;
-import de.ep.astralcores.structure.StructureRegistry;
-import de.ep.astralcores.structure.StructureType;
-import de.ep.astralcores.structure.TemplateManager;
-import de.ep.astralcores.structure.spawners.MeteorSpawner;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import java.util.Optional;
 
 public class AstralCoresCommandLogic {
 
-    public static int execute(
-            AstralCoresCommandType commandType,
+    public static int placeAltar(
             CommandContext<CommandSourceStack> context
     ) {
-        return switch (commandType) {
-            case DEBUG_COOLDOWN -> executeCooldown(context);
-            case STRUCTURE_PLACE -> executePlace(context);
-        };
-    }
+            ServerLevel level = context.getSource().getLevel();
 
-    private static int executePlace(
-            CommandContext<CommandSourceStack> context
-    ) {
-        Optional<StructureType> structureType =
-                StructureRegistry.getByStructureType(IdentifierArgument.getId(context, "structureType"));
+            CommandSourceStack source = context.getSource();
 
-        if (structureType.isEmpty()) {
-            context.getSource().sendFailure(
-                    Component.literal("StructureType not found!")
-            );
-            return 0;
-        }
+            StructurePlaceSettings structurePlaceSettings =
+                    new StructurePlaceSettings()
+                            .setKnownShape(true);
 
-        StructureType type = structureType.get();
+            Optional<StructureTemplate> template =
+                    level.getStructureManager().get(Identifier.fromNamespaceAndPath("astralcores", "core_meteor"));
 
-        StructureDefinition definition =
-                StructureRegistry.get(type);
+            if (template.isEmpty()) {
+
+                source.sendFailure(Component.literal(
+                        "Core Altar structure template not found. "
+                ));
+                return 0;
+            }
+
+            StructureTemplate altarTemplate = template.get();
 
         BlockPos pos =
                 BlockPosArgument.getBlockPos(context, "pos");
 
-        Optional<StructureTemplate> template =
-                TemplateManager.get(
-                        context.getSource().getLevel(),
-                        definition
+
+        boolean placed =
+                altarTemplate.placeInWorld(
+                        level,
+                        pos,
+                        pos,
+                        structurePlaceSettings,
+                        level.getRandom(),
+                        2
                 );
 
-        if (template.isEmpty()) {
-            return 0;
+        if (!placed) {
+            source.sendFailure(Component.literal(
+                    "Failed to place core altar."
+            ));
+
         }
 
-        MeteorSpawner.spawn(
-                context.getSource().getLevel(),
-                definition,
-                pos,
-                template.get()
+        source.sendSystemMessage(Component.literal("Placed core altar at")
+                        .append((Component) pos)
         );
+
+        // Todo: CoreRespawnDataManger.addAltar(level, pos)
 
         return 1;
     }
 
-    private static int executeCooldown(
+    public static int resetCooldowns(
             CommandContext<CommandSourceStack> context
     ) {
         CommandSourceStack source = context.getSource();
@@ -94,10 +94,5 @@ public class AstralCoresCommandLogic {
         );
 
         return 1;
-    }
-
-    public enum AstralCoresCommandType {
-        DEBUG_COOLDOWN,
-        STRUCTURE_PLACE
     }
 }

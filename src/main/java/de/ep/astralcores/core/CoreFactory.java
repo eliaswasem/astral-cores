@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class CoreFactory {
 
         // Creates an ItemStack configured with the properties of the given core
-        public static CoreStackResult createStack(Core core) {
+        public static ItemStack createStack(Core core) {
 
             // Creates the ItemStack using the base item of the core
             ItemStack stack = new ItemStack(
@@ -80,12 +80,6 @@ public class CoreFactory {
                     core.getCoreId()
             );
 
-            // Writes the unique core UUID into the NBT tag
-            tag.putString(
-                    "core_uuid",
-                    coreUuid.toString()
-            );
-
             // Commits the modified custom NBT data back to the ItemStack
             stack.set(
                     DataComponents.CUSTOM_DATA,
@@ -93,10 +87,8 @@ public class CoreFactory {
             );
 
             // Returns the configured ItemStack together with its unique UUID
-            return new CoreStackResult(
-                    stack,
-                    coreUuid
-            );
+            return stack;
+
         }
 
     // Resolves a matching core instance from the custom data tags of an item stack
@@ -154,42 +146,5 @@ public class CoreFactory {
 
         // Verify the item is actually a core by attempting to retrieve it
         return getCoreFromItem(stackTemplate.create()).isPresent();
-    }
-
-    public static Optional<UUID> getCoreUuid(ItemStack stack) {
-
-        if (stack == null
-                || stack.isEmpty()
-                || !stack.has(DataComponents.CUSTOM_DATA)) {
-            return Optional.empty();
-        }
-
-        CustomData customData =
-                stack.get(DataComponents.CUSTOM_DATA);
-
-        if (customData == null) {
-            return Optional.empty();
-        }
-
-        CompoundTag tag =
-                customData.copyTag();
-
-        Optional<String> uuidString =
-                tag.getString("core_uuid");
-
-        if (uuidString.isEmpty()) {
-            return Optional.empty();
-        }
-
-        try {
-
-            return Optional.of(
-                    UUID.fromString(uuidString.get())
-            );
-
-        } catch (IllegalArgumentException exception) {
-
-            return Optional.empty();
-        }
     }
 }

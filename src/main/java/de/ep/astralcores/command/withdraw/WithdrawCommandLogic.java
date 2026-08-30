@@ -35,10 +35,8 @@ public class WithdrawCommandLogic {
         core.onRemoved(player);
 
         // Generates the physical item stack and unique UUID for the requested core
-        CoreStackResult result = CoreFactory.createStack(core);
+        ItemStack coreStack = CoreFactory.createStack(core);
 
-        // Gets the configured ItemStack from the creation result
-        ItemStack coreStack = result.stack();
         // Clears the equipped core reference from the player profile data
         data.setEquippedCore(null);
 

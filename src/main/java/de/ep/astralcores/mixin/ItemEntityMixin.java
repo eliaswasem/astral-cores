@@ -1,10 +1,7 @@
 package de.ep.astralcores.mixin;
 
-import de.ep.astralcores.AstralCores;
+import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreFactory;
-import de.ep.astralcores.structure.StructureManager;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -47,31 +44,38 @@ public abstract class ItemEntityMixin {
         if (!CoreFactory.isCore(stack)) {
             return;
         }
+        // Cancel all other damage sources for invulnerability
+        cir.setReturnValue(false);
+    }
 
-        // Core falls into the void
-        if (source == entity.damageSources().fellOutOfWorld()) {
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void astralcores$handleCoreTick(CallbackInfo ci) {
+        ItemEntity entity = (ItemEntity) (Object) this;
+        ItemStack stack = this.getItem();
 
-            Optional<UUID> coreUuid =
-                    CoreFactory.getCoreUuid(stack);
-
-            entity.discard();
-
-            coreUuid.ifPresent(uuid -> {
-                if (StructureManager.onCoreRemoved(level, uuid)) {
-                    AstralCores.getServer().getPlayerList().broadcastSystemMessage(
-                            Component.literal("A Core has been destroyed and will respawn somewhere in the world.")
-                                    .withStyle(ChatFormatting.RED),
-                            false
-                    );
-                }
-            });
-
-
-            cir.setReturnValue(false);
+        if (!CoreFactory.isCore(stack)) {
             return;
         }
 
-        // Cancel all other damage sources for invulnerability
-        cir.setReturnValue(false);
+        // Core has fallen into the void.
+        if (!entity.level().isClientSide()
+                && entity.getY() < entity.level().getMinY() - 64) {
+
+            ServerLevel level = (ServerLevel) entity.level();
+
+            Optional<Core> core =
+                    CoreFactory.getCoreFromItem(stack);
+
+            entity.discard();
+
+
+
+            //Todo: get System.currentTimeMillis(); and add getRespawnTime and the call CoreRespawnManager.addRespawn(coreType, startTimestamp, endTimeStamp)
+
+            return;
+        }
+
+        // Prevent normal item despawn.
+        this.age = 0;
     }
 }

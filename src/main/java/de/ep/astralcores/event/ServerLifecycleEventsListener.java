@@ -3,9 +3,7 @@ package de.ep.astralcores.event;
 import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.config.ConfigManager;
 import de.ep.astralcores.playerdata.PlayerDataManager;
-import de.ep.astralcores.structure.StructureManager;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.storage.LevelResource;
 
@@ -30,19 +28,6 @@ public class ServerLifecycleEventsListener {
             ConfigManager.load();
 
             });
-
-
-        // Runs after the server has fully started and all levels are available
-        ServerLifecycleEvents.SERVER_STARTED.register(server -> {
-
-            // Processes every loaded dimension independently
-            for (ServerLevel level : server.getAllLevels()) {
-
-                // Generates missing structures for the current dimension
-                StructureManager.serverStart(level);
-            }
-        });
-
 
         // Saves all player data before the database is finally closed.
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {

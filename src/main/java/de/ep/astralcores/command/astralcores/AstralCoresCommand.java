@@ -1,12 +1,9 @@
 package de.ep.astralcores.command.astralcores;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.context.CommandContext;
-import de.ep.astralcores.structure.StructureRegistry;
+import de.ep.astralcores.command.astralcores.AstralCoresCommandLogic;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 
 public class AstralCoresCommand {
@@ -15,50 +12,30 @@ public class AstralCoresCommand {
         dispatcher.register(
                 Commands.literal("astralcores")
                         .requires(Commands.hasPermission(Commands.LEVEL_MODERATORS))
+
                         .then(
                                 Commands.literal("debug")
                                         .then(
                                                 Commands.literal("resetCooldowns")
-                                                .executes(context -> route(AstralCoresCommandLogic.AstralCoresCommandType.DEBUG_COOLDOWN, context))
+                                                        .executes(AstralCoresCommandLogic::resetCooldowns
+                                                        )
                                         )
                         )
+
                         .then(
-                                Commands.literal("structure")
+                                Commands.literal("place")
                                         .then(
-                                                Commands.literal("place")
+                                                Commands.literal("altar")
                                                         .then(
                                                                 Commands.argument(
-                                                                                "structureType",
-                                                                                IdentifierArgument.id()
+                                                                                "pos",
+                                                                                BlockPosArgument.blockPos()
                                                                         )
-                                                                        .suggests((context, builder) ->
-                                                                                SharedSuggestionProvider.suggest(
-                                                                                        StructureRegistry.getAll(),
-                                                                                        builder
-                                                                                )
-                                                                        )
-                                                                        .then(
-                                                                                Commands.argument(
-                                                                                                "pos",
-                                                                                                BlockPosArgument.blockPos()
-                                                                                        )
-                                                                                        .executes(context ->
-                                                                                                route(
-                                                                                                        AstralCoresCommandLogic.AstralCoresCommandType.STRUCTURE_PLACE,
-                                                                                                        context
-                                                                                                )
-                                                                                        )
+                                                                        .executes(AstralCoresCommandLogic::placeAltar
                                                                         )
                                                         )
                                         )
                         )
-        );
-    }
-
-    private static int route(AstralCoresCommandLogic.AstralCoresCommandType astralCoresCommandType, CommandContext<CommandSourceStack> context) {
-        return AstralCoresCommandLogic.execute(
-                astralCoresCommandType,
-                context
         );
     }
 }

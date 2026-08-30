@@ -4,7 +4,6 @@ import de.ep.astralcores.manager.CooldownManager;
 import de.ep.astralcores.manager.CoreTickManager;
 import de.ep.astralcores.actionbar.ActionBarManager;
 import de.ep.astralcores.playerdata.PlayerData;
-import de.ep.astralcores.structure.StructureManager;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import org.jspecify.annotations.NonNull;
 import net.minecraft.server.level.ServerPlayer;
@@ -38,8 +37,6 @@ public class MainLoop {
             // Applies the cores tick function
             CoreTickManager.tick(player, data);
         }
-        StructureManager.tick(server);
-
     }
 
     // Loop that runs every second
