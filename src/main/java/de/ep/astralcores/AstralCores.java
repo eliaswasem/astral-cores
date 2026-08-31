@@ -1,6 +1,7 @@
 package de.ep.astralcores;
 
 import de.ep.astralcores.command.CommandRegistry;
+import de.ep.astralcores.core.respawn.CoreRespawnDataManager;
 import de.ep.astralcores.event.PlayerEventsListener;
 import de.ep.astralcores.event.ServerLifecycleEventsListener;
 import de.ep.astralcores.playerdata.PlayerDataManager;
@@ -15,6 +16,9 @@ public class AstralCores implements ModInitializer {
 	public static final String MOD_ID = "astralcores";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
+
+	public static CoreRespawnDataManager CORE_RESPAWN_DATA;
+
 	// Persistent SQLite data processor instance
 	public static PlayerDataManager PLAYER_DATA;
 
@@ -23,7 +27,6 @@ public class AstralCores implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		LOGGER.info("Initializing AstralCores...");
-
 		// Registers server lifecycle event listeners
 		ServerLifecycleEventsListener.register();
 

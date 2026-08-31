@@ -1,6 +1,8 @@
 package de.ep.astralcores.core;
 
+import de.ep.astralcores.core.CoreType;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.BossEvent;
 import net.minecraft.world.item.Item;
 
 import java.util.List;
@@ -30,6 +32,9 @@ public abstract class Core {
     // Passive ability cooldown duration in seconds
     private final int passiveCooldown;
 
+    // Respawn duration for this core in seconds
+    private final long respawnDuration;
+
     // Display name of the active ability
     private final String activeAbilityName;
 
@@ -38,6 +43,9 @@ public abstract class Core {
 
     // Custom font character used for the action bar icon
     private final String customChar;
+
+    // Boss bar color used while this core is respawning
+    private final BossEvent.BossBarColor bossBarColor;
 
     // Constructor to define baseline core configurations
     public Core(
@@ -48,9 +56,11 @@ public abstract class Core {
             int customModelData,
             int activeCooldown,
             int passiveCooldown,
+            long respawnDuration,
             String activeAbilityName,
             String passiveAbilityName,
-            String customChar
+            String customChar,
+            BossEvent.BossBarColor bossBarColor
     ) {
         this.type = type;
         this.name = name;
@@ -59,9 +69,11 @@ public abstract class Core {
         this.customModelData = customModelData;
         this.activeCooldown = activeCooldown;
         this.passiveCooldown = passiveCooldown;
+        this.respawnDuration = respawnDuration;
         this.activeAbilityName = activeAbilityName;
         this.passiveAbilityName = passiveAbilityName;
         this.customChar = customChar;
+        this.bossBarColor = bossBarColor;
     }
 
     // Gets the core type enum
@@ -104,6 +116,11 @@ public abstract class Core {
         return passiveCooldown;
     }
 
+    // Gets the respawn duration in seconds
+    public long getRespawnDuration() {
+        return respawnDuration;
+    }
+
     // Gets the name of the active ability
     public String getActiveAbilityName() {
         return activeAbilityName;
@@ -119,6 +136,11 @@ public abstract class Core {
         return customChar;
     }
 
+    // Gets the boss bar color used for this core's respawn timer
+    public BossEvent.BossBarColor getBossBarColor() {
+        return bossBarColor;
+    }
+
     // Runs on every single server tick for continuous tracking
     public void tick(ServerPlayer player) {
     }
@@ -129,12 +151,10 @@ public abstract class Core {
 
     // Runs if a Player disconnects
     public void onPlayerDisconnect(ServerPlayer player) {
-
     }
 
     // Applies permanent background attributes or continuous buff checks
-    public void applyPassive(ServerPlayer player){
-
+    public void applyPassive(ServerPlayer player) {
     }
 
     // Triggers the main active ability spell logic

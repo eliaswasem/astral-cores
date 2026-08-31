@@ -4,6 +4,7 @@ import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.core.cores.logic.GravityCoreLogic;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.BossEvent;
 import net.minecraft.world.item.Items;
 
 import java.util.List;
@@ -22,9 +23,11 @@ public final class GravityCore extends Core {
                 10004,
                 25,
                 0,
+                86400L,
                 "Gravity Pull",
                 "Heavy Presence",
-                "\uE004"
+                "\uE004",
+                BossEvent.BossBarColor.WHITE
         );
     }
 

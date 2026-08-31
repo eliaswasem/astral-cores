@@ -4,6 +4,7 @@ import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.core.cores.logic.AeroCoreLogic;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.BossEvent;
 import net.minecraft.world.item.Items;
 
 import java.util.List;
@@ -21,9 +22,11 @@ public class AeroCore extends Core {
                 10001,
                 15,
                 0,
+                86400L,
                 "Tornado Lift",
                 "Featherweight",
-                "\uE001"
+                "\uE001",
+                BossEvent.BossBarColor.BLUE
         );
     }
 

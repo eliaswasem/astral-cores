@@ -4,6 +4,7 @@ import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.core.cores.logic.MagnetCoreLogic;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.BossEvent;
 import net.minecraft.world.item.Items;
 
 import java.util.List;
@@ -21,9 +22,11 @@ public class MagnetCore extends Core {
                 10012,
                 0,
                 0,
+                86400L,
                 "Magnetic Pull",
                 "Magnetic Disarm",
-                "\uE00C"
+                "\uE00C",
+                BossEvent.BossBarColor.WHITE
         );
     }
 

@@ -2,6 +2,7 @@ package de.ep.astralcores.event;
 
 import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.config.ConfigManager;
+import de.ep.astralcores.core.respawn.CoreRespawnDataManager;
 import de.ep.astralcores.playerdata.PlayerDataManager;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,7 +28,29 @@ public class ServerLifecycleEventsListener {
 
             ConfigManager.load();
 
+            AstralCores.CORE_RESPAWN_DATA =
+                    server.getDataStorage()
+                            .computeIfAbsent(
+                                    CoreRespawnDataManager.TYPE
+                            );
+
             });
+
+
+
+        /*
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+
+            // Load/create the global SavedData instance.
+            AstralCores.CORE_RESPAWN_DATA =
+                    server.getDataStorage()
+                            .computeIfAbsent(
+                                    CoreRespawnDataManager.TYPE
+                            );
+        });
+
+         */
+
 
         // Saves all player data before the database is finally closed.
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {

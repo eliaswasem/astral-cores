@@ -2,6 +2,7 @@ package de.ep.astralcores.mixin;
 
 import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreFactory;
+import de.ep.astralcores.core.respawn.CoreRespawnManager;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -14,7 +15,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Mixin(ItemEntity.class)
 public abstract class ItemEntityMixin {
@@ -27,55 +27,77 @@ public abstract class ItemEntityMixin {
 
     // Set despawn timer for core items to 0 every tick
     @Inject(method = "tick", at = @At("HEAD"))
-    private void astralcores$preventCoreDespawn(CallbackInfo ci) {
-        ItemStack stack = this.getItem();
+    private void astralcores$preventCoreDespawn(
+            CallbackInfo ci
+    ) {
+        ItemStack stack =
+                this.getItem();
 
         if (CoreFactory.isCore(stack)) {
             this.age = 0;
         }
     }
 
-    // Prevent Cores from being destroyed by everything except the void
-    @Inject(method = "hurtServer", at = @At("HEAD"), cancellable = true)
-    private void astralcores$handleCoreDamageAndVoid(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
-        ItemEntity entity = (ItemEntity) (Object) this;
-        ItemStack stack = this.getItem();
+    // Prevent cores from being destroyed by normal damage
+    @Inject(
+            method = "hurtServer",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void astralcores$handleCoreDamageAndVoid(
+            ServerLevel level,
+            DamageSource source,
+            float damage,
+            CallbackInfoReturnable<Boolean> cir
+    ) {
+        ItemStack stack =
+                this.getItem();
 
         if (!CoreFactory.isCore(stack)) {
             return;
         }
-        // Cancel all other damage sources for invulnerability
+
+        // Cancel all normal damage sources for core items
         cir.setReturnValue(false);
     }
 
+    // Handles core-specific item ticking and void respawns
     @Inject(method = "tick", at = @At("HEAD"))
-    private void astralcores$handleCoreTick(CallbackInfo ci) {
-        ItemEntity entity = (ItemEntity) (Object) this;
-        ItemStack stack = this.getItem();
+    private void astralcores$handleCoreTick(
+            CallbackInfo ci
+    ) {
+        ItemEntity entity =
+                (ItemEntity) (Object) this;
+
+        ItemStack stack =
+                this.getItem();
 
         if (!CoreFactory.isCore(stack)) {
             return;
         }
 
-        // Core has fallen into the void.
+        // Core has fallen into the void
         if (!entity.level().isClientSide()
-                && entity.getY() < entity.level().getMinY() - 64) {
-
-            ServerLevel level = (ServerLevel) entity.level();
+                && entity.getY()
+                < entity.level().getMinY() - 64) {
 
             Optional<Core> core =
                     CoreFactory.getCoreFromItem(stack);
 
+            if (core.isEmpty()) {
+                return;
+            }
+
+            CoreRespawnManager.addRespawn(
+                    core.get().getType()
+            );
+
             entity.discard();
-
-
-
-            //Todo: get System.currentTimeMillis(); and add getRespawnTime and the call CoreRespawnManager.addRespawn(coreType, startTimestamp, endTimeStamp)
 
             return;
         }
 
-        // Prevent normal item despawn.
+        // Prevent normal item despawn
         this.age = 0;
     }
 }

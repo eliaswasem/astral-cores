@@ -5,6 +5,7 @@ import de.ep.astralcores.core.CoreFactory;
 import de.ep.astralcores.core.CoreRegistry;
 import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.core.cores.logic.*;
+import de.ep.astralcores.core.respawn.CoreRespawnManager;
 import de.ep.astralcores.event.logic.CoreDeathLogic;
 import de.ep.astralcores.event.logic.CoreInteractLogic;
 import de.ep.astralcores.playerdata.PlayerData;
@@ -24,24 +25,65 @@ public class PlayerEventsListener {
         // Loads player profile data from the database when they join the server
         ServerPlayConnectionEvents.JOIN.register(
                 (handler, sender, server) -> {
-                    AstralCores.PLAYER_DATA.load(handler.player);
+                    ServerPlayer player =
+                            handler.player;
+
+                    AstralCores.PLAYER_DATA.load(
+                            player
+                    );
+
+                    CoreRespawnManager.addPlayer(
+                            player
+                    );
                 }
         );
 
-        // Unloads player profile data from RAM when they disconnect from the server
-        ServerPlayConnectionEvents.DISCONNECT.register(
-                (handler, server) -> server.execute(() -> {
-                    ServerPlayer player = handler.player;
 
-                    PlayerData data = AstralCores.PLAYER_DATA.get(player);
-                    if (data != null){
-                        CoreType coreType = data.getEquippedCore();
-                        CoreRegistry.get(coreType).ifPresent(core -> core.onPlayerDisconnect(player));
-                    }
-                    if (AstralCores.PLAYER_DATA != null) {
-                        AstralCores.PLAYER_DATA.unload(player);
-                    }
-                })
+        // Saves/unloads player data and removes the player
+        // from all active core respawn bossbars.
+        ServerPlayConnectionEvents.DISCONNECT.register(
+                (handler, server) ->
+                        server.execute(
+                                () -> {
+
+                                    ServerPlayer player =
+                                            handler.player;
+
+                                    if (AstralCores.PLAYER_DATA != null) {
+
+                                        PlayerData data =
+                                                AstralCores.PLAYER_DATA.get(
+                                                        player
+                                                );
+
+                                        if (data != null) {
+
+                                            CoreType coreType =
+                                                    data.getEquippedCore();
+
+                                            if (coreType != null) {
+
+                                                CoreRegistry
+                                                        .get(coreType)
+                                                        .ifPresent(
+                                                                core ->
+                                                                        core.onPlayerDisconnect(
+                                                                                player
+                                                                        )
+                                                        );
+                                            }
+                                        }
+
+                                        AstralCores.PLAYER_DATA.unload(
+                                                player
+                                        );
+                                    }
+
+                                    CoreRespawnManager.removePlayer(
+                                            player
+                                    );
+                                }
+                        )
         );
 
         // Intercepts item right-click actions to handle custom core equipment

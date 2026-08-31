@@ -4,6 +4,7 @@ import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.core.cores.logic.PhoenixCoreLogic;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.BossEvent;
 import net.minecraft.world.item.Items;
 
 import java.util.List;
@@ -22,9 +23,11 @@ public class PhoenixCore extends Core {
                 10003,
                 30,
                 0,
+                86400L,
                 "Phoenix Burst",
                 "Flameborn",
-                "\uE006"
+                "\uE006",
+                BossEvent.BossBarColor.RED
         );
     }
 

@@ -2,17 +2,17 @@ package de.ep.astralcores.command.astralcores;
 
 import com.mojang.brigadier.context.CommandContext;
 import de.ep.astralcores.AstralCores;
+import de.ep.astralcores.core.respawn.data.AltarData;
+import de.ep.astralcores.manager.AltarManager;
 import de.ep.astralcores.manager.CooldownManager;
 import de.ep.astralcores.playerdata.PlayerData;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import java.util.Optional;
 
@@ -21,55 +21,86 @@ public class AstralCoresCommandLogic {
     public static int placeAltar(
             CommandContext<CommandSourceStack> context
     ) {
-            ServerLevel level = context.getSource().getLevel();
+        CommandSourceStack source =
+                context.getSource();
 
-            CommandSourceStack source = context.getSource();
+        ServerLevel level =
+                source.getLevel();
 
-            StructurePlaceSettings structurePlaceSettings =
-                    new StructurePlaceSettings()
-                            .setKnownShape(true);
+        BlockPos pos =
+                BlockPosArgument.getBlockPos(
+                        context,
+                        "pos"
+                );
 
-            Optional<StructureTemplate> template =
-                    level.getStructureManager().get(Identifier.fromNamespaceAndPath("astralcores", "core_meteor"));
+        AltarManager.PlaceResult result =
+                AltarManager.place(
+                        level,
+                        pos
+                );
 
-            if (template.isEmpty()) {
+        switch (result) {
 
-                source.sendFailure(Component.literal(
-                        "Core Altar structure template not found. "
-                ));
+            case SUCCESS -> {
+                source.sendSuccess(
+                        () -> Component.literal(
+                                "Placed core altar at ")
+                                        .append(String.valueOf(pos.getX()))
+                                        .append(", ")
+                                        .append(String.valueOf(pos.getY()))
+                                        .append(", ")
+                                        .append(String.valueOf(pos.getZ()))
+                                        .append(".")
+                                .withStyle(ChatFormatting.GREEN),
+                        false
+                );
+
+                return 1;
+            }
+
+            case ALREADY_EXISTS -> {
+                AltarData altar =
+                        AstralCores.CORE_RESPAWN_DATA
+                                .getAltar();
+
+                source.sendFailure(
+                        Component.literal(
+                                "An altar already exists at ")
+                                    .append(String.valueOf(pos.getX()))
+                                    .append(", ")
+                                    .append(String.valueOf(pos.getY()))
+                                    .append(", ")
+                                    .append(String.valueOf(pos.getZ()))
+                                    .append(" in ")
+                                    .append(String.valueOf(altar.dimension()))
+                                    .append(".")
+                );
+
                 return 0;
             }
 
-            StructureTemplate altarTemplate = template.get();
-
-        BlockPos pos =
-                BlockPosArgument.getBlockPos(context, "pos");
-
-
-        boolean placed =
-                altarTemplate.placeInWorld(
-                        level,
-                        pos,
-                        pos,
-                        structurePlaceSettings,
-                        level.getRandom(),
-                        2
+            case STRUCTURE_NOT_FOUND -> {
+                source.sendFailure(
+                        Component.literal(
+                                "Core altar structure template not found."
+                        )
                 );
 
-        if (!placed) {
-            source.sendFailure(Component.literal(
-                    "Failed to place core altar."
-            ));
+                return 0;
+            }
 
+            case PLACEMENT_FAILED -> {
+                source.sendFailure(
+                        Component.literal(
+                                "Failed to place core altar."
+                        )
+                );
+
+                return 0;
+            }
         }
 
-        source.sendSystemMessage(Component.literal("Placed core altar at")
-                        .append((Component) pos)
-        );
-
-        // Todo: CoreRespawnDataManger.addAltar(level, pos)
-
-        return 1;
+        return 0;
     }
 
     public static int resetCooldowns(

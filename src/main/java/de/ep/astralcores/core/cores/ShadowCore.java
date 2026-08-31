@@ -4,6 +4,7 @@ import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.core.cores.logic.ShadowCoreLogic;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.BossEvent;
 import net.minecraft.world.item.Items;
 
 import java.util.List;
@@ -21,9 +22,11 @@ public class ShadowCore extends Core {
                 10007,
                 0,
                 0,
+                86400L,
                 "Smoke Veil",
                 "Living Shadow",
-                "\uE008"
+                "\uE008",
+                BossEvent.BossBarColor.PURPLE
         );
     }
 

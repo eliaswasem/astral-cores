@@ -6,6 +6,7 @@ import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.core.cores.logic.GaleCoreLogic;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.BossEvent;
 import net.minecraft.world.item.Items;
 
 public class GaleCore extends Core {
@@ -22,9 +23,11 @@ public class GaleCore extends Core {
                 10005,
                 0,
                 0,
+                86400L,
                 "Sonic Dash",
                 "Lightfeet",
-                "\uE002"
+                "\uE002",
+                BossEvent.BossBarColor.BLUE
         );
     }
 

@@ -4,6 +4,7 @@ import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.core.cores.logic.IllusionCoreLogic;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.BossEvent;
 import net.minecraft.world.item.Items;
 
 import java.util.List;
@@ -21,9 +22,11 @@ public class IllusionCore extends Core {
                 10011,
                 600,
                 0,
+                86400L,
                 "Mirror Swap",
                 "Mirror Image",
-                "\uE00A"
+                "\uE00A",
+                BossEvent.BossBarColor.PURPLE
         );
     }
 

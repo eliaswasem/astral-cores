@@ -1,5 +1,7 @@
 package de.ep.astralcores;
 
+import de.ep.astralcores.core.respawn.CoreRespawnManager;
+import de.ep.astralcores.core.respawn.data.CoreRespawnData;
 import de.ep.astralcores.manager.CooldownManager;
 import de.ep.astralcores.manager.CoreTickManager;
 import de.ep.astralcores.actionbar.ActionBarManager;
@@ -32,6 +34,9 @@ public class MainLoop {
 
     // Loop that runs every servertick
     private static void oneTickLoop(MinecraftServer server) {
+
+        CoreRespawnManager.tick();
+
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
             PlayerData data = AstralCores.PLAYER_DATA.get(player);
             // Applies the cores tick function

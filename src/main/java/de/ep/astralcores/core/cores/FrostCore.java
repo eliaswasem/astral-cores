@@ -4,6 +4,7 @@ import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.core.cores.logic.FrostCoreLogic;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.BossEvent;
 import net.minecraft.world.item.Items;
 
 import java.util.List;
@@ -22,9 +23,11 @@ public final class FrostCore extends Core {
                 10008,
                 0,
                 0,
+                86400L,
                 "Frost Lock",
                 "Frost Aura",
-                "\uE005"
+                "\uE005",
+                BossEvent.BossBarColor.BLUE
         );
     }
 
