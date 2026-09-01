@@ -16,7 +16,7 @@
 
 - **Active – Time Return:** You rewind your position to where you were 5 seconds ago.
     - **Cooldown:**
-- **Passive – Second Timeline:** You have a 100% chance to cheat death and fully heal. This ability has a global 10-minute cooldown, whether it succeeds or fails.
+- **Passive – Second Timeline:** You have a 100% chance to cheat death and fully heal. This ability has a global 10-minute cooldown.
 
 ## 4. Gravity Core
 
