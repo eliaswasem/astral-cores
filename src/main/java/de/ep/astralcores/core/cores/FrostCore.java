@@ -32,11 +32,6 @@ public final class FrostCore extends Core {
     }
 
     @Override
-    public void applyPassive(ServerPlayer player) {
-        FrostCoreLogic.applyPassive(player);
-    }
-
-    @Override
     public void activate(ServerPlayer player) {
         FrostCoreLogic.activate(player);
     }
