@@ -1,8 +1,8 @@
 # Commands
 
-# For Players
+## For Players
 
-## Actionbar
+### Actionbar
 
 - This command always begins with **/actionbar**
     after that you can type
@@ -14,31 +14,31 @@
 - /actionbar icon 
     It displays your equipped core as a small icon, and your core cooldown
 
-## Activate
+### Activate
 
 - The **/activate** command activates the ability of your current equipped core
 
-## Trust/Untrust
+### Trust/Untrust
 
 - **/trust** or **/unstrust** you can trust/untrust a player
 - If a player is trusted it isn't effected of your active/passive ability
 - If a player is not trusted or was trusted and is now untrusted it is effected by your active/passive ability
 
-## Withdraw
+### Withdraw
 
 - With **/withdraw** you can withdraw your actionbar slot that means you  get your 
     core that is currently equipped from your actionbar in your inventory 
 
-# For Sever Owners/Operator
+## For Sever Owners
 
-## Astralcores
+### Astralcores
 
 - With **/astralcores debug resetCooldowns** you can reset all your core cooldowns
   - With **/astralcores place altar pos** 
         (for pos add a position with coordinates) you can place an
   altar(there the operator can put a core inside when it gets destroyed by e.g. by falling into the void)
 
-## Core
+### Core
 - /core 
   - give //a player a core 
   - set //set the core of a player in its actionbar
