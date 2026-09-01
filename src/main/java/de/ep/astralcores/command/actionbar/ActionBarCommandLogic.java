@@ -11,33 +11,70 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class ActionBarCommandLogic {
 
-    // Changes the player's action bar display layout mode and updates the HUD
-    public static int execute(CommandContext<CommandSourceStack> context, ActionBarMode mode) {
-        final ServerPlayer player;
-        CommandSourceStack source = context.getSource();
+    public static int setText(
+            CommandContext<CommandSourceStack> context
+    ) {
+        return setMode(
+                context,
+                ActionBarMode.TEXT
+        );
+    }
+
+    public static int setIcon(
+            CommandContext<CommandSourceStack> context
+    ) {
+        return setMode(
+                context,
+                ActionBarMode.ICON
+        );
+    }
+
+    private static int setMode(
+            CommandContext<CommandSourceStack> context,
+            ActionBarMode mode
+    ) {
+        CommandSourceStack source =
+                context.getSource();
+
+        ServerPlayer player;
 
         try {
-            player = context.getSource().getPlayerOrException();
+            player =
+                    source.getPlayerOrException();
         } catch (Exception e) {
             return 0;
         }
 
-        PlayerData data = AstralCores.PLAYER_DATA.get(player);
+        PlayerData data =
+                AstralCores.PLAYER_DATA.get(player);
 
         if (data == null) {
-            source.sendFailure(Component.literal("Failed to access your database profile."));
+            source.sendFailure(
+                    Component.literal(
+                            "Failed to access your database profile."
+                    )
+            );
+
             return 0;
         }
 
-        // Saves the chosen layout preference directly to the player profile data
         data.setActionBarMode(mode);
 
-        // Updates the action bar display text immediately
-        ActionBarManager.tick(player, data);
+        ActionBarManager.tick(
+                player,
+                data
+        );
 
-        source.sendSuccess(() -> Component.literal("Actionbar display layout updated to:" )
-                .append(mode.name().toLowerCase()),
-                false);
+        source.sendSuccess(
+                () -> Component.literal(
+                                "Actionbar display layout updated to: "
+                        )
+                        .append(
+                                mode.name().toLowerCase()
+                        ),
+                false
+        );
+
         return 1;
     }
 }

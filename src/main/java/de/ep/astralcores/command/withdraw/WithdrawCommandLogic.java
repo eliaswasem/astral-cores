@@ -1,5 +1,7 @@
 package de.ep.astralcores.command.withdraw;
 
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.actionbar.ActionBarManager;
 import de.ep.astralcores.core.*;
@@ -12,7 +14,16 @@ import net.minecraft.world.item.ItemStack;
 public class WithdrawCommandLogic {
 
     // Removes the equipped core from the player slot and converts it back into an item stack
-    public static int execute(CommandSourceStack source, ServerPlayer player) {
+    public static int withdraw(
+            CommandContext<CommandSourceStack> context
+    ) throws CommandSyntaxException {
+
+        CommandSourceStack source =
+                context.getSource();
+
+        ServerPlayer player =
+                source.getPlayerOrException();
+
         PlayerData data = AstralCores.PLAYER_DATA.get(player);
         if (data == null) {
             source.sendFailure(Component.literal("Failed to access your database profile."));
