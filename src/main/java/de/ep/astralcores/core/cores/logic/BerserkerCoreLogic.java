@@ -1,6 +1,5 @@
 package de.ep.astralcores.core.cores.logic;
 
-import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.util.Effects;
 import de.ep.astralcores.util.TickTimer;
 import net.minecraft.server.level.ServerPlayer;
@@ -9,52 +8,43 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 public class BerserkerCoreLogic {
 
     private static final Set<UUID> activePlayers = new HashSet<>();
-
     private static final Map<UUID, TickTimer> ragePlayers = new HashMap<>();
 
     public static boolean allowHealing = false;
 
     public static void applyPassive(ServerPlayer player) {
-
         if (player.getHealth() <= 7) {
             Effects.applyEffect(player, MobEffects.STRENGTH, 25, 3);
         }
 
-        // Mark this player as having the core active
         activePlayers.add(player.getUUID());
     }
 
     public static void activate(ServerPlayer player) {
         player.setHealth(player.getMaxHealth());
 
-        // Assign a 10-second timer to the player
-        ragePlayers.put(player.getUUID(), new TickTimer(200));
+        // Rage lasts for 1.5 minutes
+        ragePlayers.put(player.getUUID(), new TickTimer(1800));
 
-        Effects.applyEffect(player, MobEffects.STRENGTH, 200, 2);
+        // All active effects last for 1.5 minutes
+        Effects.applyEffect(player, MobEffects.STRENGTH, 1800, 2);
         Effects.applyEffect(player, MobEffects.SPEED, 1800, 2);
         Effects.applyEffect(player, MobEffects.FIRE_RESISTANCE, 1800, 1);
     }
 
-    public static void tickRageTimers() {
+    public static void tick() {
         if (ragePlayers.isEmpty()) return;
 
-        // Tick down every player's timer and remove them when finished
-        ragePlayers.entrySet().removeIf(entry -> {
-            boolean isFinished = entry.getValue().tick();
-            if (isFinished) {
-                UUID uuid = entry.getKey();
-                ServerPlayer player = AstralCores.getServer().getPlayerList().getPlayer(uuid);
-                if (player != null) {
-                    player.removeEffect(MobEffects.STRENGTH);
-                }
-            }
-            return isFinished;
-        });
+        ragePlayers.entrySet().removeIf(entry -> entry.getValue().tick());
     }
 
     public static void onRemoved(ServerPlayer player) {
@@ -71,19 +61,21 @@ public class BerserkerCoreLogic {
     }
 
     public static void handleBloodlust(ServerPlayer victim, DamageSource source) {
-
         Entity attacker = source.getEntity();
 
-        if (attacker instanceof ServerPlayer killer && activePlayers.contains(killer.getUUID())) {
-            // Send a sound
-            killer.playSound(SoundEvents.WARDEN_HEARTBEAT, 1.0f, 1.2f);
-            // Apply Effects using your utility
+        if (attacker instanceof ServerPlayer killer
+                && activePlayers.contains(killer.getUUID())) {
+
+            killer.playSound(
+                    SoundEvents.WARDEN_HEARTBEAT,
+                    1.0f,
+                    1.2f
+            );
+
             Effects.applyEffect(killer, MobEffects.SPEED, 200, 2);
             Effects.applyEffect(killer, MobEffects.STRENGTH, 200, 3);
 
-            // Allow mod healing temporarily
             allowHealing = true;
-            // Heal the killer (2 hearts)
             killer.heal(4.0f);
             allowHealing = false;
         }
