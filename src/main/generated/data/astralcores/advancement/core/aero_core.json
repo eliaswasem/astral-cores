@@ -1,0 +1,24 @@
+{
+  "criteria": {
+    "pig_altitude": {
+      "trigger": "astralcores:pig_altitude"
+    }
+  },
+  "display": {
+    "description": "Ride a pig above Y=4000.",
+    "frame": "challenge",
+    "icon": {
+      "id": "minecraft:wind_charge"
+    },
+    "title": "Sky Pig"
+  },
+  "requirements": [
+    [
+      "pig_altitude"
+    ]
+  ],
+  "rewards": {
+    "function": "astralcores:cores/aero_core"
+  },
+  "sends_telemetry_event": true
+}

@@ -41,10 +41,13 @@ public class BerserkerCoreLogic {
         Effects.applyEffect(player, MobEffects.FIRE_RESISTANCE, 1800, 1);
     }
 
-    public static void tick() {
-        if (ragePlayers.isEmpty()) return;
+    public static void tick(ServerPlayer player) {
+        UUID uuid = player.getUUID();
+        TickTimer timer = ragePlayers.get(uuid);
 
-        ragePlayers.entrySet().removeIf(entry -> entry.getValue().tick());
+        if (timer != null && timer.tick()) {
+            ragePlayers.remove(uuid);
+        }
     }
 
     public static void onRemoved(ServerPlayer player) {

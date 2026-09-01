@@ -13,6 +13,7 @@
     "MobMixin",
     "PlayerEntityMixin",
     "ServerExplosionMixin",
+    "ServerGamePacketListenerImpMixin",
     "SlotAndShulkerBoxSlotMixin"
   ],
   "injectors": {

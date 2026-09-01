@@ -21,6 +21,9 @@
 		],
 		"client": [
 			"de.ep.astralcores.client.AstralCoresClient"
+		],
+		"fabric-datagen": [
+			"de.ep.astralcores.datagen.AstralCoresDataGenerator"
 		]
 	},
 	"mixins": [

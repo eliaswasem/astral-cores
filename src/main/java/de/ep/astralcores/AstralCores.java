@@ -1,5 +1,6 @@
 package de.ep.astralcores;
 
+import de.ep.astralcores.advancement.criterion.criterions.CriterionRegistry;
 import de.ep.astralcores.command.CommandRegistry;
 import de.ep.astralcores.core.respawn.CoreRespawnDataManager;
 import de.ep.astralcores.event.PlayerEventsListener;
@@ -41,6 +42,8 @@ public class AstralCores implements ModInitializer {
 
 		// Registers the Mainloop
 		MainLoop.register();
+
+		CriterionRegistry.init();
 	}
 
 	public static void setServer(MinecraftServer minecraftServer) {

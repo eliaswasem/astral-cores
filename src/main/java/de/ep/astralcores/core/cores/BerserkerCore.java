@@ -41,8 +41,8 @@ public class BerserkerCore extends Core {
     }
 
     @Override
-    public void tick() {
-        BerserkerCoreLogic.tick();
+    public void tick(ServerPlayer player) {
+        BerserkerCoreLogic.tick(player);
     }
 
     @Override
