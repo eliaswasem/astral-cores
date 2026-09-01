@@ -92,6 +92,7 @@ public abstract class ItemEntityMixin {
                     core.get().getType()
             );
 
+
             entity.discard();
 
             return;

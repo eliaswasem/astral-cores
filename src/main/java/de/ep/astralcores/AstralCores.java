@@ -1,6 +1,6 @@
 package de.ep.astralcores;
 
-import de.ep.astralcores.advancement.criterion.criterions.CriterionRegistry;
+import de.ep.astralcores.advancement.criterion.CriterionRegistry;
 import de.ep.astralcores.command.CommandRegistry;
 import de.ep.astralcores.core.respawn.CoreRespawnDataManager;
 import de.ep.astralcores.event.PlayerEventsListener;

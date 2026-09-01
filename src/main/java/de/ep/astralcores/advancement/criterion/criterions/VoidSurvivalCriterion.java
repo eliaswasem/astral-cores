@@ -4,30 +4,51 @@ import com.mojang.serialization.Codec;
 import net.minecraft.advancements.predicates.ContextAwarePredicate;
 import net.minecraft.advancements.triggers.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.animal.pig.Pig;
-import org.lwjgl.system.Checks;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
-public class PigAltitudeCriterion extends SimpleCriterionTrigger<PigAltitudeCriterion.Conditions> {
+public class VoidSurvivalCriterion extends SimpleCriterionTrigger<VoidSurvivalCriterion.Conditions> {
+
+    // Track players in void
+    private final Set<UUID> playersInVoid = new HashSet<>();
 
     @Override
     public Codec<Conditions> codec() {
         return Conditions.CODEC;
     }
 
-
-     // Triggers the advancement check for the given player.
+    // Process player tracking and trigger advancement
     public void trigger(ServerPlayer player) {
-        // Evaluates each instance of this criterion defined in the advancement JSONs
-        this.trigger(player, conditions -> conditions.requirementsMet(player));
+        UUID uuid = player.getUUID();
+
+        // Mojimap uses getMinY() instead of getMinBuildHeight()
+        int minBuildHeight = player.level().getMinY();
+
+        // Add player to void tracking
+        if (player.getY() < minBuildHeight) {
+            playersInVoid.add(uuid);
+            return;
+        }
+
+        // Trigger if player survived and returned alive
+        if (playersInVoid.remove(uuid) && player.isAlive()) {
+            this.trigger(player, conditions -> conditions.requirementsMet(player));
+        }
+    }
+
+    // Remove player tracking data
+    public void removePlayer(UUID uuid) {
+        playersInVoid.remove(uuid);
     }
 
     public record Conditions(
             Optional<ContextAwarePredicate> playerPredicate
     ) implements SimpleCriterionTrigger.SimpleInstance {
 
-        // Codec used to serialize and deserialize the condition from advancement JSONs
+        // JSON configuration codec
         public static final Codec<Conditions> CODEC =
                 ContextAwarePredicate.CODEC
                         .optionalFieldOf("player")
@@ -39,11 +60,9 @@ public class PigAltitudeCriterion extends SimpleCriterionTrigger<PigAltitudeCrit
             return this.playerPredicate;
         }
 
-         // Checks if the player meets the specific custom requirements.
+        // Validate criterion conditions
         public boolean requirementsMet(ServerPlayer player) {
-            // Checks if the player is riding a pig and if that pig is at or above Y level 4000
-            return player.getVehicle() instanceof Pig pig
-                    && pig.getY() >= 4000;
+            return true;
         }
     }
 }

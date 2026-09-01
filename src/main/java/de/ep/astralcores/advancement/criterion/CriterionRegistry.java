@@ -1,6 +1,8 @@
-package de.ep.astralcores.advancement.criterion.criterions;
+package de.ep.astralcores.advancement.criterion;
 
+import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.advancement.criterion.criterions.PigAltitudeCriterion;
+import de.ep.astralcores.advancement.criterion.criterions.VoidSurvivalCriterion;
 import net.minecraft.advancements.triggers.CriterionTrigger;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -11,16 +13,24 @@ public class CriterionRegistry {
     public static final PigAltitudeCriterion PIG_ALTITUDE =
             register("pig_altitude", new PigAltitudeCriterion());
 
+    public static final VoidSurvivalCriterion VOID_SURVIVAL =
+            register("void_survival", new VoidSurvivalCriterion());
+
     private static <T extends CriterionTrigger<?>> T register(
-            final String name,
-            final T criterion
+            String name,
+            T criterion
     ) {
         return Registry.register(
                 BuiltInRegistries.TRIGGER_TYPES,
-                Identifier.fromNamespaceAndPath("astralcores", name),
+                Identifier.fromNamespaceAndPath(
+                        AstralCores.MOD_ID,
+                        name
+                ),
                 criterion
         );
     }
+
     public static void init() {
+        // Triggers are registered through the static fields above.
     }
 }

@@ -1,7 +1,7 @@
 package de.ep.astralcores.datagen;
 
 import de.ep.astralcores.AstralCores;
-import de.ep.astralcores.advancement.criterion.criterions.CriterionRegistry;
+import de.ep.astralcores.advancement.criterion.CriterionRegistry;
 import de.ep.astralcores.advancement.criterion.criterions.PigAltitudeCriterion;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricAdvancementProvider;
