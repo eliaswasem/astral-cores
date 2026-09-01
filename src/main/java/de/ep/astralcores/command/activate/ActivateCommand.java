@@ -15,15 +15,7 @@ public class ActivateCommand {
                 Commands.literal("activate")
                         .requires(source -> source.getEntity() instanceof ServerPlayer)
                 // Runs the command directly when no additional arguments are provided
-                .executes(ActivateCommand::route)
+                .executes(ActivateCommandLogic::execute)
         );
-    }
-
-    // Gets the executing player from the command context and routes it forward
-    private static int route(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-        ServerPlayer player = context.getSource().getPlayerOrException();
-
-        // Redirects the action to the main activation command logic handler
-        return ActivateCommandLogic.execute(context.getSource(), player);
     }
 }

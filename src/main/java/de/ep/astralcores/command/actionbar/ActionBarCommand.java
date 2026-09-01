@@ -26,9 +26,7 @@ public class ActionBarCommand {
 
     // Resolves the executing player from the command context and routes it along with the chosen mode
     private static int route(CommandContext<CommandSourceStack> context, ActionBarMode mode) throws CommandSyntaxException {
-        ServerPlayer player = context.getSource().getPlayerOrException();
 
-        // Redirects execution to the action bar command logic layer
-        return ActionBarCommandLogic.execute(context.getSource(), player, mode);
+        return ActionBarCommandLogic.execute(context, mode);
     }
 }
