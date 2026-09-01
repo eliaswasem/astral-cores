@@ -26,7 +26,7 @@ public final class LeviathanCoreLogic {
     private static final int MAX_PULL_DURATION_TICKS = 40;
 
     public static void applyPassive(ServerPlayer player) {
-        if (player.isInWaterOrRain()) {
+        if (player.isInWater()) {
             Effects.applyEffect(
                     player,
                     MobEffects.DOLPHINS_GRACE,
