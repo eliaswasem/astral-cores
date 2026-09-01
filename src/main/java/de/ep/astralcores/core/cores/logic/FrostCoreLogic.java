@@ -31,28 +31,6 @@ public class FrostCoreLogic {
     // Currently frozen entities.
     private static final Map<LivingEntity, FrostLock> activeLocks = new HashMap<>();
 
-    public static void applyPassive(ServerPlayer player) {
-        PlayerData data = AstralCores.PLAYER_DATA.get(player);
-
-        // Applies Frost Aura to nearby non-trusted entities.
-        AABB box = player.getBoundingBox().inflate(6.0);
-
-        for (LivingEntity entity : player.level().getEntitiesOfClass(
-                LivingEntity.class,
-                box,
-                entity -> entity != player && entity.isAlive())) {
-
-            if (data != null && data.isTrusted(entity.getUUID())) {
-                continue;
-            }
-
-            double distance = player.distanceTo(entity);
-            int effectLevel = distance <= 3.5 ? 3 : distance <= 5.0 ? 2 : 1;
-
-            Effects.applyEffect(entity, MobEffects.SLOWNESS, 40, effectLevel, false, false, false);
-        }
-    }
-
     public static void activate(ServerPlayer player) {
         if (player.isAlive() && !player.isRemoved()) {
             // The next valid player hit will trigger Frost Lock.
@@ -74,6 +52,27 @@ public class FrostCoreLogic {
     }
 
     public static void tick(ServerPlayer player) {
+        // Passive ability but has to run every tick
+        PlayerData data = AstralCores.PLAYER_DATA.get(player);
+
+        // Applies Frost Aura to nearby non-trusted entities.
+        AABB box = player.getBoundingBox().inflate(6.0);
+
+        for (LivingEntity entity : player.level().getEntitiesOfClass(
+                LivingEntity.class,
+                box,
+                entity -> entity != player && entity.isAlive())) {
+
+            if (data != null && data.isTrusted(entity.getUUID())) {
+                continue;
+            }
+
+            double distance = player.distanceTo(entity);
+            int effectLevel = distance <= 3.5 ? 3 : distance <= 5.0 ? 2 : 1;
+
+            Effects.applyEffect(entity, MobEffects.SLOWNESS, 20, effectLevel, false, false, false);
+        }
+
         // Updates all active Frost Locks and removes expired ones.
         activeLocks.values().removeIf(FrostLock::tick);
     }
