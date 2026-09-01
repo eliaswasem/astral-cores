@@ -36,6 +36,13 @@ public class AstralCoresCommand {
                                                         )
                                         )
                         )
+                        .then(
+                                Commands.literal("remove")
+                                        .then(
+                                                Commands.literal("altar")
+                                                        .executes(AstralCoresCommandLogic::removeAltar)
+                                        )
+                        )
         );
     }
 }
