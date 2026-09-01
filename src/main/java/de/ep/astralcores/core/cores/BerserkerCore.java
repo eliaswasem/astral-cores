@@ -41,6 +41,11 @@ public class BerserkerCore extends Core {
     }
 
     @Override
+    public void tick() {
+        BerserkerCoreLogic.tick();
+    }
+
+    @Override
     public void onRemoved(ServerPlayer player) {
         BerserkerCoreLogic.onRemoved(player);
     }
