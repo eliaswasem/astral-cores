@@ -35,20 +35,6 @@ public class ConfigManager {
             JsonObject jsonObject = jankson.load(configFile);
             config = jankson.fromJson(jsonObject, Config.class);
 
-            // Enforce the minimum structure spawn radius
-            if (config.structure.structure_spawn_radius < 1500) {
-                int oldRadius = config.structure.structure_spawn_radius;
-
-                config.structure.structure_spawn_radius = 1500;
-
-                AstralCores.LOGGER.warn(
-                        "Invalid structure_spawn_radius value {} detected. " +
-                                "The minimum allowed value is 1500. " +
-                                "Resetting structure_spawn_radius to 1500.",
-                        oldRadius
-                );
-            }
-
         } catch (IOException | SyntaxError e) {
             AstralCores.LOGGER.error("Failed to parse or read astralcores config.json5 file! Reverting to defaults.", e);
             config = new Config();
