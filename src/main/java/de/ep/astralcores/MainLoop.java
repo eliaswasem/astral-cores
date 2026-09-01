@@ -5,6 +5,7 @@ import de.ep.astralcores.core.respawn.data.CoreRespawnData;
 import de.ep.astralcores.manager.CooldownManager;
 import de.ep.astralcores.manager.CoreTickManager;
 import de.ep.astralcores.actionbar.ActionBarManager;
+import de.ep.astralcores.manager.CriterionTickManager;
 import de.ep.astralcores.playerdata.PlayerData;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import org.jspecify.annotations.NonNull;
@@ -38,6 +39,9 @@ public class MainLoop {
         CoreRespawnManager.tick();
 
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+
+            CriterionTickManager.tick(player);
+
             PlayerData data = AstralCores.PLAYER_DATA.get(player);
             // Applies the cores tick function
             CoreTickManager.tick(player, data);

@@ -113,11 +113,8 @@ public class AstralCoresCommandLogic {
         CommandSourceStack source = context.getSource();
         ServerLevel level = source.getLevel();
 
-        AltarData altar =
-                AstralCores.CORE_RESPAWN_DATA.getAltar();
-
         // No altar exists
-        if (altar == null) {
+        if (!AstralCores.CORE_RESPAWN_DATA.altarExists()) {
             source.sendFailure(
                     Component.literal(
                             "There is no altar placed."
@@ -126,62 +123,16 @@ public class AstralCoresCommandLogic {
             return 0;
         }
 
+        AstralCores.CORE_RESPAWN_DATA.removeAltar();
 
-        BlockPos center = altar.pos();
-
-
-        BlockPos min = new BlockPos(
-                center.getX(),
-                center.getY(),
-                center.getZ()
+        source.sendSuccess(
+                () -> Component.literal(
+                        "Removed altar."
+                ).withStyle(ChatFormatting.GREEN),
+                false
         );
 
-        BlockPos max = new BlockPos(
-                center.getX() + 5,
-                center.getY() + 5,
-                center.getZ() + 5
-        );
-
-        try {
-            for (BlockPos pos : BlockPos.betweenClosed(min, max)) {
-
-                if (!level.getBlockState(pos).isAir()) {
-
-                    level.setBlock(
-                            pos,
-                            Blocks.AIR.defaultBlockState(),
-                            Block.UPDATE_ALL
-                    );
-
-                }
-            }
-
-            AstralCores.CORE_RESPAWN_DATA.removeAltar();
-
-            source.sendSuccess(
-                    () -> Component.literal(
-                            "Removed altar."
-                    ).withStyle(ChatFormatting.GREEN),
-                    false
-            );
-
-            return 1;
-
-        } catch (Exception e) {
-
-            AstralCores.LOGGER.error(
-                    "Failed to remove altar",
-                    e
-            );
-
-            source.sendFailure(
-                    Component.literal(
-                            "Failed to remove altar."
-                    )
-            );
-
-            return 0;
-        }
+        return 1;
     }
 
     public static int resetCooldowns(
