@@ -4,44 +4,88 @@
 
 ### Actionbar
 
-- This command always begins with **/actionbar**
-    after that you can type
-- **text** or **icon**
-- This command is to switch between what your actionbar displays with
-- /actionbar text
-    It displays you're equipped core name, and your core cooldown
-    and with
-- /actionbar icon 
-    It displays your equipped core as a small icon, and your core cooldown
+The **/actionbar** command lets you switch between different actionbar displays:
+
+```text
+/actionbar
+├── text
+└── icon
+```
+
+- **text**
+  - Displays your equipped core's name and its cooldown.
+- **icon**
+  - Displays your equipped core as a small icon, along with its cooldown.
 
 ### Activate
 
-- The **/activate** command activates the ability of your current equipped core
+```text
+/activate
+```
 
-### Trust/Untrust
+- Activates the ability of your currently equipped core.
 
-- **/trust** or **/unstrust** you can trust/untrust a player
-- If a player is trusted it isn't effected of your active/passive ability
-- If a player is not trusted or was trusted and is now untrusted it is effected by your active/passive ability
+### Trust
+
+```text
+/trust <player>
+```
+
+- Trusts a player.
+- Trusted players aren't affected by your active or passive abilities.
+
+### Untrust
+
+```text
+/untrust <player>
+```
+
+- Untrusts a player.
+- Untrusted players are affected by your active or passive abilities.
 
 ### Withdraw
 
-- With **/withdraw** you can withdraw your actionbar slot that means you  get your 
-    core that is currently equipped from your actionbar in your inventory 
+```text
+/withdraw
+```
 
-## For Sever Owners
+- Withdraws your currently equipped core from your actionbar and puts it back into your inventory.
+
+---
+
+## For Server Owners
 
 ### Astralcores
 
-- With **/astralcores debug resetCooldowns** you can reset all your core cooldowns
-  - With **/astralcores place altar pos** 
-        (for pos add a position with coordinates) you can place an
-  altar(there the operator can put a core inside when it gets destroyed by e.g. by falling into the void)
+```text
+/astralcores
+├── debug
+│   └── resetCooldowns
+└── place
+    └── altar <pos>
+```
+
+- **debug resetCooldowns**
+  - Resets all core cooldowns.
+- **place altar <pos>**
+  - Places an altar at the specified position.
+  - An operator can put a core inside the altar if it gets destroyed, e.g. by falling into the void.
 
 ### Core
-- /core 
-  - give //a player a core 
-  - set //set the core of a player in its actionbar
-  - clear //clear the core of a player out of it's actionbar
-  - clearInv // clear the core of a player out of it's inventory
-        
+
+```text
+/core
+├── give <player>
+├── set <player>
+├── clear <player>
+└── clearInv <player>
+```
+
+- **give**
+  - Gives a core to a player.
+- **set**
+  - Sets a player's core in their actionbar.
+- **clear**
+  - Clears a player's core from their actionbar.
+- **clearInv**
+  - Clears a player's core from their inventory.
