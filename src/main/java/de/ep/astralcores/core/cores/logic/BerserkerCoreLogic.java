@@ -35,9 +35,9 @@ public class BerserkerCoreLogic {
         // Assign a 10-second timer to the player
         ragePlayers.put(player.getUUID(), new TickTimer(200));
 
-        Effects.applyEffect(player, MobEffects.STRENGTH, 200, 1);
-        Effects.applyEffect(player, MobEffects.SPEED, 1800, 1);
-        Effects.applyEffect(player, MobEffects.FIRE_RESISTANCE, 1800, 0);
+        Effects.applyEffect(player, MobEffects.STRENGTH, 200, 2);
+        Effects.applyEffect(player, MobEffects.SPEED, 1800, 2);
+        Effects.applyEffect(player, MobEffects.FIRE_RESISTANCE, 1800, 1);
     }
 
     public static void tickRageTimers() {
