@@ -145,7 +145,7 @@ public class ChronoCoreLogic {
         }
 
         // Rolls a 50% success chance to trigger the death cheat mechanic.
-        if (player.getRandom().nextBoolean()) {
+
 
             // Restores the player to maximum health and resets their combat state.
             player.setHealth(player.getMaxHealth());
@@ -158,13 +158,6 @@ public class ChronoCoreLogic {
                     .withStyle(ChatFormatting.GREEN));
 
             return false;
-        } else {
-
-            player.sendSystemMessage(Component.literal("[Chrono Core] Second Timeline failed!")
-                    .withStyle(ChatFormatting.RED));
-
-            return true;
-        }
     }
 
     // Handles the particles, sounds, and fake item packets for the death prevention animation.
