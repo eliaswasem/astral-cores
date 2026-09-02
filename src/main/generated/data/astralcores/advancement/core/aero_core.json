@@ -10,7 +10,7 @@
               "minecraft:location": {
                 "position": {
                   "y": {
-                    "min": 100.0
+                    "min": 4000.0
                   }
                 }
               },
