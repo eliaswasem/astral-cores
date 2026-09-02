@@ -1,6 +1,7 @@
 package de.ep.astralcores.core.cores.logic;
 
 import de.ep.astralcores.AstralCores;
+import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.playerdata.PlayerData;
 import de.ep.astralcores.util.Effects;
 import de.ep.astralcores.util.TickTimer;
@@ -20,15 +21,8 @@ import java.util.*;
 
 public class AeroCoreLogic {
 
-    // Players that currently have the Aero Core passive active.
-    public static final Set<UUID> activePlayers = new HashSet<>();
-
     // Active Tornado Lift timers.
     private static final Map<UUID, TickTimer> tornadoTimers = new HashMap<>();
-
-    public static void applyPassive(ServerPlayer player) {
-        activePlayers.add(player.getUUID());
-    }
 
     public static void onRemoved(ServerPlayer player) {
         cleanup(player);
@@ -39,7 +33,6 @@ public class AeroCoreLogic {
     }
 
     private static void cleanup(ServerPlayer player) {
-        activePlayers.remove(player.getUUID());
         tornadoTimers.remove(player.getUUID());
     }
 
@@ -48,7 +41,7 @@ public class AeroCoreLogic {
             DamageSource source
     ) {
         // Ignore the event if the player does not have Aero Core.
-        if (!activePlayers.contains(player.getUUID())) {
+        if (!(AstralCores.PLAYER_DATA.get(player).getEquippedCore() == CoreType.AERO_CORE)) {
             return true;
         }
 

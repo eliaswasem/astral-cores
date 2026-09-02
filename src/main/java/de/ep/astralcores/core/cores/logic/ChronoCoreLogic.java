@@ -1,6 +1,7 @@
 package de.ep.astralcores.core.cores.logic;
 
 import com.mojang.datafixers.util.Pair;
+import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreRegistry;
 import de.ep.astralcores.core.CoreType;
@@ -25,8 +26,6 @@ import java.util.*;
 
 public class ChronoCoreLogic {
 
-    // Tracks which players currently have this core's passive effect active.
-    public static final Set<UUID> activePlayers = new HashSet<>();
 
     // Stores up to 10 positions for each player.
     private static final int MAX_POSITION_HISTORY = 10;
@@ -46,9 +45,6 @@ public class ChronoCoreLogic {
     // applyPassive runs once per second and is used as the position history loop.
     public static void applyPassive(ServerPlayer player) {
         UUID uuid = player.getUUID();
-
-        // Mark the player as active.
-        activePlayers.add(uuid);
 
         // Get or create this player's history.
         Deque<PositionSnapshot> history =
@@ -78,18 +74,15 @@ public class ChronoCoreLogic {
     }
 
     private static void cleanup(ServerPlayer player) {
-        // Remove the player from the active list.
-        activePlayers.remove(player.getUUID());
 
         // Remove the player's stored position history.
         positionHistory.remove(player.getUUID());
     }
 
     public static void activate(ServerPlayer player) {
-        UUID uuid = player.getUUID();
 
         // Check if the Chrono Core is active.
-        if (!activePlayers.contains(uuid)) {
+        if (!(AstralCores.PLAYER_DATA.get(player).getEquippedCore() == CoreType.CHRONO_CORE)) {
             return;
         }
 
@@ -140,7 +133,7 @@ public class ChronoCoreLogic {
     // Evaluates if the chrono core is equipped and rolls a 50% chance to prevent death.
     public static boolean handleSecondTimeline(ServerPlayer player, DamageSource damageSource, float damageAmount) {
         // Stops execution immediately if the player does not have the ChronoCore active in the map.
-        if (!activePlayers.contains(player.getUUID())) {
+        if (!(AstralCores.PLAYER_DATA.get(player).getEquippedCore() == CoreType.CHRONO_CORE)) {
             return true;
         }
 

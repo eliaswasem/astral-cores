@@ -31,11 +31,6 @@ public class AeroCore extends Core {
     }
 
     @Override
-    public void applyPassive(ServerPlayer player) {
-        AeroCoreLogic.applyPassive(player);
-    }
-
-    @Override
     public void onRemoved(ServerPlayer player) {
         AeroCoreLogic.onRemoved(player);
     }

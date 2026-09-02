@@ -31,11 +31,6 @@ public class IllusionCore extends Core {
     }
 
     @Override
-    public void applyPassive(ServerPlayer player) {
-        IllusionCoreLogic.applyPassive(player);
-    }
-
-    @Override
     public void onRemoved(ServerPlayer player) {
         IllusionCoreLogic.onRemoved(player);
     }

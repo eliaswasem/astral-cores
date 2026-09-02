@@ -1,5 +1,7 @@
 package de.ep.astralcores.core.cores.logic;
 
+import de.ep.astralcores.AstralCores;
+import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.util.Effects;
 import de.ep.astralcores.util.TickTimer;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,7 +18,6 @@ import java.util.UUID;
 
 public class BerserkerCoreLogic {
 
-    private static final Set<UUID> activePlayers = new HashSet<>();
     private static final Map<UUID, TickTimer> ragePlayers = new HashMap<>();
 
     public static boolean allowHealing = false;
@@ -25,8 +26,6 @@ public class BerserkerCoreLogic {
         if (player.getHealth() <= 7) {
             Effects.applyEffect(player, MobEffects.STRENGTH, 25, 3);
         }
-
-        activePlayers.add(player.getUUID());
     }
 
     public static void activate(ServerPlayer player) {
@@ -59,7 +58,6 @@ public class BerserkerCoreLogic {
     }
 
     private static void cleanup(ServerPlayer player) {
-        activePlayers.remove(player.getUUID());
         ragePlayers.remove(player.getUUID());
     }
 
@@ -67,7 +65,7 @@ public class BerserkerCoreLogic {
         Entity attacker = source.getEntity();
 
         if (attacker instanceof ServerPlayer killer
-                && activePlayers.contains(killer.getUUID())) {
+                && AstralCores.PLAYER_DATA.get(killer).getEquippedCore() == CoreType.BERSERKER_CORE) {
 
             killer.playSound(
                     SoundEvents.WARDEN_HEARTBEAT,
