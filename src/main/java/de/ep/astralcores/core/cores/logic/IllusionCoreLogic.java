@@ -178,7 +178,7 @@ public final class IllusionCoreLogic {
             ServerPlayer player,
             DamageSource source
     ) {
-        if (!(AstralCores.PLAYER_DATA.get(player).getEquippedCore() == CoreType.CHRONO_CORE)) {
+        if (!(AstralCores.PLAYER_DATA.get(player).getEquippedCore() == CoreType.ILLUSION_CORE)) {
             return true;
         }
 

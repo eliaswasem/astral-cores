@@ -105,6 +105,6 @@ public final class NatureCoreLogic {
     }
 
     public static boolean hasNatureCore(ServerPlayer player) {
-        return  (AstralCores.PLAYER_DATA.get(player).getEquippedCore() == CoreType.CHRONO_CORE);
+        return  (AstralCores.PLAYER_DATA.get(player).getEquippedCore() == CoreType.NATURE_CORE);
     }
 }
