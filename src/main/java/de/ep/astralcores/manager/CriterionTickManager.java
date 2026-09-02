@@ -7,7 +7,6 @@ public final class CriterionTickManager {
 
 
     public static void tick(ServerPlayer player) {
-        CriterionRegistry.PIG_ALTITUDE.trigger(player);
         CriterionRegistry.VOID_SURVIVAL.trigger(player);
     }
 }

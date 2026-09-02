@@ -1,7 +1,27 @@
 {
   "criteria": {
     "pig_altitude": {
-      "trigger": "astralcores:pig_altitude"
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "minecraft:location": {
+                "position": {
+                  "y": {
+                    "min": 100.0
+                  }
+                }
+              },
+              "minecraft:vehicle": {
+                "minecraft:entity_type": "minecraft:pig"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
     }
   },
   "display": {

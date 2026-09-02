@@ -1,7 +1,6 @@
 package de.ep.astralcores.advancement.criterion;
 
 import de.ep.astralcores.AstralCores;
-import de.ep.astralcores.advancement.criterion.criterions.PigAltitudeCriterion;
 import de.ep.astralcores.advancement.criterion.criterions.VoidSurvivalCriterion;
 import net.minecraft.advancements.triggers.CriterionTrigger;
 import net.minecraft.core.Registry;
@@ -9,9 +8,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 
 public class CriterionRegistry {
-
-    public static final PigAltitudeCriterion PIG_ALTITUDE =
-            register("pig_altitude", new PigAltitudeCriterion());
 
     public static final VoidSurvivalCriterion VOID_SURVIVAL =
             register("void_survival", new VoidSurvivalCriterion());

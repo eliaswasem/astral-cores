@@ -1,0 +1,24 @@
+{
+  "criteria": {
+    "void_survival": {
+      "trigger": "astralcores:void_survival"
+    }
+  },
+  "display": {
+    "description": "Disappear into the void and survive it.",
+    "frame": "challenge",
+    "icon": {
+      "id": "minecraft:ender_eye"
+    },
+    "title": "Where did i go"
+  },
+  "requirements": [
+    [
+      "void_survival"
+    ]
+  ],
+  "rewards": {
+    "function": "astralcores:cores/shadow_core"
+  },
+  "sends_telemetry_event": true
+}
