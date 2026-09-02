@@ -152,8 +152,10 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                         PlayerTrigger.TriggerInstance.located(
                                 LocationPredicate.Builder.location()
                                         .setBiomes(
+                                                HolderSet.direct(
                                                 lookup.lookupOrThrow(Registries.BIOME)
-                                                        .getOrThrow(BiomeTags.IS_FOREST)
+                                                        .getOrThrow(Biomes.FOREST)
+                                                )
                                         )
                         )
                 )
@@ -164,8 +166,10 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                         PlayerTrigger.TriggerInstance.located(
                                 LocationPredicate.Builder.location()
                                         .setBiomes(
+                                                HolderSet.direct(
                                                 lookup.lookupOrThrow(Registries.BIOME)
-                                                        .getOrThrow(BiomeTags.IS_JUNGLE)
+                                                        .getOrThrow(Biomes.JUNGLE)
+                                                )
                                         )
                         )
                 )
@@ -176,8 +180,10 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                         PlayerTrigger.TriggerInstance.located(
                                 LocationPredicate.Builder.location()
                                         .setBiomes(
+                                                HolderSet.direct(
                                                 lookup.lookupOrThrow(Registries.BIOME)
-                                                        .getOrThrow(BiomeTags.IS_TAIGA)
+                                                        .getOrThrow(Biomes.TAIGA)
+                                                )
                                         )
                         )
                 )
