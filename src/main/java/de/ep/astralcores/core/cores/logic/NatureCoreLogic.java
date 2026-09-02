@@ -1,5 +1,7 @@
 package de.ep.astralcores.core.cores.logic;
 
+import de.ep.astralcores.AstralCores;
+import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.util.BiomeUtils;
 import de.ep.astralcores.util.CropUtils;
 import de.ep.astralcores.util.Effects;
@@ -13,18 +15,10 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
 
 public final class NatureCoreLogic {
 
-    // Stores UUIDs of players that currently have the Nature Core active.
-    private static final Set<UUID> activePlayers =
-            new HashSet<>();
-
     public static void applyPassive(ServerPlayer player) {
-        activePlayers.add(player.getUUID());
 
         if (!BiomeUtils.isInNatureBiome(player)) {
             return;
@@ -93,18 +87,6 @@ public final class NatureCoreLogic {
         level.addFreshEntity(cloud);
     }
 
-    public static void onRemoved(ServerPlayer player) {
-        cleanup(player);
-    }
-
-    public static void onPlayerDisconnect(ServerPlayer player) {
-        cleanup(player);
-    }
-
-    private static void cleanup(ServerPlayer player) {
-        activePlayers.remove(player.getUUID());
-    }
-
     private static void handleFoodHealing(ServerPlayer player) {
         if (!FoodUtils.isFinishedEating(player)) {
             return;
@@ -123,6 +105,6 @@ public final class NatureCoreLogic {
     }
 
     public static boolean hasNatureCore(ServerPlayer player) {
-        return activePlayers.contains(player.getUUID());
+        return  (AstralCores.PLAYER_DATA.get(player).getEquippedCore() == CoreType.NATURE_CORE);
     }
 }

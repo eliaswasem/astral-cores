@@ -1,6 +1,7 @@
 package de.ep.astralcores.core.cores.logic;
 
 import de.ep.astralcores.AstralCores;
+import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.playerdata.PlayerData;
 import de.ep.astralcores.util.Effects;
 import de.ep.astralcores.util.TickTimer;
@@ -278,8 +279,14 @@ public final class MagnetCoreLogic {
         PlayerData data =
                 AstralCores.PLAYER_DATA.get(attacker);
 
-        if (data != null
-                && data.isTrusted(victim.getUUID())) {
+        if (data == null) {
+            return;
+        }
+
+        if (!(data.getEquippedCore() == CoreType.MAGNET_CORE)) {
+            return;
+        }
+        if (data.isTrusted(victim.getUUID())) {
             return;
         }
 

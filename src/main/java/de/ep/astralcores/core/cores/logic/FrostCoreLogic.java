@@ -109,7 +109,7 @@ public class FrostCoreLogic {
 
         private final Display.BlockDisplay bottom;
         private final Display.BlockDisplay top;
-        private final TickTimer timer = new TickTimer(40);
+        private final TickTimer timer = new TickTimer(100);
 
         private FrostLock(LivingEntity entity) {
             this.entity = entity;

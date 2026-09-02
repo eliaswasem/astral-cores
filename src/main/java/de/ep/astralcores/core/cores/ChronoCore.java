@@ -20,8 +20,8 @@ public class ChronoCore extends Core {
                         "§a[Active: Time Return]"
                 ),
                 10006,
-                0,
-                0,
+                45,
+                600,
                 86400L,
                 "Time Return",
                 "Second Timeline",

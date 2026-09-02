@@ -1,5 +1,7 @@
 package de.ep.astralcores.core.cores.logic;
 
+import de.ep.astralcores.AstralCores;
+import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.mixin.MannequinAccessor;
 import de.ep.astralcores.util.Effects;
 import de.ep.astralcores.util.TickTimer;
@@ -26,16 +28,10 @@ public final class IllusionCoreLogic {
     private static final double TRIGGER_CHANCE = 0.20;
     private static final int MANNEQUIN_LIFETIME = 30 * 20;
 
-    private static final Set<UUID> activePlayers = new HashSet<>();
-
     /**
      * Mannequins grouped by player UUID.
      */
     private static final Map<UUID, Set<MannequinData>> mannequins = new HashMap<>();
-
-    public static void applyPassive(ServerPlayer player) {
-        activePlayers.add(player.getUUID());
-    }
 
     public static void onRemoved(ServerPlayer player) {
         cleanup(player);
@@ -46,7 +42,6 @@ public final class IllusionCoreLogic {
     }
 
     private static void cleanup(ServerPlayer player) {
-        activePlayers.remove(player.getUUID());
 
         Set<MannequinData> playerMannequins =
                 mannequins.remove(player.getUUID());
@@ -183,7 +178,7 @@ public final class IllusionCoreLogic {
             ServerPlayer player,
             DamageSource source
     ) {
-        if (!activePlayers.contains(player.getUUID())) {
+        if (!(AstralCores.PLAYER_DATA.get(player).getEquippedCore() == CoreType.ILLUSION_CORE)) {
             return true;
         }
 
