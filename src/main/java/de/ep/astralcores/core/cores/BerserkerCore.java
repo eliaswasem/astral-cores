@@ -20,7 +20,7 @@ public class BerserkerCore extends Core {
                         "§6[Active: Rage Mode]"
                 ),
                 10011,
-                0,
+                300,
                 0,
                 86400L,
                 "Rage Mode",

@@ -51,7 +51,7 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                 .display(
                         Items.WIND_CHARGE,
                         Component.literal("Sky Pig"),
-                        Component.literal("Ride a pig above Y=2500."),
+                        Component.literal("Ride a pig above Y=4000."),
                         null,
                         AdvancementType.CHALLENGE,
                         true,
@@ -74,7 +74,7 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                                         .located(
                                                 LocationPredicate.Builder.location()
                                                         .setY(
-                                                                MinMaxBounds.Doubles.atLeast(2500.0)
+                                                                MinMaxBounds.Doubles.atLeast(4000.0)
                                                         )
                                         )
                         )
