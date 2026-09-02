@@ -21,7 +21,7 @@ public final class FrostCore extends Core {
                         "§b[Active: Frost Lock]"
                 ),
                 10008,
-                0,
+                30,
                 0,
                 86400L,
                 "Frost Lock",
