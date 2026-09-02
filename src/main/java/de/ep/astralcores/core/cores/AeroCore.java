@@ -20,7 +20,7 @@ public class AeroCore extends Core {
                         "§6[Active: Tornado Lift]"
                 ),
                 10001,
-                15,
+                45,
                 0,
                 86400L,
                 "Tornado Lift",

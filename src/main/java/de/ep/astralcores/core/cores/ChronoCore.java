@@ -21,7 +21,7 @@ public class ChronoCore extends Core {
                 ),
                 10006,
                 0,
-                0,
+                600,
                 86400L,
                 "Time Return",
                 "Second Timeline",
