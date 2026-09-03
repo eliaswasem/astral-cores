@@ -4,8 +4,8 @@
       "conditions": {
         "effects": {
           "minecraft:conduit_power": {
-            "amplifier": 2,
-            "duration": 2
+            "amplifier": 1,
+            "duration": 1
           }
         }
       },

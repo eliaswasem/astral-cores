@@ -3,38 +3,24 @@ package de.ep.astralcores.datagen;
 import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.advancement.criterion.CriterionRegistry;
 import de.ep.astralcores.advancement.criterion.criterions.VoidSurvivalCriterion;
-import de.ep.astralcores.util.BiomeUtils;
-import de.ep.astralcores.util.FlowerUtils;
-import de.ep.astralcores.util.SaplingUtils;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricAdvancementProvider;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.predicates.*;
 import net.minecraft.advancements.predicates.entity.EntityEquipmentPredicate;
 import net.minecraft.advancements.predicates.entity.EntityPredicate;
-import net.minecraft.advancements.predicates.entity.PlayerPredicate;
 import net.minecraft.advancements.triggers.EffectsChangedTrigger;
-import net.minecraft.advancements.triggers.EnterBlockTrigger;
-import net.minecraft.advancements.triggers.InventoryChangeTrigger;
 import net.minecraft.advancements.triggers.PlayerTrigger;
-import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.HolderSet;
-import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.core.component.predicates.DataComponentPredicates;
 import net.minecraft.core.component.predicates.EnchantmentsPredicate;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.tags.BiomeTags;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.List;
@@ -144,7 +130,7 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                 );
 
 
-        Advancement.Builder.advancement()
+       /* Advancement.Builder.advancement()
                 .display(
                         Blocks.OAK_LEAVES,
                         Component.literal("Best Botanic"),
@@ -156,28 +142,6 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                         true,
                         true,
                         false
-                )
-
-                .addCriterion(
-                        "flowers",
-                        InventoryChangeTrigger.TriggerInstance.hasItems(
-                                ItemPredicate.Builder.item()
-                                        .of(
-                                                lookup.lookupOrThrow(Registries.ITEM),
-                                                FlowerUtils.FLOWERS
-                                        )
-                        )
-                )
-
-                .addCriterion(
-                        "saplings",
-                        InventoryChangeTrigger.TriggerInstance.hasItems(
-                                ItemPredicate.Builder.item()
-                                        .of(
-                                                lookup.lookupOrThrow(Registries.ITEM),
-                                                SaplingUtils.SAPLINGS
-                                        )
-                        )
                 )
 
                 // ALL criteria are required
@@ -204,6 +168,8 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                         )
                 );
 
+        */
+
         Advancement.Builder.advancement()
                 .display(
                         Blocks.CONDUIT,
@@ -223,8 +189,8 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                                         .and(
                                                 MobEffects.CONDUIT_POWER,
                                                 new MobEffectsPredicate.MobEffectInstancePredicate(
-                                                        MinMaxBounds.Ints.exactly(2),
-                                                        MinMaxBounds.Ints.exactly(2),
+                                                        MinMaxBounds.Ints.exactly(1),
+                                                        MinMaxBounds.Ints.exactly(1),
                                                         Optional.empty(),
                                                         Optional.empty()
                                                 )
@@ -300,41 +266,20 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                 )
 
                 .addCriterion(
-                        "speed",
-                        EffectsChangedTrigger.TriggerInstance.hasEffects(
-                                MobEffectsPredicate.Builder.effects()
-                                        .and(
-                                                MobEffects.SPEED,
-                                                new MobEffectsPredicate.MobEffectInstancePredicate(
-                                                        MinMaxBounds.Ints.atLeast(1),
-                                                        MinMaxBounds.Ints.atLeast(1),
-                                                        Optional.empty(),
-                                                        Optional.empty()
-                                                )
-                                        )
-                        )
-                )
-
-                .addCriterion(
-                        "dolphins_grace",
-                        EffectsChangedTrigger.TriggerInstance.hasEffects(
-                                MobEffectsPredicate.Builder.effects()
-                                        .and(
-                                                MobEffects.DOLPHINS_GRACE,
-                                                new MobEffectsPredicate.MobEffectInstancePredicate(
-                                                        MinMaxBounds.Ints.ANY,
-                                                        MinMaxBounds.Ints.ANY,
-                                                        Optional.empty(),
-                                                        Optional.empty()
-                                                )
-                                        )
-                        )
-                )
-
-                .addCriterion(
-                        "enchanted_netherite_boots",
+                        "super_speed_challenge",
                         PlayerTrigger.TriggerInstance.located(
                                 EntityPredicate.Builder.entity()
+                                        .steppingOn(
+                                                LocationPredicate.Builder.location()
+                                                        .setBlock(
+                                                                BlockPredicate.Builder.block()
+                                                                        .of(
+                                                                                lookup.lookupOrThrow(Registries.BLOCK),
+                                                                                Blocks.SOUL_SAND
+                                                                        )
+                                                        )
+                                        )
+
                                         .equipment(
                                                 EntityEquipmentPredicate.Builder.equipment()
                                                         .feet(
@@ -344,19 +289,14 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                                                                                 Items.NETHERITE_BOOTS
                                                                         )
                                                                         .withComponents(
-                                                                                DataComponentMatchers.Builder
-                                                                                        .components()
+                                                                                DataComponentMatchers.Builder.components()
                                                                                         .partial(
                                                                                                 DataComponentPredicates.ENCHANTMENTS,
                                                                                                 EnchantmentsPredicate.enchantments(
                                                                                                         List.of(
                                                                                                                 new EnchantmentPredicate(
-                                                                                                                        lookup.lookupOrThrow(
-                                                                                                                                Registries.ENCHANTMENT
-                                                                                                                        ).getOrThrow(
-                                                                                                                                Enchantments.SOUL_SPEED
-                                                                                                                        ),
-                                                                                                                        MinMaxBounds.Ints.atLeast(2)
+                                                                                                                        lookup.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.SOUL_SPEED),
+                                                                                                                        MinMaxBounds.Ints.atLeast(3)
                                                                                                                 )
                                                                                                         )
                                                                                                 )
@@ -365,21 +305,26 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                                                                         )
                                                         )
                                         )
-                        )
-                )
 
-                .addCriterion(
-                        "on_soul_sand",
-                        PlayerTrigger.TriggerInstance.located(
-                                EntityPredicate.Builder.entity()
-                                        .steppingOn(
-                                                LocationPredicate.Builder.location()
-                                                        .setBlock(
-                                                                BlockPredicate.Builder.block()
-                                                                        .of(
-                                                                                lookup.lookupOrThrow(Registries.BLOCK),
-                                                                                    Blocks.SOUL_SAND
-                                                                        )
+                                        .effects(
+                                                MobEffectsPredicate.Builder.effects()
+                                                        .and(
+                                                                MobEffects.SPEED,
+                                                                new MobEffectsPredicate.MobEffectInstancePredicate(
+                                                                        MinMaxBounds.Ints.atLeast(1),
+                                                                        MinMaxBounds.Ints.atLeast(1),
+                                                                        Optional.empty(),
+                                                                        Optional.empty()
+                                                                )
+                                                        )
+                                                        .and(
+                                                                MobEffects.DOLPHINS_GRACE,
+                                                                new MobEffectsPredicate.MobEffectInstancePredicate(
+                                                                        MinMaxBounds.Ints.ANY,
+                                                                        MinMaxBounds.Ints.ANY,
+                                                                        Optional.empty(),
+                                                                        Optional.empty()
+                                                                )
                                                         )
                                         )
                         )

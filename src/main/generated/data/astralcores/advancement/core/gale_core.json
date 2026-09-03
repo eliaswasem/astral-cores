@@ -1,20 +1,23 @@
 {
   "criteria": {
-    "dolphins_grace": {
-      "conditions": {
-        "effects": {
-          "minecraft:dolphins_grace": {}
-        }
-      },
-      "trigger": "minecraft:effects_changed"
-    },
-    "enchanted_netherite_boots": {
+    "super_speed_challenge": {
       "conditions": {
         "player": [
           {
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
+              "minecraft:effects": {
+                "minecraft:dolphins_grace": {},
+                "minecraft:speed": {
+                  "amplifier": {
+                    "min": 1
+                  },
+                  "duration": {
+                    "min": 1
+                  }
+                }
+              },
               "minecraft:equipment": {
                 "feet": {
                   "items": "minecraft:netherite_boots",
@@ -23,26 +26,13 @@
                       {
                         "enchantments": "minecraft:soul_speed",
                         "levels": {
-                          "min": 2
+                          "min": 3
                         }
                       }
                     ]
                   }
                 }
-              }
-            }
-          }
-        ]
-      },
-      "trigger": "minecraft:location"
-    },
-    "on_soul_sand": {
-      "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
+              },
               "minecraft:stepping_on": {
                 "block": {
                   "blocks": "minecraft:soul_sand"
@@ -53,21 +43,6 @@
         ]
       },
       "trigger": "minecraft:location"
-    },
-    "speed": {
-      "conditions": {
-        "effects": {
-          "minecraft:speed": {
-            "amplifier": {
-              "min": 1
-            },
-            "duration": {
-              "min": 1
-            }
-          }
-        }
-      },
-      "trigger": "minecraft:effects_changed"
     }
   },
   "display": {
@@ -80,16 +55,7 @@
   },
   "requirements": [
     [
-      "speed"
-    ],
-    [
-      "dolphins_grace"
-    ],
-    [
-      "enchanted_netherite_boots"
-    ],
-    [
-      "on_soul_sand"
+      "super_speed_challenge"
     ]
   ],
   "rewards": {
