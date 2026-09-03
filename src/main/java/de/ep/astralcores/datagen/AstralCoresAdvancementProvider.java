@@ -564,7 +564,7 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
         Advancement.Builder.advancement()
                 .display(
                         Items.BREEZE_ROD,
-                        Component.literal("It gotta go FAST!!!"),
+                        Component.literal("It needs to be FAST!!!“"),
                         Component.literal("Have Speed 2, Dolphins Grace, Netherite Boots with soul speed 3 while walking on soul sand"),
                         null,
                         AdvancementType.CHALLENGE,
