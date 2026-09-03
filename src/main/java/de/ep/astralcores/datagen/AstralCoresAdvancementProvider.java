@@ -3,6 +3,9 @@ package de.ep.astralcores.datagen;
 import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.advancement.criterion.CriterionRegistry;
 import de.ep.astralcores.advancement.criterion.criterions.VoidSurvivalCriterion;
+import de.ep.astralcores.util.BiomeUtils;
+import de.ep.astralcores.util.FlowerUtils;
+import de.ep.astralcores.util.SaplingUtils;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricAdvancementProvider;
 import net.minecraft.advancements.*;
@@ -140,9 +143,9 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
         Advancement.Builder.advancement()
                 .display(
                         Blocks.OAK_LEAVES,
-                        Component.literal("Farming Dedication"),
+                        Component.literal("Best Botanic"),
                         Component.literal(
-                                "Visit a forest, jungle, taiga, swamp, mangrove swamp and savanna, and obtain a Netherite Hoe with Mending and Unbreaking."
+                                "Collect every flower and every sapling from the Minecraft Overworld"
                         ),
                         null,
                         AdvancementType.CHALLENGE,
@@ -151,124 +154,24 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                         false
                 )
 
-                // Forest
                 .addCriterion(
-                        "forest",
-                        PlayerTrigger.TriggerInstance.located(
-                                LocationPredicate.Builder.location()
-                                        .setBiomes(
-                                                HolderSet.direct(
-                                                lookup.lookupOrThrow(Registries.BIOME)
-                                                        .getOrThrow(Biomes.FOREST)
-                                                )
-                                        )
-                        )
-                )
-
-                // Jungle
-                .addCriterion(
-                        "jungle",
-                        PlayerTrigger.TriggerInstance.located(
-                                LocationPredicate.Builder.location()
-                                        .setBiomes(
-                                                HolderSet.direct(
-                                                lookup.lookupOrThrow(Registries.BIOME)
-                                                        .getOrThrow(Biomes.JUNGLE)
-                                                )
-                                        )
-                        )
-                )
-
-                // Taiga
-                .addCriterion(
-                        "taiga",
-                        PlayerTrigger.TriggerInstance.located(
-                                LocationPredicate.Builder.location()
-                                        .setBiomes(
-                                                HolderSet.direct(
-                                                lookup.lookupOrThrow(Registries.BIOME)
-                                                        .getOrThrow(Biomes.TAIGA)
-                                                )
-                                        )
-                        )
-                )
-
-                // Swamp
-                .addCriterion(
-                        "swamp",
-                        PlayerTrigger.TriggerInstance.located(
-                                LocationPredicate.Builder.location()
-                                        .setBiomes(
-                                                HolderSet.direct(
-                                                        lookup.lookupOrThrow(Registries.BIOME)
-                                                                .getOrThrow(Biomes.SWAMP)
-                                                )
-                                        )
-                        )
-                )
-
-                // Mangrove Swamp
-                .addCriterion(
-                        "mangrove_swamp",
-                        PlayerTrigger.TriggerInstance.located(
-                                LocationPredicate.Builder.location()
-                                        .setBiomes(
-                                                HolderSet.direct(
-                                                        lookup.lookupOrThrow(Registries.BIOME)
-                                                                .getOrThrow(Biomes.MANGROVE_SWAMP)
-                                                )
-                                        )
-                        )
-                )
-
-                // Savanna
-                .addCriterion(
-                        "savanna",
-                        PlayerTrigger.TriggerInstance.located(
-                                LocationPredicate.Builder.location()
-                                        .setBiomes(
-                                                lookup.lookupOrThrow(Registries.BIOME)
-                                                        .getOrThrow(BiomeTags.IS_SAVANNA)
-                                        )
-                        )
-                )
-
-                // Netherite Hoe with Mending + Unbreaking
-                .addCriterion(
-                        "enchanted_netherite_hoe",
+                        "flowers",
                         InventoryChangeTrigger.TriggerInstance.hasItems(
                                 ItemPredicate.Builder.item()
                                         .of(
                                                 lookup.lookupOrThrow(Registries.ITEM),
-                                                Items.NETHERITE_HOE
+                                                FlowerUtils.FLOWERS
                                         )
-                                        .withComponents(
-                                                DataComponentMatchers.Builder
-                                                        .components()
-                                                        .partial(
-                                                                DataComponentPredicates.ENCHANTMENTS,
-                                                                EnchantmentsPredicate.enchantments(
-                                                                        List.of(
-                                                                                new EnchantmentPredicate(
-                                                                                        lookup.lookupOrThrow(
-                                                                                                Registries.ENCHANTMENT
-                                                                                        ).getOrThrow(
-                                                                                                Enchantments.MENDING
-                                                                                        ),
-                                                                                        MinMaxBounds.Ints.atLeast(1)
-                                                                                ),
-                                                                                new EnchantmentPredicate(
-                                                                                        lookup.lookupOrThrow(
-                                                                                                Registries.ENCHANTMENT
-                                                                                        ).getOrThrow(
-                                                                                                Enchantments.UNBREAKING
-                                                                                        ),
-                                                                                        MinMaxBounds.Ints.atLeast(1)
-                                                                                )
-                                                                        )
-                                                                )
-                                                        )
-                                                        .build()
+                        )
+                )
+
+                .addCriterion(
+                        "saplings",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                SaplingUtils.SAPLINGS
                                         )
                         )
                 )
