@@ -1,0 +1,382 @@
+{
+  "criteria": {
+    "acacia_sapling": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:acacia_sapling"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "allium": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:allium"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "azalea": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:azalea"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "azure_bluet": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:azure_bluet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "birch_sapling": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:birch_sapling"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "blue_orchid": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:blue_orchid"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "cherry_sapling": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:cherry_sapling"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "closed_eyeblossom": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:closed_eyeblossom"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "cornflower": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:cornflower"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "dandelion": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:dandelion"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "dark_oak_sapling": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:dark_oak_sapling"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "jungle_sapling": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:jungle_sapling"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "lily_of_the_valley": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:lily_of_the_valley"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "mangrove_propagule": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:mangrove_propagule"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "oak_sapling": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:oak_sapling"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "open_eyeblossom": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:open_eyeblossom"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "orange_tulip": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:orange_tulip"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "oxeye_daisy": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:oxeye_daisy"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "pale_oak_sapling": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:pale_oak_sapling"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "pink_tulip": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:pink_tulip"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "poppy": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:poppy"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "red_tulip": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:red_tulip"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "rose_bush": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:rose_bush"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "spore_blossom": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:spore_blossom"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "spruce_sapling": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:spruce_sapling"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "sunflower": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:sunflower"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "torchflower": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:torchflower"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "white_tulip": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:white_tulip"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": "Collect every flower and every sapling from the Minecraft Overworld",
+    "frame": "challenge",
+    "icon": {
+      "id": "minecraft:oak_leaves"
+    },
+    "title": "Best Botanic"
+  },
+  "requirements": [
+    [
+      "allium"
+    ],
+    [
+      "azure_bluet"
+    ],
+    [
+      "blue_orchid"
+    ],
+    [
+      "cornflower"
+    ],
+    [
+      "dandelion"
+    ],
+    [
+      "open_eyeblossom"
+    ],
+    [
+      "closed_eyeblossom"
+    ],
+    [
+      "lily_of_the_valley"
+    ],
+    [
+      "oxeye_daisy"
+    ],
+    [
+      "poppy"
+    ],
+    [
+      "rose_bush"
+    ],
+    [
+      "spore_blossom"
+    ],
+    [
+      "sunflower"
+    ],
+    [
+      "torchflower"
+    ],
+    [
+      "red_tulip"
+    ],
+    [
+      "orange_tulip"
+    ],
+    [
+      "pink_tulip"
+    ],
+    [
+      "white_tulip"
+    ],
+    [
+      "acacia_sapling"
+    ],
+    [
+      "azalea"
+    ],
+    [
+      "birch_sapling"
+    ],
+    [
+      "cherry_sapling"
+    ],
+    [
+      "dark_oak_sapling"
+    ],
+    [
+      "jungle_sapling"
+    ],
+    [
+      "mangrove_propagule"
+    ],
+    [
+      "oak_sapling"
+    ],
+    [
+      "pale_oak_sapling"
+    ],
+    [
+      "spruce_sapling"
+    ]
+  ],
+  "rewards": {
+    "function": "astralcores:cores/nature_core"
+  },
+  "sends_telemetry_event": true
+}

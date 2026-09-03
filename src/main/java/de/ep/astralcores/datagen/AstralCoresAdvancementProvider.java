@@ -10,6 +10,7 @@ import net.minecraft.advancements.predicates.*;
 import net.minecraft.advancements.predicates.entity.EntityEquipmentPredicate;
 import net.minecraft.advancements.predicates.entity.EntityPredicate;
 import net.minecraft.advancements.triggers.EffectsChangedTrigger;
+import net.minecraft.advancements.triggers.InventoryChangeTrigger;
 import net.minecraft.advancements.triggers.PlayerTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.predicates.DataComponentPredicates;
@@ -130,7 +131,7 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                 );
 
 
-       /* Advancement.Builder.advancement()
+        Advancement.Builder.advancement()
                 .display(
                         Blocks.OAK_LEAVES,
                         Component.literal("Best Botanic"),
@@ -142,6 +143,314 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                         true,
                         true,
                         false
+                )
+
+                .addCriterion(
+                        "allium",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                        ItemPredicate.Builder.item()
+                                .of(
+                                        lookup.lookupOrThrow(Registries.ITEM),
+                                        Items.ALLIUM
+                                )
+                        )
+                )
+
+                .addCriterion(
+                        "azure_bluet",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                        ItemPredicate.Builder.item()
+                                .of(
+                                        lookup.lookupOrThrow(Registries.ITEM),
+                                        Items.AZURE_BLUET
+                                )
+                        )
+                )
+
+                .addCriterion(
+                        "blue_orchid",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                        ItemPredicate.Builder.item()
+                                .of(
+                                        lookup.lookupOrThrow(Registries.ITEM),
+                                        Items.BLUE_ORCHID
+                                )
+                        )
+                )
+
+                .addCriterion(
+                        "cornflower",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                        ItemPredicate.Builder.item()
+                                .of(
+                                        lookup.lookupOrThrow(Registries.ITEM),
+                                        Items.CORNFLOWER
+                                )
+                        )
+                )
+
+                .addCriterion(
+                        "dandelion",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                        ItemPredicate.Builder.item()
+                                .of(
+                                        lookup.lookupOrThrow(Registries.ITEM),
+                                        Items.DANDELION
+                                )
+                        )
+                )
+
+                .addCriterion(
+                        "open_eyeblossom",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                        ItemPredicate.Builder.item()
+                                .of(
+                                        lookup.lookupOrThrow(Registries.ITEM),
+                                        Items.OPEN_EYEBLOSSOM
+                                )
+                        )
+                )
+
+                .addCriterion(
+                        "closed_eyeblossom",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                        ItemPredicate.Builder.item()
+                                .of(
+                                        lookup.lookupOrThrow(Registries.ITEM),
+                                        Items.CLOSED_EYEBLOSSOM
+                                )
+                        )
+                )
+
+                .addCriterion(
+                        "lily_of_the_valley",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                        ItemPredicate.Builder.item()
+                                .of(
+                                        lookup.lookupOrThrow(Registries.ITEM),
+                                        Items.LILY_OF_THE_VALLEY
+                                )
+                        )
+                )
+
+                .addCriterion(
+                        "oxeye_daisy",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                        ItemPredicate.Builder.item()
+                                .of(
+                                        lookup.lookupOrThrow(Registries.ITEM),
+                                        Items.OXEYE_DAISY
+                                )
+                        )
+                )
+
+                .addCriterion(
+                        "poppy",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                        ItemPredicate.Builder.item()
+                                .of(
+                                        lookup.lookupOrThrow(Registries.ITEM),
+                                        Items.POPPY
+                                )
+                        )
+                )
+
+                .addCriterion(
+                        "rose_bush",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                        ItemPredicate.Builder.item()
+                                .of(
+                                        lookup.lookupOrThrow(Registries.ITEM),
+                                        Items.ROSE_BUSH
+                                )
+                        )
+                )
+
+                .addCriterion(
+                        "spore_blossom",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                        ItemPredicate.Builder.item()
+                                .of(
+                                        lookup.lookupOrThrow(Registries.ITEM),
+                                        Items.SPORE_BLOSSOM
+                                )
+                        )
+                )
+
+                .addCriterion(
+                        "sunflower",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                        ItemPredicate.Builder.item()
+                                .of(
+                                        lookup.lookupOrThrow(Registries.ITEM),
+                                        Items.SUNFLOWER
+                                )
+                        )
+                )
+
+                .addCriterion(
+                        "torchflower",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                        ItemPredicate.Builder.item()
+                                .of(
+                                        lookup.lookupOrThrow(Registries.ITEM),
+                                        Items.TORCHFLOWER
+                                )
+                        )
+                )
+
+                .addCriterion(
+                        "red_tulip",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                        ItemPredicate.Builder.item()
+                                .of(
+                                        lookup.lookupOrThrow(Registries.ITEM),
+                                        Items.RED_TULIP
+                                )
+                        )
+                )
+
+                .addCriterion(
+                        "orange_tulip",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                        ItemPredicate.Builder.item()
+                                .of(
+                                        lookup.lookupOrThrow(Registries.ITEM),
+                                        Items.ORANGE_TULIP
+                                )
+                        )
+                )
+
+                .addCriterion(
+                        "pink_tulip",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                        ItemPredicate.Builder.item()
+                                .of(
+                                        lookup.lookupOrThrow(Registries.ITEM),
+                                        Items.PINK_TULIP
+                                )
+                        )
+                )
+
+                .addCriterion(
+                        "white_tulip",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                        ItemPredicate.Builder.item()
+                                .of(
+                                        lookup.lookupOrThrow(Registries.ITEM),
+                                        Items.WHITE_TULIP
+                                )
+                        )
+                )
+
+                .addCriterion(
+                        "acacia_sapling",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.ACACIA_SAPLING
+                                        )
+                        )
+                )
+
+                .addCriterion(
+                        "azalea",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.AZALEA
+                                        )
+                        )
+                )
+
+                .addCriterion(
+                        "birch_sapling",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.BIRCH_SAPLING
+                                        )
+                        )
+                )
+
+                .addCriterion(
+                        "cherry_sapling",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.CHERRY_SAPLING
+                                        )
+                        )
+                )
+
+                .addCriterion(
+                        "dark_oak_sapling",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.DARK_OAK_SAPLING
+                                        )
+                        )
+                )
+
+                .addCriterion(
+                        "jungle_sapling",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.JUNGLE_SAPLING
+                                        )
+                        )
+                )
+
+                .addCriterion(
+                        "mangrove_propagule",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.MANGROVE_PROPAGULE
+                                        )
+                        )
+                )
+
+                .addCriterion(
+                        "oak_sapling",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.OAK_SAPLING
+                                        )
+                        )
+                )
+
+                .addCriterion(
+                        "pale_oak_sapling",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.PALE_OAK_SAPLING
+                                        )
+                        )
+                )
+
+                .addCriterion(
+                        "spruce_sapling",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.SPRUCE_SAPLING
+                                        )
+                        )
                 )
 
                 // ALL criteria are required
@@ -168,7 +477,6 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                         )
                 );
 
-        */
 
         Advancement.Builder.advancement()
                 .display(
