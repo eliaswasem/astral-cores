@@ -2,6 +2,7 @@ package de.ep.astralcores.core.cores.logic;
 
 import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.core.CoreType;
+import de.ep.astralcores.core.data.CoreActivationResult;
 import de.ep.astralcores.mixin.MannequinAccessor;
 import de.ep.astralcores.util.Effects;
 import de.ep.astralcores.util.TickTimer;
@@ -98,7 +99,7 @@ public final class IllusionCoreLogic {
         }
     }
 
-    public static void activate(ServerPlayer player) {
+    public static CoreActivationResult activate(ServerPlayer player) {
         ServerLevel level = player.level();
 
         Mannequin mannequin = Mannequin.create(
@@ -166,6 +167,8 @@ public final class IllusionCoreLogic {
         );
 
         teleportSafelyAway(player);
+
+        return CoreActivationResult.EXECUTED;
     }
 
     /**

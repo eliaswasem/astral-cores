@@ -3,6 +3,7 @@ package de.ep.astralcores.core.cores;
 import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.core.cores.logic.LeviathanCoreLogic;
+import de.ep.astralcores.core.data.CoreActivationResult;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.item.Items;
@@ -36,7 +37,8 @@ public class LeviathanCore extends Core {
     }
 
     @Override
-    public void activate(ServerPlayer player) {LeviathanCoreLogic.activate(player);}
+    public CoreActivationResult activate(ServerPlayer player) {
+        return LeviathanCoreLogic.activate(player);}
 
     @Override
     public void onPlayerDisconnect(ServerPlayer player) {

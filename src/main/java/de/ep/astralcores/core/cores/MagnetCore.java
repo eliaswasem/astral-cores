@@ -3,6 +3,7 @@ package de.ep.astralcores.core.cores;
 import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.core.cores.logic.MagnetCoreLogic;
+import de.ep.astralcores.core.data.CoreActivationResult;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.item.Items;
@@ -41,8 +42,8 @@ public class MagnetCore extends Core {
     }
 
     @Override
-    public void activate(ServerPlayer player) {
-        MagnetCoreLogic.activate(player);
+    public CoreActivationResult activate(ServerPlayer player) {
+        return MagnetCoreLogic.activate(player);
     }
 
     @Override

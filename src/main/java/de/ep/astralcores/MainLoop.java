@@ -1,8 +1,7 @@
 package de.ep.astralcores;
 
 import de.ep.astralcores.core.respawn.CoreRespawnManager;
-import de.ep.astralcores.core.respawn.data.CoreRespawnData;
-import de.ep.astralcores.manager.CooldownManager;
+import de.ep.astralcores.manager.CoreCooldownManager;
 import de.ep.astralcores.manager.CoreTickManager;
 import de.ep.astralcores.actionbar.ActionBarManager;
 import de.ep.astralcores.manager.CriterionTickManager;
@@ -55,7 +54,7 @@ public class MainLoop {
             PlayerData data = AstralCores.PLAYER_DATA.get(player);
 
             // Updates and manages the Cooldowns every second
-            CooldownManager.tick(player, data);
+            CoreCooldownManager.tick(player, data);
             // Updates and manages the custom ActionBar HUD every second
             ActionBarManager.tick(player, data);
             // Applies the cores passive Ability function

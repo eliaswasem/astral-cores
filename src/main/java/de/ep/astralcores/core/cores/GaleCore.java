@@ -5,6 +5,7 @@ import java.util.List;
 import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.core.cores.logic.GaleCoreLogic;
+import de.ep.astralcores.core.data.CoreActivationResult;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.item.Items;
@@ -37,8 +38,8 @@ public class GaleCore extends Core {
     }
 
     @Override
-    public void activate(ServerPlayer player) {
-        GaleCoreLogic.activate(player);
+    public CoreActivationResult activate(ServerPlayer player) {
+        return GaleCoreLogic.activate(player);
     }
 
     @Override

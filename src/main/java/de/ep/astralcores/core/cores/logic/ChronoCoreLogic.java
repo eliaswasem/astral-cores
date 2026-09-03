@@ -3,10 +3,10 @@ package de.ep.astralcores.core.cores.logic;
 import com.mojang.datafixers.util.Pair;
 import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.core.Core;
-import de.ep.astralcores.core.CoreFactory;
 import de.ep.astralcores.core.CoreRegistry;
 import de.ep.astralcores.core.CoreType;
-import de.ep.astralcores.manager.CooldownManager;
+import de.ep.astralcores.core.data.CoreActivationResult;
+import de.ep.astralcores.manager.CoreCooldownManager;
 import de.ep.astralcores.playerdata.PlayerData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
@@ -82,11 +82,11 @@ public class ChronoCoreLogic {
         positionHistory.remove(player.getUUID());
     }
 
-    public static void activate(ServerPlayer player) {
+    public static CoreActivationResult activate(ServerPlayer player) {
 
         // Check if the Chrono Core is active.
         if (!(AstralCores.PLAYER_DATA.get(player).getEquippedCore() == CoreType.CHRONO_CORE)) {
-            return;
+            return CoreActivationResult.FAILED;
         }
 
         PositionSnapshot target = getReturnPosition(player);
@@ -97,7 +97,7 @@ public class ChronoCoreLogic {
                     Component.literal("[Chrono Core] Not enough time history!")
                             .withStyle(ChatFormatting.RED)
             );
-            return;
+            return CoreActivationResult.FAILED;
         }
 
         // Teleport the player to their position from 5 seconds ago.
@@ -117,6 +117,8 @@ public class ChronoCoreLogic {
                 Component.literal("[Chrono Core] Time Return activated!")
                         .withStyle(ChatFormatting.AQUA)
         );
+
+        return CoreActivationResult.EXECUTED;
     }
 
     private static PositionSnapshot getReturnPosition(ServerPlayer player) {
@@ -143,7 +145,7 @@ public class ChronoCoreLogic {
             return true;
         }
 
-        if (!CooldownManager.isPassiveReady(data, CoreType.CHRONO_CORE)) {
+        if (!CoreCooldownManager.isPassiveReady(data, CoreType.CHRONO_CORE)) {
             player.sendSystemMessage(Component.literal("Second timeline is on Cooldown.")
                     .withStyle(ChatFormatting.RED));
             return true;
@@ -157,7 +159,7 @@ public class ChronoCoreLogic {
 
         Core core = coreOptional.get();
 
-        CooldownManager.startPassiveCooldown(data, CoreType.CHRONO_CORE, core.getPassiveCooldown());
+        CoreCooldownManager.startPassiveCooldown(data, CoreType.CHRONO_CORE, core.getPassiveCooldown());
 
             // Restores the player to maximum health and resets their combat state.
             player.setHealth(player.getMaxHealth());

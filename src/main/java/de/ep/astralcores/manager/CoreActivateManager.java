@@ -2,6 +2,7 @@ package de.ep.astralcores.manager;
 
 import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.actionbar.ActionBarManager;
+import de.ep.astralcores.core.data.CoreActivationResult;
 import de.ep.astralcores.playerdata.PlayerData;
 import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreRegistry;
@@ -29,8 +30,8 @@ public class CoreActivateManager {
         }
 
         // Rejects execution sequence if the specific core capacity is currently locked on cooldown
-        if (!CooldownManager.isActiveReady(data, targetedType)) {
-            int remaining = CooldownManager.getActiveRemaining(data, targetedType);
+        if (!CoreCooldownManager.isActiveReady(data, targetedType)) {
+            int remaining = CoreCooldownManager.getActiveRemaining(data, targetedType);
 
             String abilityName = core.getActiveAbilityName();
             return new ActivationResult(false, Component.literal(abilityName)
@@ -40,15 +41,22 @@ public class CoreActivateManager {
         }
 
         // Executes the custom capability features bound to the target core instance
-        core.activate(player);
+        CoreActivationResult result = core.activate(player);
 
-        // Commits the core cooldown parameters directly into active tracker memory lines
-        CooldownManager.startActiveCooldown(data, targetedType, core.getActiveCooldown());
+        if (result == CoreActivationResult.EXECUTED) {
+            CoreCooldownManager.startActiveCooldown(
+                    data,
+                    targetedType,
+                    core.getActiveCooldown()
+            );
+        }
 
-        // Re-renders the action bar layout immediately to display updated timers on the HUD
         ActionBarManager.tick(player, data);
 
-        return new ActivationResult(true, null);
+        return new ActivationResult(
+                result != CoreActivationResult.FAILED,
+                null
+        );
     }
 
     // Transfers action status signals and failure feedback details through execution streams

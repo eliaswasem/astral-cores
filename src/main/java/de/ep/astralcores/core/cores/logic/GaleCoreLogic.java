@@ -1,5 +1,6 @@
 package de.ep.astralcores.core.cores.logic;
 
+import de.ep.astralcores.core.data.CoreActivationResult;
 import de.ep.astralcores.util.Effects;
 import de.ep.astralcores.util.TickTimer;
 import net.minecraft.core.particles.ParticleTypes;
@@ -31,9 +32,9 @@ public final class GaleCoreLogic {
         }
     }
 
-    public static void activate(ServerPlayer player) {
+    public static CoreActivationResult activate(ServerPlayer player) {
         if (!player.isAlive() || player.isRemoved()) {
-            return;
+            return CoreActivationResult.FAILED;
         }
 
         Vec3 look = player.getLookAngle();
@@ -52,6 +53,8 @@ public final class GaleCoreLogic {
                 player.getUUID(),
                 new TickTimer(10)
         );
+
+        return CoreActivationResult.EXECUTED;
     }
 
     public static void tick(ServerPlayer player) {

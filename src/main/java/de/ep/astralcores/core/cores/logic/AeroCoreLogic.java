@@ -2,6 +2,7 @@ package de.ep.astralcores.core.cores.logic;
 
 import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.core.CoreType;
+import de.ep.astralcores.core.data.CoreActivationResult;
 import de.ep.astralcores.playerdata.PlayerData;
 import de.ep.astralcores.util.Effects;
 import de.ep.astralcores.util.TickTimer;
@@ -159,10 +160,10 @@ public class AeroCoreLogic {
         return false;
     }
 
-    public static void activate(ServerPlayer player) {
+    public static CoreActivationResult activate(ServerPlayer player) {
 
         if (!player.isAlive() || player.isRemoved()) {
-            return;
+            return CoreActivationResult.FAILED;
         }
 
         ServerLevel world = (ServerLevel) player.level();
@@ -225,6 +226,8 @@ public class AeroCoreLogic {
                 player.getUUID(),
                 new TickTimer(25)
         );
+
+        return CoreActivationResult.EXECUTED;
     }
 
     public static void tick(ServerPlayer player) {

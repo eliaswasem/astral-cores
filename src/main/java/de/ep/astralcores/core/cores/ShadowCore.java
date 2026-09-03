@@ -3,6 +3,7 @@ package de.ep.astralcores.core.cores;
 import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.core.cores.logic.ShadowCoreLogic;
+import de.ep.astralcores.core.data.CoreActivationResult;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.item.Items;
@@ -36,8 +37,8 @@ public class ShadowCore extends Core {
     }
 
     @Override
-    public void activate(ServerPlayer player) {
-        ShadowCoreLogic.activate(player);
+    public CoreActivationResult activate(ServerPlayer player) {
+        return ShadowCoreLogic.activate(player);
     }
 
     @Override

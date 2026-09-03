@@ -4,7 +4,7 @@ import com.mojang.brigadier.context.CommandContext;
 import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.core.respawn.data.AltarData;
 import de.ep.astralcores.manager.AltarManager;
-import de.ep.astralcores.manager.CooldownManager;
+import de.ep.astralcores.manager.CoreCooldownManager;
 import de.ep.astralcores.playerdata.PlayerData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
@@ -13,12 +13,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-
-import java.util.Optional;
-
-import static de.ep.astralcores.manager.AltarManager.PlaceResult.SUCCESS;
 
 public class AstralCoresCommandLogic {
 
@@ -149,7 +143,7 @@ public class AstralCoresCommandLogic {
 
         PlayerData data = AstralCores.PLAYER_DATA.get(player);
 
-        CooldownManager.resetCooldowns(data);
+        CoreCooldownManager.resetCooldowns(data);
 
         source.sendSuccess(
                 () -> Component.literal("All core cooldowns have been reset."),

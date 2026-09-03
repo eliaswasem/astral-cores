@@ -2,6 +2,7 @@ package de.ep.astralcores.core.cores.logic;
 
 import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.core.CoreType;
+import de.ep.astralcores.core.data.CoreActivationResult;
 import de.ep.astralcores.playerdata.PlayerData;
 import de.ep.astralcores.util.Effects;
 import de.ep.astralcores.util.TickTimer;
@@ -53,9 +54,9 @@ public final class MagnetCoreLogic {
         clearItemsForPlayer(player.getUUID());
     }
 
-    public static void activate(ServerPlayer player) {
+    public static CoreActivationResult activate(ServerPlayer player) {
         if (!player.isAlive() || player.isRemoved()) {
-            return;
+            return CoreActivationResult.FAILED;
         }
 
         ServerLevel level = player.level();
@@ -121,6 +122,8 @@ public final class MagnetCoreLogic {
                     0.005D
             );
         }
+
+        return CoreActivationResult.EXECUTED;
     }
 
     public static void tick(ServerPlayer player) {

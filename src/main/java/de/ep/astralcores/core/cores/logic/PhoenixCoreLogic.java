@@ -1,5 +1,6 @@
 package de.ep.astralcores.core.cores.logic;
 
+import de.ep.astralcores.core.data.CoreActivationResult;
 import de.ep.astralcores.util.Effects;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -59,9 +60,9 @@ public final class PhoenixCoreLogic {
         }
     }
 
-    public static void activate(ServerPlayer player) {
+    public static CoreActivationResult activate(ServerPlayer player) {
         if (!player.isAlive() || player.isRemoved()) {
-            return;
+            return CoreActivationResult.FAILED;
         }
 
         ServerLevel level = player.level();
@@ -117,6 +118,8 @@ public final class PhoenixCoreLogic {
                 1.33F,
                 0.8F
         );
+
+        return CoreActivationResult.EXECUTED;
     }
 
     public static void tick(ServerPlayer player) {

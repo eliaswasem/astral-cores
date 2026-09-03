@@ -3,7 +3,7 @@ package de.ep.astralcores.actionbar;
 import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreRegistry;
 import de.ep.astralcores.core.CoreType;
-import de.ep.astralcores.manager.CooldownManager;
+import de.ep.astralcores.manager.CoreCooldownManager;
 import de.ep.astralcores.playerdata.PlayerData;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
@@ -41,11 +41,11 @@ public class ActionBarManager {
         boolean hasPassiveFeature = core.getPassiveCooldown() > 0;
         boolean hasActiveFeature = core.getActiveCooldown() > 0;
 
-        boolean activeReady = CooldownManager.isActiveReady(data, equippedType);
-        boolean passiveReady = CooldownManager.isPassiveReady(data, equippedType);
+        boolean activeReady = CoreCooldownManager.isActiveReady(data, equippedType);
+        boolean passiveReady = CoreCooldownManager.isPassiveReady(data, equippedType);
 
-        int activeRemaining = CooldownManager.getActiveRemaining(data, equippedType);
-        int passiveRemaining = CooldownManager.getPassiveRemaining(data, equippedType);
+        int activeRemaining = CoreCooldownManager.getActiveRemaining(data, equippedType);
+        int passiveRemaining = CoreCooldownManager.getPassiveRemaining(data, equippedType);
 
         // Formats the passive ability status string
         String passiveStatus = "";

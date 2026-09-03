@@ -1,6 +1,7 @@
 package de.ep.astralcores.core.cores.logic;
 
 import de.ep.astralcores.AstralCores;
+import de.ep.astralcores.core.data.CoreActivationResult;
 import de.ep.astralcores.playerdata.PlayerData;
 import de.ep.astralcores.util.TickTimer;
 import net.minecraft.core.particles.ParticleTypes;
@@ -67,9 +68,9 @@ public final class GravityCoreLogic {
         activePulls.remove(player.getUUID());
     }
 
-    public static void activate(ServerPlayer player) {
+    public static CoreActivationResult activate(ServerPlayer player) {
         if (!player.isAlive() || player.isRemoved()) {
-            return;
+            return CoreActivationResult.FAILED;
         }
 
         // 40 ticks = 2 seconds.
@@ -77,6 +78,8 @@ public final class GravityCoreLogic {
                 player.getUUID(),
                 new TickTimer(40)
         );
+
+        return CoreActivationResult.EXECUTED;
     }
 
     public static void tick(ServerPlayer player) {

@@ -2,6 +2,7 @@ package de.ep.astralcores.core.cores.logic;
 
 import com.mojang.datafixers.util.Pair;
 import de.ep.astralcores.AstralCores;
+import de.ep.astralcores.core.data.CoreActivationResult;
 import de.ep.astralcores.playerdata.PlayerData;
 import de.ep.astralcores.util.Effects;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -152,9 +153,9 @@ public final class ShadowCoreLogic {
         }
     }
 
-    public static void activate(ServerPlayer player) {
+    public static CoreActivationResult activate(ServerPlayer player) {
         if (!player.isAlive() || player.isRemoved()) {
-            return;
+            return CoreActivationResult.FAILED;
         }
 
         ServerLevel level = player.level();
@@ -229,6 +230,8 @@ public final class ShadowCoreLogic {
                     false
             );
         }
+
+        return CoreActivationResult.EXECUTED;
     }
 
     public static void handleDamageReveal(

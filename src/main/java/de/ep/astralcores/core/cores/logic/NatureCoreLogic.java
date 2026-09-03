@@ -2,6 +2,7 @@ package de.ep.astralcores.core.cores.logic;
 
 import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.core.CoreType;
+import de.ep.astralcores.core.data.CoreActivationResult;
 import de.ep.astralcores.util.BiomeUtils;
 import de.ep.astralcores.util.CropUtils;
 import de.ep.astralcores.util.Effects;
@@ -47,7 +48,7 @@ public final class NatureCoreLogic {
         handleFoodHealing(player);
     }
 
-    public static void activate(ServerPlayer player) {
+    public static CoreActivationResult activate(ServerPlayer player) {
         ServerLevel level = player.level();
         Vec3 pos = player.position();
 
@@ -85,6 +86,8 @@ public final class NatureCoreLogic {
         );
 
         level.addFreshEntity(cloud);
+
+        return CoreActivationResult.EXECUTED;
     }
 
     private static void handleFoodHealing(ServerPlayer player) {

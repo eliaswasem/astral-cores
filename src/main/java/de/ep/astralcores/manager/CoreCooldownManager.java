@@ -4,7 +4,7 @@ import de.ep.astralcores.playerdata.PlayerData;
 import de.ep.astralcores.core.CoreType;
 import net.minecraft.server.level.ServerPlayer;
 
-public class CooldownManager {
+public class CoreCooldownManager {
 
     // Decrements active and passive cooldown duration metrics inside the player profile data structures
     public static void tick(ServerPlayer player, PlayerData data) {

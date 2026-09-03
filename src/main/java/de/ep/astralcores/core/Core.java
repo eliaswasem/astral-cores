@@ -1,6 +1,7 @@
 package de.ep.astralcores.core;
 
 import de.ep.astralcores.core.CoreType;
+import de.ep.astralcores.core.data.CoreActivationResult;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.item.Item;
@@ -158,5 +159,5 @@ public abstract class Core {
     }
 
     // Triggers the main active ability spell logic
-    public abstract void activate(ServerPlayer player);
+    public abstract CoreActivationResult activate(ServerPlayer player);
 }

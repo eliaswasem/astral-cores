@@ -1,6 +1,11 @@
 package de.ep.astralcores.core.cores.logic;
 
 import de.ep.astralcores.AstralCores;
+import de.ep.astralcores.core.Core;
+import de.ep.astralcores.core.CoreRegistry;
+import de.ep.astralcores.core.CoreType;
+import de.ep.astralcores.core.data.CoreActivationResult;
+import de.ep.astralcores.manager.CoreCooldownManager;
 import de.ep.astralcores.playerdata.PlayerData;
 import de.ep.astralcores.util.Effects;
 import de.ep.astralcores.util.TickTimer;
@@ -31,11 +36,18 @@ public class FrostCoreLogic {
     // Currently frozen entities.
     private static final Map<LivingEntity, FrostLock> activeLocks = new HashMap<>();
 
-    public static void activate(ServerPlayer player) {
-        if (player.isAlive() && !player.isRemoved()) {
-            // The next valid player hit will trigger Frost Lock.
-            armedPlayers.add(player.getUUID());
+    public static CoreActivationResult activate(ServerPlayer player) {
+        if (!player.isAlive() || player.isRemoved()) {
+            return CoreActivationResult.FAILED;
         }
+
+        // Already armed — don't re-arm or reset anything.
+        if (!armedPlayers.add(player.getUUID())) {
+            return CoreActivationResult.FAILED;
+        }
+
+        // The next valid player hit will trigger Frost Lock.
+        return CoreActivationResult.ARMED;
     }
 
     public static void onRemoved(ServerPlayer player) {
@@ -78,25 +90,53 @@ public class FrostCoreLogic {
     }
 
     public static void handleFrostLock(ServerPlayer attacker, LivingEntity entity) {
-        if (armedPlayers.remove(attacker.getUUID())) {
-            tryLockEntity(attacker, entity);
+        if (!armedPlayers.contains(attacker.getUUID())) {
+            return;
         }
+
+        if (!tryLockEntity(attacker, entity)) {
+            return;
+        }
+
+        // Frost Lock actually executed.
+        armedPlayers.remove(attacker.getUUID());
+
+        PlayerData data = AstralCores.PLAYER_DATA.get(attacker);
+
+        if (data == null) {
+            return;
+        }
+
+        CoreRegistry.get(CoreType.FROST_CORE).ifPresent(core ->
+                CoreCooldownManager.startActiveCooldown(
+                        data,
+                        CoreType.FROST_CORE,
+                        core.getActiveCooldown()
+                )
+        );
     }
 
-    public static void tryLockEntity(ServerPlayer attacker, LivingEntity target) {
+
+    public static boolean tryLockEntity(ServerPlayer attacker, LivingEntity target) {
         if (!target.isAlive() || target.isRemoved()) {
-            return;
+            return false;
         }
 
         PlayerData data = AstralCores.PLAYER_DATA.get(attacker);
 
         // Trusted entities cannot be frozen.
         if (data != null && data.isTrusted(target.getUUID())) {
-            return;
+            return false;
         }
 
         // Do not replace an existing Frost Lock.
-        activeLocks.putIfAbsent(target, new FrostLock(target));
+        if (activeLocks.containsKey(target)) {
+            return false;
+        }
+
+        activeLocks.put(target, new FrostLock(target));
+
+        return true;
     }
 
     private static final class FrostLock {

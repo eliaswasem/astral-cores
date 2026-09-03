@@ -2,6 +2,7 @@ package de.ep.astralcores.core.cores.logic;
 
 import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.core.CoreType;
+import de.ep.astralcores.core.data.CoreActivationResult;
 import de.ep.astralcores.util.Effects;
 import de.ep.astralcores.util.TickTimer;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,7 +29,7 @@ public class BerserkerCoreLogic {
         }
     }
 
-    public static void activate(ServerPlayer player) {
+    public static CoreActivationResult activate(ServerPlayer player) {
         player.setHealth(player.getMaxHealth());
 
         // Rage lasts for 1.5 minutes
@@ -38,6 +39,8 @@ public class BerserkerCoreLogic {
         Effects.applyEffect(player, MobEffects.STRENGTH, 1800, 2);
         Effects.applyEffect(player, MobEffects.SPEED, 1800, 2);
         Effects.applyEffect(player, MobEffects.FIRE_RESISTANCE, 1800, 1);
+
+        return CoreActivationResult.EXECUTED;
     }
 
     public static void tick(ServerPlayer player) {

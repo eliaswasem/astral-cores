@@ -1,6 +1,7 @@
 package de.ep.astralcores.core.cores.logic;
 
 import de.ep.astralcores.AstralCores;
+import de.ep.astralcores.core.data.CoreActivationResult;
 import de.ep.astralcores.playerdata.PlayerData;
 import de.ep.astralcores.util.Effects;
 import de.ep.astralcores.util.TickTimer;
@@ -108,47 +109,41 @@ public final class LeviathanCoreLogic {
         pullCasters.remove(playerUUID);
     }
 
-    public static void activate(ServerPlayer player) {
+    public static CoreActivationResult activate(ServerPlayer player) {
         if (!player.isAlive() || player.isRemoved()) {
-            return;
+            return CoreActivationResult.FAILED;
+        }
+
+        // Whirlpool only works in water or while it is raining.
+        if (!player.isInWaterOrRain()) {
+            return CoreActivationResult.FAILED;
         }
 
         ServerLevel level = player.level();
 
-        boolean inWaterOrRain =
-                player.isInWaterOrRain();
+        // Whirlpool is twice as strong underwater.
+        boolean inWater = player.isInWater();
 
-        double pullRadius =
-                inWaterOrRain ? 6.0D : 4.0D;
+        double pullRadius = inWater ? 6.0D : 4.0D;
+        double particleRadius = inWater ? 4.0D : 3.0D;
 
-        double particleRadius =
-                inWaterOrRain ? 4.0D : 3.0D;
+        AABB searchBox = player.getBoundingBox().inflate(pullRadius);
 
-        AABB searchBox =
-                player.getBoundingBox().inflate(pullRadius);
+        List<ServerPlayer> targets = level.getEntitiesOfClass(
+                ServerPlayer.class,
+                searchBox,
+                target ->
+                        target.isAlive()
+                                && !target.equals(player)
+        );
 
-        List<ServerPlayer> targets =
-                level.getEntitiesOfClass(
-                        ServerPlayer.class,
-                        searchBox,
-                        target ->
-                                target.isAlive()
-                                        && !target.equals(player)
-                );
-
-        PlayerData data =
-                AstralCores.PLAYER_DATA.get(player);
-
-        UUID casterUUID =
-                player.getUUID();
+        PlayerData data = AstralCores.PLAYER_DATA.get(player);
+        UUID casterUUID = player.getUUID();
 
         for (ServerPlayer target : targets) {
+            UUID targetUUID = target.getUUID();
 
-            UUID targetUUID =
-                    target.getUUID();
-
-            if (data != null
-                    && data.isTrusted(targetUUID)) {
+            if (data != null && data.isTrusted(targetUUID)) {
                 continue;
             }
 
@@ -163,15 +158,9 @@ public final class LeviathanCoreLogic {
             );
         }
 
-        Vec3 position =
-                player.position();
-
-        if (player.isInWater()) {
-            return;
-        }
+        Vec3 position = player.position();
 
         for (int i = 0; i < 40; i++) {
-
             level.sendParticles(
                     ParticleTypes.DRIPPING_DRIPSTONE_WATER,
                     position.x,
@@ -208,6 +197,8 @@ public final class LeviathanCoreLogic {
                     0.05D
             );
         }
+
+        return CoreActivationResult.EXECUTED;
     }
 
     public static void tick(ServerPlayer caster) {
