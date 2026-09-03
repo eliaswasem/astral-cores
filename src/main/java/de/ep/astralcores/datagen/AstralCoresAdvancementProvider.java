@@ -10,11 +10,14 @@ import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricAdvancementProvider;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.predicates.*;
+import net.minecraft.advancements.predicates.entity.EntityEquipmentPredicate;
 import net.minecraft.advancements.predicates.entity.EntityPredicate;
 import net.minecraft.advancements.predicates.entity.PlayerPredicate;
 import net.minecraft.advancements.triggers.EffectsChangedTrigger;
+import net.minecraft.advancements.triggers.EnterBlockTrigger;
 import net.minecraft.advancements.triggers.InventoryChangeTrigger;
 import net.minecraft.advancements.triggers.PlayerTrigger;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
@@ -31,6 +34,7 @@ import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.List;
@@ -282,6 +286,127 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                                 "core/leviathan_core"
                         )
                 );
+
+        Advancement.Builder.advancement()
+                .display(
+                        Items.BREEZE_ROD,
+                        Component.literal("It gotta go FAST!!!"),
+                        Component.literal("Have Speed 2, Dolphins Grace, Netherite Boots with soul speed 3 while walking on soul sand"),
+                        null,
+                        AdvancementType.CHALLENGE,
+                        true,
+                        true,
+                        false
+                )
+
+                .addCriterion(
+                        "speed",
+                        EffectsChangedTrigger.TriggerInstance.hasEffects(
+                                MobEffectsPredicate.Builder.effects()
+                                        .and(
+                                                MobEffects.SPEED,
+                                                new MobEffectsPredicate.MobEffectInstancePredicate(
+                                                        MinMaxBounds.Ints.atLeast(1),
+                                                        MinMaxBounds.Ints.atLeast(1),
+                                                        Optional.empty(),
+                                                        Optional.empty()
+                                                )
+                                        )
+                        )
+                )
+
+                .addCriterion(
+                        "dolphins_grace",
+                        EffectsChangedTrigger.TriggerInstance.hasEffects(
+                                MobEffectsPredicate.Builder.effects()
+                                        .and(
+                                                MobEffects.DOLPHINS_GRACE,
+                                                new MobEffectsPredicate.MobEffectInstancePredicate(
+                                                        MinMaxBounds.Ints.ANY,
+                                                        MinMaxBounds.Ints.ANY,
+                                                        Optional.empty(),
+                                                        Optional.empty()
+                                                )
+                                        )
+                        )
+                )
+
+                .addCriterion(
+                        "enchanted_netherite_boots",
+                        PlayerTrigger.TriggerInstance.located(
+                                EntityPredicate.Builder.entity()
+                                        .equipment(
+                                                EntityEquipmentPredicate.Builder.equipment()
+                                                        .feet(
+                                                                ItemPredicate.Builder.item()
+                                                                        .of(
+                                                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                                                Items.NETHERITE_BOOTS
+                                                                        )
+                                                                        .withComponents(
+                                                                                DataComponentMatchers.Builder
+                                                                                        .components()
+                                                                                        .partial(
+                                                                                                DataComponentPredicates.ENCHANTMENTS,
+                                                                                                EnchantmentsPredicate.enchantments(
+                                                                                                        List.of(
+                                                                                                                new EnchantmentPredicate(
+                                                                                                                        lookup.lookupOrThrow(
+                                                                                                                                Registries.ENCHANTMENT
+                                                                                                                        ).getOrThrow(
+                                                                                                                                Enchantments.SOUL_SPEED
+                                                                                                                        ),
+                                                                                                                        MinMaxBounds.Ints.atLeast(2)
+                                                                                                                )
+                                                                                                        )
+                                                                                                )
+                                                                                        )
+                                                                                        .build()
+                                                                        )
+                                                        )
+                                        )
+                        )
+                )
+
+                .addCriterion(
+                        "on_soul_sand",
+                        PlayerTrigger.TriggerInstance.located(
+                                EntityPredicate.Builder.entity()
+                                        .steppingOn(
+                                                LocationPredicate.Builder.location()
+                                                        .setBlock(
+                                                                BlockPredicate.Builder.block()
+                                                                        .of(
+                                                                                lookup.lookupOrThrow(Registries.BLOCK),
+                                                                                    Blocks.SOUL_SAND
+                                                                        )
+                                                        )
+                                        )
+                        )
+                )
+
+                .requirements(
+                        AdvancementRequirements.Strategy.AND
+                )
+
+                .rewards(
+                        new AdvancementRewards.Builder()
+                                .runs(
+                                        Identifier.fromNamespaceAndPath(
+                                                AstralCores.MOD_ID,
+                                                "cores/gale_core"
+                                        )
+                                )
+                )
+
+                .save(
+                        consumer,
+                        Identifier.fromNamespaceAndPath(
+                                AstralCores.MOD_ID,
+                                "core/gale_core"
+                        )
+                );
+
 
     }
     }

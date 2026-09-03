@@ -1,0 +1,99 @@
+{
+  "criteria": {
+    "dolphins_grace": {
+      "conditions": {
+        "effects": {
+          "minecraft:dolphins_grace": {}
+        }
+      },
+      "trigger": "minecraft:effects_changed"
+    },
+    "enchanted_netherite_boots": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "minecraft:equipment": {
+                "feet": {
+                  "items": "minecraft:netherite_boots",
+                  "predicates": {
+                    "minecraft:enchantments": [
+                      {
+                        "enchantments": "minecraft:soul_speed",
+                        "levels": {
+                          "min": 2
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "on_soul_sand": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "minecraft:stepping_on": {
+                "block": {
+                  "blocks": "minecraft:soul_sand"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "speed": {
+      "conditions": {
+        "effects": {
+          "minecraft:speed": {
+            "amplifier": {
+              "min": 1
+            },
+            "duration": {
+              "min": 1
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:effects_changed"
+    }
+  },
+  "display": {
+    "description": "Have Speed 2, Dolphins Grace, Netherite Boots with soul speed 3 while walking on soul sand",
+    "frame": "challenge",
+    "icon": {
+      "id": "minecraft:breeze_rod"
+    },
+    "title": "It gotta go FAST!!!"
+  },
+  "requirements": [
+    [
+      "speed"
+    ],
+    [
+      "dolphins_grace"
+    ],
+    [
+      "enchanted_netherite_boots"
+    ],
+    [
+      "on_soul_sand"
+    ]
+  ],
+  "rewards": {
+    "function": "astralcores:cores/gale_core"
+  },
+  "sends_telemetry_event": true
+}
