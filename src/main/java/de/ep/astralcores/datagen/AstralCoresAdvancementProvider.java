@@ -8,6 +8,8 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricAdvancementProvider;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.predicates.*;
 import net.minecraft.advancements.predicates.entity.EntityPredicate;
+import net.minecraft.advancements.predicates.entity.PlayerPredicate;
+import net.minecraft.advancements.triggers.EffectsChangedTrigger;
 import net.minecraft.advancements.triggers.InventoryChangeTrigger;
 import net.minecraft.advancements.triggers.PlayerTrigger;
 import net.minecraft.core.HolderLookup;
@@ -18,7 +20,10 @@ import net.minecraft.core.component.predicates.EnchantmentsPredicate;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -152,8 +157,10 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                         PlayerTrigger.TriggerInstance.located(
                                 LocationPredicate.Builder.location()
                                         .setBiomes(
+                                                HolderSet.direct(
                                                 lookup.lookupOrThrow(Registries.BIOME)
-                                                        .getOrThrow(BiomeTags.IS_FOREST)
+                                                        .getOrThrow(Biomes.FOREST)
+                                                )
                                         )
                         )
                 )
@@ -164,8 +171,10 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                         PlayerTrigger.TriggerInstance.located(
                                 LocationPredicate.Builder.location()
                                         .setBiomes(
+                                                HolderSet.direct(
                                                 lookup.lookupOrThrow(Registries.BIOME)
-                                                        .getOrThrow(BiomeTags.IS_JUNGLE)
+                                                        .getOrThrow(Biomes.JUNGLE)
+                                                )
                                         )
                         )
                 )
@@ -176,8 +185,10 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                         PlayerTrigger.TriggerInstance.located(
                                 LocationPredicate.Builder.location()
                                         .setBiomes(
+                                                HolderSet.direct(
                                                 lookup.lookupOrThrow(Registries.BIOME)
-                                                        .getOrThrow(BiomeTags.IS_JUNGLE)
+                                                        .getOrThrow(Biomes.TAIGA)
+                                                )
                                         )
                         )
                 )
@@ -285,5 +296,89 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                                 "core/nature_core"
                         )
                 );
+
+        Advancement.Builder.advancement()
+                .display(
+                        Blocks.CONDUIT,
+                        Component.literal("What a breath"),
+                        Component.literal("Have Conduit Power 2, Water breathing & Dolphins Grace"),
+                        null,
+                        AdvancementType.CHALLENGE,
+                        true,
+                        true,
+                        false
+                )
+
+                .addCriterion(
+                        "conduit_power_2",
+                        EffectsChangedTrigger.TriggerInstance.hasEffects(
+                                MobEffectsPredicate.Builder.effects()
+                                        .and(
+                                                MobEffects.CONDUIT_POWER,
+                                                new MobEffectsPredicate.MobEffectInstancePredicate(
+                                                        MinMaxBounds.Ints.exactly(2),
+                                                        MinMaxBounds.Ints.exactly(2),
+                                                        Optional.empty(),
+                                                        Optional.empty()
+                                                )
+                                        )
+                        )
+                )
+
+                .addCriterion(
+                        "water_breathing",
+                        EffectsChangedTrigger.TriggerInstance.hasEffects(
+                                MobEffectsPredicate.Builder.effects()
+                                        .and(
+                                                MobEffects.WATER_BREATHING,
+                                                new MobEffectsPredicate.MobEffectInstancePredicate(
+                                                        MinMaxBounds.Ints.ANY,
+                                                        MinMaxBounds.Ints.ANY,
+                                                        Optional.empty(),
+                                                        Optional.empty()
+                                                )
+                                        )
+                        )
+
+                )
+
+                .addCriterion(
+                        "dolphins_grace",
+                        EffectsChangedTrigger.TriggerInstance.hasEffects(
+                                MobEffectsPredicate.Builder.effects()
+                                        .and(
+                                                MobEffects.DOLPHINS_GRACE,
+                                                new MobEffectsPredicate.MobEffectInstancePredicate(
+                                                        MinMaxBounds.Ints.ANY,
+                                                        MinMaxBounds.Ints.ANY,
+                                                        Optional.empty(),
+                                                        Optional.empty()
+                                                )
+                                        )
+                        )
+                )
+
+                .requirements(
+                        AdvancementRequirements.Strategy.AND
+                )
+
+                .rewards(
+                        new AdvancementRewards.Builder()
+                                .runs(
+                                        Identifier.fromNamespaceAndPath(
+                                                AstralCores.MOD_ID,
+                                                "cores/leviathan_core"
+                                        )
+                                )
+                )
+
+                .save(
+                        consumer,
+                        Identifier.fromNamespaceAndPath(
+                                AstralCores.MOD_ID,
+                                "core/leviathan_core"
+                        )
+                );
+
     }
     }

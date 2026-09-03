@@ -34,7 +34,7 @@
             "entity": "this",
             "predicate": {
               "minecraft:location": {
-                "biomes": "#minecraft:is_forest"
+                "biomes": "minecraft:forest"
               }
             }
           }
@@ -50,7 +50,7 @@
             "entity": "this",
             "predicate": {
               "minecraft:location": {
-                "biomes": "#minecraft:is_jungle"
+                "biomes": "minecraft:jungle"
               }
             }
           }
@@ -114,7 +114,7 @@
             "entity": "this",
             "predicate": {
               "minecraft:location": {
-                "biomes": "#minecraft:is_jungle"
+                "biomes": "minecraft:taiga"
               }
             }
           }
