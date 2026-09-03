@@ -152,10 +152,8 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                         PlayerTrigger.TriggerInstance.located(
                                 LocationPredicate.Builder.location()
                                         .setBiomes(
-                                                HolderSet.direct(
                                                 lookup.lookupOrThrow(Registries.BIOME)
-                                                        .getOrThrow(Biomes.FOREST)
-                                                )
+                                                        .getOrThrow(BiomeTags.IS_FOREST)
                                         )
                         )
                 )
@@ -166,10 +164,8 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                         PlayerTrigger.TriggerInstance.located(
                                 LocationPredicate.Builder.location()
                                         .setBiomes(
-                                                HolderSet.direct(
                                                 lookup.lookupOrThrow(Registries.BIOME)
-                                                        .getOrThrow(Biomes.JUNGLE)
-                                                )
+                                                        .getOrThrow(BiomeTags.IS_JUNGLE)
                                         )
                         )
                 )
@@ -180,10 +176,8 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                         PlayerTrigger.TriggerInstance.located(
                                 LocationPredicate.Builder.location()
                                         .setBiomes(
-                                                HolderSet.direct(
                                                 lookup.lookupOrThrow(Registries.BIOME)
-                                                        .getOrThrow(Biomes.TAIGA)
-                                                )
+                                                        .getOrThrow(BiomeTags.IS_JUNGLE)
                                         )
                         )
                 )
