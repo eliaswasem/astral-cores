@@ -1,27 +1,13 @@
 {
   "criteria": {
-    "conduit_power_2": {
+    "all_effects": {
       "conditions": {
         "effects": {
           "minecraft:conduit_power": {
             "amplifier": 1,
             "duration": 1
-          }
-        }
-      },
-      "trigger": "minecraft:effects_changed"
-    },
-    "dolphins_grace": {
-      "conditions": {
-        "effects": {
-          "minecraft:dolphins_grace": {}
-        }
-      },
-      "trigger": "minecraft:effects_changed"
-    },
-    "water_breathing": {
-      "conditions": {
-        "effects": {
+          },
+          "minecraft:dolphins_grace": {},
           "minecraft:water_breathing": {}
         }
       },
@@ -38,13 +24,7 @@
   },
   "requirements": [
     [
-      "conduit_power_2"
-    ],
-    [
-      "water_breathing"
-    ],
-    [
-      "dolphins_grace"
+      "all_effects"
     ]
   ],
   "rewards": {

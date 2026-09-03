@@ -282,7 +282,7 @@
     }
   },
   "display": {
-    "description": "Collect every flower and every sapling from the Minecraft Overworld",
+    "description": "Collect every flower and sapling from the Overworld",
     "frame": "challenge",
     "icon": {
       "id": "minecraft:oak_leaves"

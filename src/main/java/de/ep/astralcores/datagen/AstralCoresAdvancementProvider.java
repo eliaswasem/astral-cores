@@ -136,7 +136,7 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                         Blocks.OAK_LEAVES,
                         Component.literal("Best Botanic"),
                         Component.literal(
-                                "Collect every flower and every sapling from the Minecraft Overworld"
+                                "Collect every flower and sapling from the Overworld"
                         ),
                         null,
                         AdvancementType.CHALLENGE,
@@ -148,198 +148,198 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                 .addCriterion(
                         "allium",
                         InventoryChangeTrigger.TriggerInstance.hasItems(
-                        ItemPredicate.Builder.item()
-                                .of(
-                                        lookup.lookupOrThrow(Registries.ITEM),
-                                        Items.ALLIUM
-                                )
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.ALLIUM
+                                        )
                         )
                 )
 
                 .addCriterion(
                         "azure_bluet",
                         InventoryChangeTrigger.TriggerInstance.hasItems(
-                        ItemPredicate.Builder.item()
-                                .of(
-                                        lookup.lookupOrThrow(Registries.ITEM),
-                                        Items.AZURE_BLUET
-                                )
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.AZURE_BLUET
+                                        )
                         )
                 )
 
                 .addCriterion(
                         "blue_orchid",
                         InventoryChangeTrigger.TriggerInstance.hasItems(
-                        ItemPredicate.Builder.item()
-                                .of(
-                                        lookup.lookupOrThrow(Registries.ITEM),
-                                        Items.BLUE_ORCHID
-                                )
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.BLUE_ORCHID
+                                        )
                         )
                 )
 
                 .addCriterion(
                         "cornflower",
                         InventoryChangeTrigger.TriggerInstance.hasItems(
-                        ItemPredicate.Builder.item()
-                                .of(
-                                        lookup.lookupOrThrow(Registries.ITEM),
-                                        Items.CORNFLOWER
-                                )
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.CORNFLOWER
+                                        )
                         )
                 )
 
                 .addCriterion(
                         "dandelion",
                         InventoryChangeTrigger.TriggerInstance.hasItems(
-                        ItemPredicate.Builder.item()
-                                .of(
-                                        lookup.lookupOrThrow(Registries.ITEM),
-                                        Items.DANDELION
-                                )
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.DANDELION
+                                        )
                         )
                 )
 
                 .addCriterion(
                         "open_eyeblossom",
                         InventoryChangeTrigger.TriggerInstance.hasItems(
-                        ItemPredicate.Builder.item()
-                                .of(
-                                        lookup.lookupOrThrow(Registries.ITEM),
-                                        Items.OPEN_EYEBLOSSOM
-                                )
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.OPEN_EYEBLOSSOM
+                                        )
                         )
                 )
 
                 .addCriterion(
                         "closed_eyeblossom",
                         InventoryChangeTrigger.TriggerInstance.hasItems(
-                        ItemPredicate.Builder.item()
-                                .of(
-                                        lookup.lookupOrThrow(Registries.ITEM),
-                                        Items.CLOSED_EYEBLOSSOM
-                                )
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.CLOSED_EYEBLOSSOM
+                                        )
                         )
                 )
 
                 .addCriterion(
                         "lily_of_the_valley",
                         InventoryChangeTrigger.TriggerInstance.hasItems(
-                        ItemPredicate.Builder.item()
-                                .of(
-                                        lookup.lookupOrThrow(Registries.ITEM),
-                                        Items.LILY_OF_THE_VALLEY
-                                )
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.LILY_OF_THE_VALLEY
+                                        )
                         )
                 )
 
                 .addCriterion(
                         "oxeye_daisy",
                         InventoryChangeTrigger.TriggerInstance.hasItems(
-                        ItemPredicate.Builder.item()
-                                .of(
-                                        lookup.lookupOrThrow(Registries.ITEM),
-                                        Items.OXEYE_DAISY
-                                )
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.OXEYE_DAISY
+                                        )
                         )
                 )
 
                 .addCriterion(
                         "poppy",
                         InventoryChangeTrigger.TriggerInstance.hasItems(
-                        ItemPredicate.Builder.item()
-                                .of(
-                                        lookup.lookupOrThrow(Registries.ITEM),
-                                        Items.POPPY
-                                )
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.POPPY
+                                        )
                         )
                 )
 
                 .addCriterion(
                         "rose_bush",
                         InventoryChangeTrigger.TriggerInstance.hasItems(
-                        ItemPredicate.Builder.item()
-                                .of(
-                                        lookup.lookupOrThrow(Registries.ITEM),
-                                        Items.ROSE_BUSH
-                                )
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.ROSE_BUSH
+                                        )
                         )
                 )
 
                 .addCriterion(
                         "spore_blossom",
                         InventoryChangeTrigger.TriggerInstance.hasItems(
-                        ItemPredicate.Builder.item()
-                                .of(
-                                        lookup.lookupOrThrow(Registries.ITEM),
-                                        Items.SPORE_BLOSSOM
-                                )
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.SPORE_BLOSSOM
+                                        )
                         )
                 )
 
                 .addCriterion(
                         "sunflower",
                         InventoryChangeTrigger.TriggerInstance.hasItems(
-                        ItemPredicate.Builder.item()
-                                .of(
-                                        lookup.lookupOrThrow(Registries.ITEM),
-                                        Items.SUNFLOWER
-                                )
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.SUNFLOWER
+                                        )
                         )
                 )
 
                 .addCriterion(
                         "torchflower",
                         InventoryChangeTrigger.TriggerInstance.hasItems(
-                        ItemPredicate.Builder.item()
-                                .of(
-                                        lookup.lookupOrThrow(Registries.ITEM),
-                                        Items.TORCHFLOWER
-                                )
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.TORCHFLOWER
+                                        )
                         )
                 )
 
                 .addCriterion(
                         "red_tulip",
                         InventoryChangeTrigger.TriggerInstance.hasItems(
-                        ItemPredicate.Builder.item()
-                                .of(
-                                        lookup.lookupOrThrow(Registries.ITEM),
-                                        Items.RED_TULIP
-                                )
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.RED_TULIP
+                                        )
                         )
                 )
 
                 .addCriterion(
                         "orange_tulip",
                         InventoryChangeTrigger.TriggerInstance.hasItems(
-                        ItemPredicate.Builder.item()
-                                .of(
-                                        lookup.lookupOrThrow(Registries.ITEM),
-                                        Items.ORANGE_TULIP
-                                )
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.ORANGE_TULIP
+                                        )
                         )
                 )
 
                 .addCriterion(
                         "pink_tulip",
                         InventoryChangeTrigger.TriggerInstance.hasItems(
-                        ItemPredicate.Builder.item()
-                                .of(
-                                        lookup.lookupOrThrow(Registries.ITEM),
-                                        Items.PINK_TULIP
-                                )
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.PINK_TULIP
+                                        )
                         )
                 )
 
                 .addCriterion(
                         "white_tulip",
                         InventoryChangeTrigger.TriggerInstance.hasItems(
-                        ItemPredicate.Builder.item()
-                                .of(
-                                        lookup.lookupOrThrow(Registries.ITEM),
-                                        Items.WHITE_TULIP
-                                )
+                                ItemPredicate.Builder.item()
+                                        .of(
+                                                lookup.lookupOrThrow(Registries.ITEM),
+                                                Items.WHITE_TULIP
+                                        )
                         )
                 )
 
@@ -491,7 +491,7 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                 )
 
                 .addCriterion(
-                        "conduit_power_2",
+                        "all_effects",
                         EffectsChangedTrigger.TriggerInstance.hasEffects(
                                 MobEffectsPredicate.Builder.effects()
                                         .and(
@@ -503,13 +503,6 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                                                         Optional.empty()
                                                 )
                                         )
-                        )
-                )
-
-                .addCriterion(
-                        "water_breathing",
-                        EffectsChangedTrigger.TriggerInstance.hasEffects(
-                                MobEffectsPredicate.Builder.effects()
                                         .and(
                                                 MobEffects.WATER_BREATHING,
                                                 new MobEffectsPredicate.MobEffectInstancePredicate(
@@ -519,14 +512,6 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                                                         Optional.empty()
                                                 )
                                         )
-                        )
-
-                )
-
-                .addCriterion(
-                        "dolphins_grace",
-                        EffectsChangedTrigger.TriggerInstance.hasEffects(
-                                MobEffectsPredicate.Builder.effects()
                                         .and(
                                                 MobEffects.DOLPHINS_GRACE,
                                                 new MobEffectsPredicate.MobEffectInstancePredicate(
@@ -564,8 +549,10 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
         Advancement.Builder.advancement()
                 .display(
                         Items.BREEZE_ROD,
-                        Component.literal("It needs to be FAST!!!“"),
-                        Component.literal("Have Speed 2, Dolphins Grace, Netherite Boots with soul speed 3 while walking on soul sand"),
+                        Component.literal("It needs to be FAST!!!"),
+                        Component.literal(
+                                "Have Speed 2, Dolphins Grace, Netherite Boots with Soul Speed 3 while walking on soul sand"
+                        ),
                         null,
                         AdvancementType.CHALLENGE,
                         true,
@@ -574,7 +561,7 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                 )
 
                 .addCriterion(
-                        "critereon_gale_core",
+                        "criterion_gale_core",
                         PlayerTrigger.TriggerInstance.located(
                                 EntityPredicate.Builder.entity()
                                         .steppingOn(
@@ -587,7 +574,6 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                                                                         )
                                                         )
                                         )
-
                                         .equipment(
                                                 EntityEquipmentPredicate.Builder.equipment()
                                                         .feet(
@@ -603,7 +589,11 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                                                                                                 EnchantmentsPredicate.enchantments(
                                                                                                         List.of(
                                                                                                                 new EnchantmentPredicate(
-                                                                                                                        lookup.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.SOUL_SPEED),
+                                                                                                                        lookup.lookupOrThrow(
+                                                                                                                                Registries.ENCHANTMENT
+                                                                                                                        ).getOrThrow(
+                                                                                                                                Enchantments.SOUL_SPEED
+                                                                                                                        ),
                                                                                                                         MinMaxBounds.Ints.atLeast(3)
                                                                                                                 )
                                                                                                         )
@@ -613,7 +603,6 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                                                                         )
                                                         )
                                         )
-
                                         .effects(
                                                 MobEffectsPredicate.Builder.effects()
                                                         .and(
@@ -628,38 +617,16 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                                                         .and(
                                                                 MobEffects.DOLPHINS_GRACE,
                                                                 new MobEffectsPredicate.MobEffectInstancePredicate(
-                                                                        MinMaxBounds.Ints.ANY,
-                                                                        MinMaxBounds.Ints.ANY,
+                                                                        MinMaxBounds.Ints.atLeast(0),
+                                                                        MinMaxBounds.Ints.atLeast(0),
                                                                         Optional.empty(),
                                                                         Optional.empty()
                                                                 )
                                                         )
                                         )
                         )
-                )
-
-                .requirements(
-                        AdvancementRequirements.Strategy.AND
-                )
-
-                .rewards(
-                        new AdvancementRewards.Builder()
-                                .runs(
-                                        Identifier.fromNamespaceAndPath(
-                                                AstralCores.MOD_ID,
-                                                "cores/gale_core"
-                                        )
-                                )
-                )
-
-                .save(
-                        consumer,
-                        Identifier.fromNamespaceAndPath(
-                                AstralCores.MOD_ID,
-                                "core/gale_core"
-                        )
                 );
 
 
     }
-    }
+}
