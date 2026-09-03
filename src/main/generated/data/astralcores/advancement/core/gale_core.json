@@ -1,6 +1,6 @@
 {
   "criteria": {
-    "super_speed_challenge": {
+    "critereon_gale_core": {
       "conditions": {
         "player": [
           {
@@ -55,7 +55,7 @@
   },
   "requirements": [
     [
-      "super_speed_challenge"
+      "critereon_gale_core"
     ]
   ],
   "rewards": {

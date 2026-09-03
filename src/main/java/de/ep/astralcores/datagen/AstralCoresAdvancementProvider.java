@@ -266,7 +266,7 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                 )
 
                 .addCriterion(
-                        "super_speed_challenge",
+                        "critereon_gale_core",
                         PlayerTrigger.TriggerInstance.located(
                                 EntityPredicate.Builder.entity()
                                         .steppingOn(
