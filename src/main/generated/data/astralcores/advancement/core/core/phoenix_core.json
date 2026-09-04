@@ -1,0 +1,122 @@
+{
+  "criteria": {
+    "basalt_deltas": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "minecraft:location": {
+                "biomes": "minecraft:basalt_deltas"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "crimson_forest": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "minecraft:location": {
+                "biomes": "minecraft:crimson_forest"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "nether_wastes": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "minecraft:location": {
+                "biomes": "minecraft:nether_wastes"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "soul_sand_valley": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "minecraft:location": {
+                "biomes": "minecraft:soul_sand_valley"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "stayed_in_nether": {
+      "conditions": {
+        "required_ticks": 1200
+      },
+      "trigger": "astralcores:nether_time"
+    },
+    "warped_forest": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "minecraft:location": {
+                "biomes": "minecraft:warped_forest"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "description": "Be for 12 hours continuously in the nether and were in every nether biome",
+    "frame": "challenge",
+    "icon": {
+      "id": "minecraft:wind_charge"
+    },
+    "title": "Warm Living"
+  },
+  "requirements": [
+    [
+      "nether_wastes"
+    ],
+    [
+      "crimson_forest"
+    ],
+    [
+      "warped_forest"
+    ],
+    [
+      "soul_sand_valley"
+    ],
+    [
+      "basalt_deltas"
+    ],
+    [
+      "stayed_in_nether"
+    ]
+  ],
+  "rewards": {
+    "function": "astralcores:cores/phoenix_core"
+  },
+  "sends_telemetry_event": true
+}

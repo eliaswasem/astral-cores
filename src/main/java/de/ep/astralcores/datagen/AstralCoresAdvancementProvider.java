@@ -30,6 +30,6 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
         ChronoCoreAdvancement.generate(lookup, consumer);
         LeviathanCoreAdvancement.generate(lookup, consumer);
         GaleCoreAdvancement.generate(lookup, consumer);
-
+        PhoenixCoreAdvancement.generate(lookup, consumer);
     }
 }

@@ -13,7 +13,7 @@
                     "min": 0
                   },
                   "duration": {
-                    "min": 0
+                    "min": 1
                   }
                 },
                 "minecraft:speed": {
@@ -53,7 +53,7 @@
     }
   },
   "display": {
-    "description": "Have Speed 2, Dolphins Grace, Netherite Boots with Soul Speed 3 while walking on soul sand",
+    "description": "Have Speed 2, Dolphins Grace and Netherite Boots with Soul Speed 3 while walking on soul sand",
     "frame": "challenge",
     "icon": {
       "id": "minecraft:breeze_rod"
