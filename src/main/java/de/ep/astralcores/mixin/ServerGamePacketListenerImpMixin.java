@@ -26,7 +26,11 @@ public class ServerGamePacketListenerImpMixin {
         if (packet.getAction() == ServerboundPlayerActionPacket.Action.SWAP_ITEM_WITH_OFFHAND
                 && this.player.isShiftKeyDown()) {
 
-            CoreActivateManager.attemptActivation(player);
+            var result = CoreActivateManager.attemptActivation(player);
+
+            if (!result.isSuccess() && result.errorMessage() != null) {
+                player.sendSystemMessage(result.errorMessage());
+            }
 
             // Blocks the normal item switch
             ci.cancel();

@@ -7,6 +7,7 @@ import de.ep.astralcores.playerdata.PlayerData;
 import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreRegistry;
 import de.ep.astralcores.core.CoreType;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -16,17 +17,20 @@ public class CoreActivateManager {
     public static ActivationResult attemptActivation(ServerPlayer player) {
         PlayerData data = AstralCores.PLAYER_DATA.get(player);
         if (data == null) {
-            return new ActivationResult(false, Component.literal("Failed to access your database profile."));
+            return new ActivationResult(false, Component.literal("Failed to access your database profile.")
+                    .withStyle(ChatFormatting.RED));
         }
 
         CoreType targetedType = data.getEquippedCore();
         if (targetedType == null) {
-            return new ActivationResult(false, Component.literal("You do not have a core equipped."));
+            return new ActivationResult(false, Component.literal("You do not have a core equipped.")
+                    .withStyle(ChatFormatting.RED));
         }
 
         Core core = CoreRegistry.get(targetedType).orElse(null);
         if (core == null) {
-            return new ActivationResult(false, Component.literal("Your stored core type doesn't exist."));
+            return new ActivationResult(false, Component.literal("Your stored core type doesn't exist.")
+                    .withStyle(ChatFormatting.RED));
         }
 
         // Rejects execution sequence if the specific core capacity is currently locked on cooldown
@@ -37,8 +41,10 @@ public class CoreActivateManager {
             return new ActivationResult(false, Component.literal(abilityName)
                     .append(" is on cooldown for another ")
                     .append(String.valueOf(remaining))
-                    .append("s."));
+                    .append("s.")
+                    .withStyle(ChatFormatting.RED));
         }
+
 
         // Executes the custom capability features bound to the target core instance
         CoreActivationResult result = core.activate(player);
