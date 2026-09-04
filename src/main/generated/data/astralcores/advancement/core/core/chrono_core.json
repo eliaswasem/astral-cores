@@ -50,10 +50,10 @@
     }
   },
   "display": {
-    "description": "Ride a horse a skeleton horse and a zombie horse",
+    "description": "Ride a pig above Y=4000.",
     "frame": "challenge",
     "icon": {
-      "id": "minecraft:clock"
+      "id": "minecraft:wind_charge"
     },
     "title": "Time Traveler"
   },

@@ -1,0 +1,72 @@
+{
+  "criteria": {
+    "criterion_gale_core": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "minecraft:effects": {
+                "minecraft:dolphins_grace": {
+                  "amplifier": {
+                    "min": 0
+                  },
+                  "duration": {
+                    "min": 0
+                  }
+                },
+                "minecraft:speed": {
+                  "amplifier": {
+                    "min": 1
+                  },
+                  "duration": {
+                    "min": 1
+                  }
+                }
+              },
+              "minecraft:equipment": {
+                "feet": {
+                  "items": "minecraft:netherite_boots",
+                  "predicates": {
+                    "minecraft:enchantments": [
+                      {
+                        "enchantments": "minecraft:soul_speed",
+                        "levels": {
+                          "min": 3
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              "minecraft:stepping_on": {
+                "block": {
+                  "blocks": "minecraft:soul_sand"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "description": "Have Speed 2, Dolphins Grace, Netherite Boots with Soul Speed 3 while walking on soul sand",
+    "frame": "challenge",
+    "icon": {
+      "id": "minecraft:breeze_rod"
+    },
+    "title": "It needs to be FAST!!!"
+  },
+  "requirements": [
+    [
+      "criterion_gale_core"
+    ]
+  ],
+  "rewards": {
+    "function": "astralcores:cores/gale_core"
+  },
+  "sends_telemetry_event": true
+}
