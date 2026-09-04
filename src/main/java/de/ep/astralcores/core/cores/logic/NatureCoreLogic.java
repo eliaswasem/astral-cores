@@ -98,8 +98,6 @@ public final class NatureCoreLogic {
         cloud.setRadius(radius);
         cloud.setDuration(120);
         cloud.setWaitTime(0);
-        cloud.setRadiusOnUse(0.0f);
-        cloud.setRadiusPerTick(0.0f);
 
         // Use green leaves for the Nature visual.
         cloud.setCustomParticle(
@@ -182,13 +180,11 @@ public final class NatureCoreLogic {
     }
 
     public static void onRemoved(ServerPlayer player) {
-
         // Remove clouds owned by the removed player.
         removeOwnedClouds(player);
     }
 
     public static void onPlayerDisconnect(ServerPlayer player) {
-
         // Remove clouds owned by the disconnected player.
         removeOwnedClouds(player);
     }
@@ -221,25 +217,16 @@ public final class NatureCoreLogic {
         );
     }
 
-    public static boolean hasNatureCore(ServerPlayer player) {
-
-        return AstralCores.PLAYER_DATA
-                .get(player)
-                .getEquippedCore() == CoreType.NATURE_CORE;
-    }
-
     private static final class RootTrap {
 
         private final LivingEntity entity;
         private final Vec3 position;
-        private final boolean noGravity;
         private final TickTimer timer = new TickTimer(40);
 
         private RootTrap(LivingEntity entity) {
 
             this.entity = entity;
             this.position = entity.position();
-            this.noGravity = entity.isNoGravity();
 
             addKnockbackResistance();
             update();
@@ -303,13 +290,7 @@ public final class NatureCoreLogic {
         }
 
         private void cleanup() {
-
             removeKnockbackResistance();
-
-            if (entity.isAlive() && !entity.isRemoved()) {
-                entity.setNoGravity(noGravity);
-                entity.setDeltaMovement(Vec3.ZERO);
-            }
         }
     }
 }
