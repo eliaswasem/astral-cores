@@ -27,9 +27,7 @@ public class CoreFactory {
             // Sets the custom display name for the core item
             stack.set(
                     DataComponents.CUSTOM_NAME,
-                    Component.literal(
-                            core.getName()
-                    )
+                    core.getName()
             );
 
             // Converts and applies the text lines to the item lore

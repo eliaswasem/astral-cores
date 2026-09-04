@@ -17,7 +17,8 @@ public class NatureCore extends Core {
     public NatureCore() {
         super(
                 CoreType.NATURE_CORE,
-                "§2Nature Core",
+                Component.literal("Nature Core")
+                        .withStyle(style -> style.withColor(0x55FF55)),
                 Items.SLIME_BALL,
                 List.of(
                         Component.literal("A fragment of the core of a fallen meteor, awakened by the life of the world.")
@@ -25,17 +26,27 @@ public class NatureCore extends Core {
                         Component.empty(),
 
                         Component.literal("Active")
-                                .withStyle(ChatFormatting.DARK_GREEN, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                                .withStyle(style -> style
+                                        .withColor(0x339933)
+                                        .withBold(true)
+                                        .withItalic(true)),
                         Component.literal("Root Trap")
-                                .withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD),
+                                .withStyle(style -> style
+                                        .withColor(0xAAFFAA)
+                                        .withBold(true)),
                         Component.literal("Creates a field of vines that roots nearby players.")
                                 .withStyle(ChatFormatting.GRAY),
                         Component.empty(),
 
                         Component.literal("Passive")
-                                .withStyle(ChatFormatting.DARK_GREEN, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                                .withStyle(style -> style
+                                        .withColor(0x339933)
+                                        .withBold(true)
+                                        .withItalic(true)),
                         Component.literal("Nature's Blessing")
-                                .withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD),
+                                .withStyle(style -> style
+                                        .withColor(0xAAFFAA)
+                                        .withBold(true)),
                         Component.literal("Natural biomes improve regeneration, speed, food healing, and crops.")
                                 .withStyle(ChatFormatting.GRAY)
                 ),

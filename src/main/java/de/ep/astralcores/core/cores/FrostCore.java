@@ -17,25 +17,36 @@ public final class FrostCore extends Core {
     public FrostCore() {
         super(
                 CoreType.FROST_CORE,
-                "§bFrost Core",
-                Items.SNOWBALL,
+                Component.literal("Frost Core")
+                        .withStyle(style -> style.withColor(0x55FFFF)),
+                Items.CLAY_BALL,
                 List.of(
                         Component.literal("A fragment of the core of a fallen meteor.")
                                 .withStyle(ChatFormatting.GRAY),
                         Component.empty(),
 
                         Component.literal("Active")
-                                .withStyle(ChatFormatting.DARK_AQUA, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                                .withStyle(style -> style
+                                        .withColor(0x339999)
+                                        .withBold(true)
+                                        .withItalic(true)),
                         Component.literal("Frost Lock")
-                                .withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD),
+                                .withStyle(style -> style
+                                        .withColor(0xAAFFFF)
+                                        .withBold(true)),
                         Component.literal("Freezes a target in place for five seconds.")
                                 .withStyle(ChatFormatting.GRAY),
                         Component.empty(),
 
                         Component.literal("Passive")
-                                .withStyle(ChatFormatting.DARK_AQUA, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                                .withStyle(style -> style
+                                        .withColor(0x339999)
+                                        .withBold(true)
+                                        .withItalic(true)),
                         Component.literal("Frost Aura")
-                                .withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD),
+                                .withStyle(style -> style
+                                        .withColor(0xAAFFFF)
+                                        .withBold(true)),
                         Component.literal("Slows nearby enemies. Stronger at close range.")
                                 .withStyle(ChatFormatting.GRAY)
                 ),

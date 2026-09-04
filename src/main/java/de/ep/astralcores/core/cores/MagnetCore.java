@@ -17,7 +17,8 @@ public class MagnetCore extends Core {
     public MagnetCore() {
         super(
                 CoreType.MAGNET_CORE,
-                "§cMagnet Core",
+                Component.literal("Magnet Core")
+                        .withStyle(style -> style.withColor(0xFF55AA)),
                 Items.IRON_INGOT,
                 List.of(
                         Component.literal("A fragment of the core of a fallen meteor, radiating magnetic force.")
@@ -25,17 +26,27 @@ public class MagnetCore extends Core {
                         Component.empty(),
 
                         Component.literal("Active")
-                                .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                                .withStyle(style -> style
+                                        .withColor(0x993366)
+                                        .withBold(true)
+                                        .withItalic(true)),
                         Component.literal("Magnetic Pull")
-                                .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD),
+                                .withStyle(style -> style
+                                        .withColor(0xFFAAFF)
+                                        .withBold(true)),
                         Component.literal("Pulls nearby items and XP orbs directly toward you.")
                                 .withStyle(ChatFormatting.GRAY),
                         Component.empty(),
 
                         Component.literal("Passive")
-                                .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                                .withStyle(style -> style
+                                        .withColor(0x993366)
+                                        .withBold(true)
+                                        .withItalic(true)),
                         Component.literal("Magnetic Disarm")
-                                .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD),
+                                .withStyle(style -> style
+                                        .withColor(0xFFAAFF)
+                                        .withBold(true)),
                         Component.literal("Critical hits can freeze an enemy's attack for 1.5 seconds.")
                                 .withStyle(ChatFormatting.GRAY)
                 ),

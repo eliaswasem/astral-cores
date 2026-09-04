@@ -16,7 +16,8 @@ public class AeroCore extends Core {
     public AeroCore() {
         super(
                 CoreType.AERO_CORE,
-                "§bAero Core",
+                Component.literal("Aero Core")
+                        .withStyle(style -> style.withColor(0x5555FF)),
                 Items.FEATHER,
                 List.of(
                         Component.literal("A fragment of the core of a fallen meteor.")
@@ -24,17 +25,27 @@ public class AeroCore extends Core {
                         Component.empty(),
 
                         Component.literal("Active")
-                                .withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                                .withStyle(style -> style
+                                        .withColor(0x333399)
+                                        .withBold(true)
+                                        .withItalic(true)),
                         Component.literal("Tornado Lift")
-                                .withStyle(ChatFormatting.WHITE, ChatFormatting.BOLD),
+                                .withStyle(style -> style
+                                        .withColor(0x9999FF)
+                                        .withBold(true)),
                         Component.literal("Launches nearby enemies into the air with a violent updraft.")
                                 .withStyle(ChatFormatting.GRAY),
                         Component.empty(),
 
                         Component.literal("Passive")
-                                .withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                                .withStyle(style -> style
+                                        .withColor(0x333399)
+                                        .withBold(true)
+                                        .withItalic(true)),
                         Component.literal("Featherweight")
-                                .withStyle(ChatFormatting.WHITE, ChatFormatting.BOLD),
+                                .withStyle(style -> style
+                                        .withColor(0x9999FF)
+                                        .withBold(true)),
                         Component.literal("Immune to fall damage. Landing damages nearby enemies.")
                                 .withStyle(ChatFormatting.GRAY)
                 ),
@@ -69,4 +80,3 @@ public class AeroCore extends Core {
         AeroCoreLogic.onPlayerDisconnect(player);
     }
 }
-

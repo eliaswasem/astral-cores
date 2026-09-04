@@ -17,7 +17,8 @@ public class ShadowCore extends Core {
     public ShadowCore() {
         super(
                 CoreType.SHADOW_CORE,
-                "§8Shadow Core",
+                Component.literal("Shadow Core")
+                        .withStyle(style -> style.withColor(0x5500AA)),
                 Items.DRAGON_BREATH,
                 List.of(
                         Component.literal("A fragment of the core of a fallen meteor, consumed by darkness.")
@@ -25,17 +26,27 @@ public class ShadowCore extends Core {
                         Component.empty(),
 
                         Component.literal("Active")
-                                .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                                .withStyle(style -> style
+                                        .withColor(0x2A0055)
+                                        .withBold(true)
+                                        .withItalic(true)),
                         Component.literal("Smoke Veil")
-                                .withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD),
+                                .withStyle(style -> style
+                                        .withColor(0xAA55FF)
+                                        .withBold(true)),
                         Component.literal("Creates an 8-second smoke cloud. Blinds enemies and grants Speed II.")
                                 .withStyle(ChatFormatting.GRAY),
                         Component.empty(),
 
                         Component.literal("Passive")
-                                .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                                .withStyle(style -> style
+                                        .withColor(0x2A0055)
+                                        .withBold(true)
+                                        .withItalic(true)),
                         Component.literal("Living Shadow")
-                                .withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD),
+                                .withStyle(style -> style
+                                        .withColor(0xAA55FF)
+                                        .withBold(true)),
                         Component.literal("Sneak in darkness for five seconds to become invisible.")
                                 .withStyle(ChatFormatting.GRAY)
                 ),

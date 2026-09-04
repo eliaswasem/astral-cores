@@ -17,7 +17,8 @@ public class LeviathanCore extends Core {
     public LeviathanCore() {
         super(
                 CoreType.LEVIATHAN_CORE,
-                "§1Leviathan Core",
+                Component.literal("Leviathan Core")
+                        .withStyle(style -> style.withColor(0x0055FF)),
                 Items.TIPPED_ARROW,
                 List.of(
                         Component.literal("A fragment of the core of a fallen meteor, awakened beneath the deepest waters.")
@@ -25,17 +26,27 @@ public class LeviathanCore extends Core {
                         Component.empty(),
 
                         Component.literal("Active")
-                                .withStyle(ChatFormatting.DARK_AQUA, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                                .withStyle(style -> style
+                                        .withColor(0x003399)
+                                        .withBold(true)
+                                        .withItalic(true)),
                         Component.literal("Whirlpool")
-                                .withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD),
+                                .withStyle(style -> style
+                                        .withColor(0x55AAFF)
+                                        .withBold(true)),
                         Component.literal("Creates a vortex that pulls nearby players inward if you are in water or rain. Twice as strong underwater.")
                                 .withStyle(ChatFormatting.GRAY),
                         Component.empty(),
 
                         Component.literal("Passive")
-                                .withStyle(ChatFormatting.DARK_AQUA, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                                .withStyle(style -> style
+                                        .withColor(0x003399)
+                                        .withBold(true)
+                                        .withItalic(true)),
                         Component.literal("Oceanborn")
-                                .withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD),
+                                .withStyle(style -> style
+                                        .withColor(0x55AAFF)
+                                        .withBold(true)),
                         Component.literal("Improved swimming and infinite water breathing. Water or Rain grants additional buffs.")
                                 .withStyle(ChatFormatting.GRAY)
                 ),
@@ -57,7 +68,8 @@ public class LeviathanCore extends Core {
 
     @Override
     public CoreActivationResult activate(ServerPlayer player) {
-        return LeviathanCoreLogic.activate(player);}
+        return LeviathanCoreLogic.activate(player);
+    }
 
     @Override
     public void onPlayerDisconnect(ServerPlayer player) {

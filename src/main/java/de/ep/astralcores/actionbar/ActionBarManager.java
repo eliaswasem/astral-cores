@@ -19,8 +19,9 @@ public class ActionBarManager {
         // Shows empty slots if no core is equipped
         if (data == null || data.getEquippedCore() == null) {
             switch (mode) {
-                case ICON -> sendPacket(player, "\uE000");
-                case TEXT -> sendPacket(player, "§cNone");
+                case ICON -> sendPacket(player, Component.literal("\uE000"));
+                case TEXT -> sendPacket(player, Component.literal("None")
+                        .withStyle(style -> style.withColor(0xFF5555)));
             }
             return;
         }
@@ -31,8 +32,9 @@ public class ActionBarManager {
         // Shows empty slots if the core registry fails
         if (core == null) {
             switch (mode) {
-                case ICON -> sendPacket(player, "\uE000");
-                case TEXT -> sendPacket(player, "§cNone");
+                case ICON -> sendPacket(player, Component.literal("\uE000"));
+                case TEXT -> sendPacket(player, Component.literal("None")
+                        .withStyle(style -> style.withColor(0xFF5555)));
             }
             return;
         }
@@ -48,33 +50,46 @@ public class ActionBarManager {
         int passiveRemaining = CoreCooldownManager.getPassiveRemaining(data, equippedType);
 
         // Formats the passive ability status string
-        String passiveStatus = "";
+        Component passiveStatus = Component.empty();
         if (hasPassiveFeature) {
-            passiveStatus = passiveReady ? "§aReady " : "§6" + formatTime(passiveRemaining) + " ";
+            passiveStatus = passiveReady
+                    ? Component.literal("Ready ")
+                    .withStyle(style -> style.withColor(0x55FF55))
+                    : Component.literal(formatTime(passiveRemaining) + " ")
+                    .withStyle(style -> style.withColor(0xFFAA00));
         }
 
         // Formats the active ability status string
-        String activeStatus = "";
+        Component activeStatus = Component.empty();
         if (hasActiveFeature) {
-            activeStatus = activeReady ? " §aReady" : " §c" + formatTime(activeRemaining);
+            activeStatus = activeReady
+                    ? Component.literal(" Ready")
+                    .withStyle(style -> style.withColor(0x55FF55))
+                    : Component.literal(" " + formatTime(activeRemaining))
+                    .withStyle(style -> style.withColor(0xFF5555));
         }
 
         // Selects the center text or icon based on player settings
-        String centerModule;
+        Component centerModule;
         switch (mode) {
-            case ICON -> centerModule = core.getCustomChar();
+            case ICON -> centerModule = Component.literal(core.getCustomChar());
             case TEXT -> centerModule = core.getName();
             default -> centerModule = core.getName();
         }
 
         // Sends the combined text to the player action bar
-        sendPacket(player, passiveStatus + centerModule + activeStatus);
+        Component content = Component.empty()
+                .append(passiveStatus)
+                .append(centerModule)
+                .append(activeStatus);
+
+        sendPacket(player, content);
     }
 
     // Sends the action bar packet to the player connection
-    private static void sendPacket(ServerPlayer player, String content) {
+    private static void sendPacket(ServerPlayer player, Component content) {
         if (player.connection != null) {
-            player.connection.send(new ClientboundSetActionBarTextPacket(Component.literal(content)));
+            player.connection.send(new ClientboundSetActionBarTextPacket(content));
         }
     }
 

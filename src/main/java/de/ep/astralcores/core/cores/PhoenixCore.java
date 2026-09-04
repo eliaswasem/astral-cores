@@ -17,7 +17,8 @@ public class PhoenixCore extends Core {
     public PhoenixCore() {
         super(
                 CoreType.PHOENIX_CORE,
-                "§cPhoenix Core",
+                Component.literal("Phoenix Core")
+                        .withStyle(style -> style.withColor(0xFF5555)),
                 Items.MAGMA_CREAM,
                 List.of(
                         Component.literal("A fragment of the core of a fallen meteor, burning with an eternal flame.")
@@ -25,17 +26,27 @@ public class PhoenixCore extends Core {
                         Component.empty(),
 
                         Component.literal("Active")
-                                .withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                                .withStyle(style -> style
+                                        .withColor(0x993333)
+                                        .withBold(true)
+                                        .withItalic(true)),
                         Component.literal("Phoenix Burst")
-                                .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD),
+                                .withStyle(style -> style
+                                        .withColor(0xFFAA55)
+                                        .withBold(true)),
                         Component.literal("Fiery explosion that burns and knocks back nearby enemies.")
                                 .withStyle(ChatFormatting.GRAY),
                         Component.empty(),
 
                         Component.literal("Passive")
-                                .withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                                .withStyle(style -> style
+                                        .withColor(0x993333)
+                                        .withBold(true)
+                                        .withItalic(true)),
                         Component.literal("Flameborn")
-                                .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD),
+                                .withStyle(style -> style
+                                        .withColor(0xFFAA55)
+                                        .withBold(true)),
                         Component.literal("Immune to fire and lava. Regeneration I in the Nether.")
                                 .withStyle(ChatFormatting.GRAY)
                 ),

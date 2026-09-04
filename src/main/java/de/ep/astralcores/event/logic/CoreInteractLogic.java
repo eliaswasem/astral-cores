@@ -4,6 +4,7 @@ import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.actionbar.ActionBarManager;
 import de.ep.astralcores.playerdata.PlayerData;
 import de.ep.astralcores.core.Core;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -21,13 +22,17 @@ public class CoreInteractLogic {
 
         // Stops equipment if the single profile slot is already full
         if (data.getEquippedCore() != null) {
-            player.sendSystemMessage(Component.literal("§cYour core slot is already occupied!"));
+            player.sendSystemMessage(Component.literal("Your core slot is already occupied!")
+                    .withStyle(ChatFormatting.RED));
             return InteractionResult.FAIL;
         }
 
         // Binds the core enum type to the player data profile
         data.setEquippedCore(core.getType());
-        player.sendSystemMessage(Component.literal("§aSuccessfully bound " + core.getName() + " to your profile slot."));
+        player.sendSystemMessage(Component.literal("Successfully bound ")
+                .append(core.getName())
+                .append(" to your profile slot.")
+                .withStyle(ChatFormatting.GREEN));
 
         // Updates the action bar display text immediately
         ActionBarManager.tick(player, data);

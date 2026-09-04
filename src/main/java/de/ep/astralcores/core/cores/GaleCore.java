@@ -14,11 +14,11 @@ import net.minecraft.world.item.Items;
 
 public class GaleCore extends Core {
 
-
     public GaleCore() {
         super(
                 CoreType.GALE_CORE,
-                "§7Gale Core",
+                Component.literal("Gale Core")
+                        .withStyle(style -> style.withColor(0x55FFFF)),
                 Items.BREEZE_ROD,
                 List.of(
                         Component.literal("A fragment of the core of a fallen meteor.")
@@ -26,17 +26,27 @@ public class GaleCore extends Core {
                         Component.empty(),
 
                         Component.literal("Active")
-                                .withStyle(ChatFormatting.DARK_AQUA, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                                .withStyle(style -> style
+                                        .withColor(0x339999)
+                                        .withBold(true)
+                                        .withItalic(true)),
                         Component.literal("Sonic Dash")
-                                .withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD),
+                                .withStyle(style -> style
+                                        .withColor(0xAAFFFF)
+                                        .withBold(true)),
                         Component.literal("Dash forward, damaging and knocking back enemies.")
                                 .withStyle(ChatFormatting.GRAY),
                         Component.empty(),
 
                         Component.literal("Passive")
-                                .withStyle(ChatFormatting.DARK_AQUA, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                                .withStyle(style -> style
+                                        .withColor(0x339999)
+                                        .withBold(true)
+                                        .withItalic(true)),
                         Component.literal("Lightfeet")
-                                .withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD),
+                                .withStyle(style -> style
+                                        .withColor(0xAAFFFF)
+                                        .withBold(true)),
                         Component.literal("Permanent Speed I.")
                                 .withStyle(ChatFormatting.GRAY)
                 ),

@@ -17,7 +17,8 @@ public class BerserkerCore extends Core {
     public BerserkerCore() {
         super(
                 CoreType.BERSERKER_CORE,
-                "§6Berseker Core",
+                Component.literal("Berseker Core")
+                        .withStyle(style -> style.withColor(0xAA0000)),
                 Items.BLAZE_POWDER,
                 List.of(
                         Component.literal("A fragment of the core of a fallen meteor, burning with raw destructive force.")
@@ -25,17 +26,27 @@ public class BerserkerCore extends Core {
                         Component.empty(),
 
                         Component.literal("Active")
-                                .withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                                .withStyle(style -> style
+                                        .withColor(0x550000)
+                                        .withBold(true)
+                                        .withItalic(true)),
                         Component.literal("Rage Mode")
-                                .withStyle(ChatFormatting.RED, ChatFormatting.BOLD),
+                                .withStyle(style -> style
+                                        .withColor(0xFF5555)
+                                        .withBold(true)),
                         Component.literal("Gain +15% melee damage, Strength II, Speed II and Fire Resistance.")
                                 .withStyle(ChatFormatting.GRAY),
                         Component.empty(),
 
                         Component.literal("Passive")
-                                .withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                                .withStyle(style -> style
+                                        .withColor(0x550000)
+                                        .withBold(true)
+                                        .withItalic(true)),
                         Component.literal("Bloodlust")
-                                .withStyle(ChatFormatting.RED, ChatFormatting.BOLD),
+                                .withStyle(style -> style
+                                        .withColor(0xFF5555)
+                                        .withBold(true)),
                         Component.literal("Kills restore 4 hearts and grant Speed II and Strength III.")
                                 .withStyle(ChatFormatting.GRAY)
                 ),

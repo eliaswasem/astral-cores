@@ -17,7 +17,8 @@ public class ChronoCore extends Core {
     public ChronoCore() {
         super(
                 CoreType.CHRONO_CORE,
-                "§aChrono Core",
+                Component.literal("Chrono Core")
+                        .withStyle(style -> style.withColor(0xFFAA00)),
                 Items.CLOCK,
                 List.of(
                         Component.literal("A fragment of the core of a fallen meteor.")
@@ -25,17 +26,27 @@ public class ChronoCore extends Core {
                         Component.empty(),
 
                         Component.literal("Active")
-                                .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                                .withStyle(style -> style
+                                        .withColor(0x995F00)
+                                        .withBold(true)
+                                        .withItalic(true)),
                         Component.literal("Time Return")
-                                .withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD),
+                                .withStyle(style -> style
+                                        .withColor(0xFFFF55)
+                                        .withBold(true)),
                         Component.literal("Rewinds your position by five seconds.")
                                 .withStyle(ChatFormatting.GRAY),
                         Component.empty(),
 
                         Component.literal("Passive")
-                                .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                                .withStyle(style -> style
+                                        .withColor(0x995F00)
+                                        .withBold(true)
+                                        .withItalic(true)),
                         Component.literal("Second Timeline")
-                                .withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD),
+                                .withStyle(style -> style
+                                        .withColor(0xFFFF55)
+                                        .withBold(true)),
                         Component.literal("Survive fatal damage and fully heal. 10-minute cooldown.")
                                 .withStyle(ChatFormatting.GRAY)
                 ),

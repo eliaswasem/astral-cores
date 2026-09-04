@@ -17,7 +17,8 @@ public final class GravityCore extends Core {
     public GravityCore() {
         super(
                 CoreType.GRAVITY_CORE,
-                "§5Gravity Core",
+                Component.literal("Gravity Core")
+                        .withStyle(style -> style.withColor(0xAA00AA)),
                 Items.NETHERITE_INGOT,
                 List.of(
                         Component.literal("A fragment of the core of a fallen meteor.")
@@ -25,17 +26,27 @@ public final class GravityCore extends Core {
                         Component.empty(),
 
                         Component.literal("Active")
-                                .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                                .withStyle(style -> style
+                                        .withColor(0x550055)
+                                        .withBold(true)
+                                        .withItalic(true)),
                         Component.literal("Gravity Pull")
-                                .withStyle(ChatFormatting.GRAY, ChatFormatting.BOLD),
+                                .withStyle(style -> style
+                                        .withColor(0xFF55FF)
+                                        .withBold(true)),
                         Component.literal("Pulls nearby players toward you.")
                                 .withStyle(ChatFormatting.GRAY),
                         Component.empty(),
 
                         Component.literal("Passive")
-                                .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                                .withStyle(style -> style
+                                        .withColor(0x550055)
+                                        .withBold(true)
+                                        .withItalic(true)),
                         Component.literal("Heavy Presence")
-                                .withStyle(ChatFormatting.GRAY, ChatFormatting.BOLD),
+                                .withStyle(style -> style
+                                        .withColor(0xFF55FF)
+                                        .withBold(true)),
                         Component.literal("50% knockback resistance.")
                                 .withStyle(ChatFormatting.GRAY)
                 ),

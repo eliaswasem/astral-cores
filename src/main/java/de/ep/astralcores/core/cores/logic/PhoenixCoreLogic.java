@@ -69,11 +69,6 @@ public final class PhoenixCoreLogic {
         ServerLevel level = player.level();
         Vec3 pos = player.position();
 
-        player.sendSystemMessage(
-                Component.literal("§cYou unleashed a Phoenix Burst!")
-                        .withStyle(ChatFormatting.GREEN)
-        );
-
         // Explosion without block damage.
         level.explode(
                 player,
@@ -119,6 +114,11 @@ public final class PhoenixCoreLogic {
                 SoundSource.PLAYERS,
                 1.33F,
                 0.8F
+        );
+
+        player.sendSystemMessage(
+                Component.literal("§cYou unleashed a Phoenix Burst!")
+                        .withStyle(ChatFormatting.GREEN)
         );
 
         return CoreActivationResult.EXECUTED;

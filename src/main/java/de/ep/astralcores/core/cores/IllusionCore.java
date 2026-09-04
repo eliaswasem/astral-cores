@@ -17,7 +17,8 @@ public class IllusionCore extends Core {
     public IllusionCore() {
         super(
                 CoreType.ILLUSION_CORE,
-                "§fIllusion Core",
+                Component.literal("Illusion Core")
+                        .withStyle(style -> style.withColor(0xFF55FF)),
                 Items.AMETHYST_SHARD,
                 List.of(
                         Component.literal("A fragment of the core of a fallen meteor, distorting light and perception.")
@@ -25,17 +26,27 @@ public class IllusionCore extends Core {
                         Component.empty(),
 
                         Component.literal("Active")
-                                .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                                .withStyle(style -> style
+                                        .withColor(0x993399)
+                                        .withBold(true)
+                                        .withItalic(true)),
                         Component.literal("Mirror Swap")
-                                .withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD),
+                                .withStyle(style -> style
+                                        .withColor(0xFFAAFF)
+                                        .withBold(true)),
                         Component.literal("Creates a decoy, grants invisibility, and teleports you 10–15 blocks away.")
                                 .withStyle(ChatFormatting.GRAY),
                         Component.empty(),
 
                         Component.literal("Passive")
-                                .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                                .withStyle(style -> style
+                                        .withColor(0x993399)
+                                        .withBold(true)
+                                        .withItalic(true)),
                         Component.literal("Mirror Image")
-                                .withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD),
+                                .withStyle(style -> style
+                                        .withColor(0xFFAAFF)
+                                        .withBold(true)),
                         Component.literal("Being hit has a chance to create an illusion.")
                                 .withStyle(ChatFormatting.GRAY)
                 ),

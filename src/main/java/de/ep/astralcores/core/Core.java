@@ -17,7 +17,7 @@ public abstract class Core {
     private final CoreType type;
 
     // In-game display name for the core
-    private final String name;
+    private final Component name;
 
     // Vanilla item used to back the core physically
     private final Item baseItem;
@@ -52,7 +52,7 @@ public abstract class Core {
     // Constructor to define baseline core configurations
     public Core(
             CoreType type,
-            String name,
+            Component name,
             Item baseItem,
             List<Component> lore,
             int customModelData,
@@ -89,7 +89,7 @@ public abstract class Core {
     }
 
     // Gets the core display name
-    public String getName() {
+    public Component getName() {
         return name;
     }
 
