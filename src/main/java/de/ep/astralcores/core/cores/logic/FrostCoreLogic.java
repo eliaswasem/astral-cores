@@ -198,10 +198,9 @@ public class FrostCoreLogic {
 
         private void update() {
             // Keeps the entity at its original position and rotation.
-            entity.setPos(position.x, position.y, position.z);
+            entity.teleportTo(position.x, position.y, position.z);
             entity.setYRot(yaw);
             entity.setXRot(pitch);
-            entity.setNoGravity(true);
             entity.setDeltaMovement(Vec3.ZERO);
             entity.setTicksFrozen(40);
 

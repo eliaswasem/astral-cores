@@ -70,4 +70,9 @@ public class NatureCore extends Core {
     public CoreActivationResult activate(ServerPlayer player) {
         return NatureCoreLogic.activate(player);
     }
+
+    @Override
+    public void tick(ServerPlayer player) {
+        NatureCoreLogic.tick(player);
+    }
 }
