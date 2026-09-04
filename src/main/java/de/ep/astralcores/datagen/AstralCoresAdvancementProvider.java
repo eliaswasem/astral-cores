@@ -628,5 +628,90 @@ public class AstralCoresAdvancementProvider extends FabricAdvancementProvider {
                 );
 
 
+        Advancement.Builder.advancement()
+                .display(
+                        Items.CLOCK,
+                        Component.literal("Time Traveler"),
+                        Component.literal(
+                                "Ride a horse a skeleton horse and a zombie horse"
+                        ),
+                        null,
+                        AdvancementType.CHALLENGE,
+                        true,
+                        true,
+                        false
+                )
+
+                .addCriterion(
+                        "horse",
+                        PlayerTrigger.TriggerInstance.located(
+                                EntityPredicate.Builder.entity()
+                                        .vehicle(
+                                                EntityPredicate.Builder.entity()
+                                                        .of(
+                                                                lookup.lookupOrThrow(
+                                                                        Registries.ENTITY_TYPE
+                                                                ),
+                                                                EntityTypes.HORSE
+                                                        )
+                                        )
+                        )
+                )
+
+                .addCriterion(
+                        "skeleton_horse",
+                        PlayerTrigger.TriggerInstance.located(
+                                EntityPredicate.Builder.entity()
+                                        .vehicle(
+                                                EntityPredicate.Builder.entity()
+                                                        .of(
+                                                                lookup.lookupOrThrow(
+                                                                        Registries.ENTITY_TYPE
+                                                                ),
+                                                                EntityTypes.SKELETON_HORSE
+                                                        )
+                                        )
+                        )
+                )
+
+                .addCriterion(
+                        "zombie_horse",
+                        PlayerTrigger.TriggerInstance.located(
+                                EntityPredicate.Builder.entity()
+                                        .vehicle(
+                                                EntityPredicate.Builder.entity()
+                                                        .of(
+                                                                lookup.lookupOrThrow(
+                                                                        Registries.ENTITY_TYPE
+                                                                ),
+                                                                EntityTypes.ZOMBIE_HORSE
+                                                        )
+                                        )
+                        )
+                )
+
+                .requirements(
+                        AdvancementRequirements.Strategy.AND
+                )
+
+                .rewards(
+                        new AdvancementRewards.Builder()
+                                .runs(
+                                        Identifier.fromNamespaceAndPath(
+                                                AstralCores.MOD_ID,
+                                                "cores/chrono_core"
+                                        )
+                                )
+                )
+
+                .save(
+                        consumer,
+                        Identifier.fromNamespaceAndPath(
+                                AstralCores.MOD_ID,
+                                "core/chrono_core"
+                        )
+                );
+
+
     }
 }

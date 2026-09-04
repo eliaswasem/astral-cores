@@ -1,5 +1,6 @@
 // 26.2	-999999999-01-01T00:00:00	Astral Cores/Advancements
 cbb79e5160823d8fafa62864bfdb2596c7499110 data/astralcores/advancement/core/aero_core.json
+30c634fe23ddba94101444384707af09d972a2c6 data/astralcores/advancement/core/chrono_core.json
 b9a11f7828688f82bf1e7118bfe8937934e31136 data/astralcores/advancement/core/leviathan_core.json
 ff423e2931024fb1ff15829ebeba9111d1addfa4 data/astralcores/advancement/core/nature_core.json
 9b6e976cde03ac7e9d8a6955fdd684c5fa0e8510 data/astralcores/advancement/core/shadow_core.json
