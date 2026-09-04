@@ -21,6 +21,8 @@ import java.util.function.Consumer;
 
 public class PhoenixCoreAdvancement {
 
+
+
     public static void generate(
 
             HolderLookup.Provider lookup,
@@ -112,11 +114,12 @@ public class PhoenixCoreAdvancement {
                         )
                 )
 
-                .addCriterion("stayed_in_nether",
+                .addCriterion(
+                        "stayed_in_nether",
 
                         CriterionRegistry.NETHER_TIME.createCriterion(
 
-                                new NetherTimeCriterion.Conditions(java.util.Optional.empty(), 1200L)
+                                new NetherTimeCriterion.Conditions(java.util.Optional.empty(), 12*20*60*60)
                         )
                 )
                 .rewards(
@@ -126,7 +129,6 @@ public class PhoenixCoreAdvancement {
                         consumer,
                         AdvancementHelper.advancementId("core/phoenix_core")
                 );
-
 
 
     }
