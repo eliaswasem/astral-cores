@@ -4,7 +4,9 @@ import de.ep.astralcores.AstralCores;
 import de.ep.astralcores.core.data.CoreActivationResult;
 import de.ep.astralcores.playerdata.PlayerData;
 import de.ep.astralcores.util.TickTimer;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -77,6 +79,11 @@ public final class GravityCoreLogic {
         activePulls.put(
                 player.getUUID(),
                 new TickTimer(40)
+        );
+
+        player.sendSystemMessage(
+                Component.literal("You unleashed a Gravity Pull!")
+                        .withStyle(ChatFormatting.GREEN)
         );
 
         return CoreActivationResult.EXECUTED;

@@ -168,6 +168,11 @@ public final class IllusionCoreLogic {
 
         teleportSafelyAway(player);
 
+        player.sendSystemMessage(
+                Component.literal("You swapped with your mirror!")
+                        .withStyle(ChatFormatting.GREEN)
+        );
+
         return CoreActivationResult.EXECUTED;
     }
 

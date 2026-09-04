@@ -5,7 +5,9 @@ import de.ep.astralcores.core.data.CoreActivationResult;
 import de.ep.astralcores.playerdata.PlayerData;
 import de.ep.astralcores.util.Effects;
 import de.ep.astralcores.util.TickTimer;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffects;
@@ -197,6 +199,11 @@ public final class LeviathanCoreLogic {
                     0.05D
             );
         }
+
+        player.sendSystemMessage(
+                Component.literal("You summoned a Whirlpool!")
+                        .withStyle(ChatFormatting.GREEN)
+        );
 
         return CoreActivationResult.EXECUTED;
     }

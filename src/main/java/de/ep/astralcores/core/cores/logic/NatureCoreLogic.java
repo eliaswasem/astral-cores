@@ -7,8 +7,10 @@ import de.ep.astralcores.util.BiomeUtils;
 import de.ep.astralcores.util.CropUtils;
 import de.ep.astralcores.util.Effects;
 import de.ep.astralcores.util.FoodUtils;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -86,6 +88,11 @@ public final class NatureCoreLogic {
         );
 
         level.addFreshEntity(cloud);
+
+        player.sendSystemMessage(
+                Component.literal("You summoned a Root Trap!")
+                        .withStyle(ChatFormatting.GREEN)
+        );
 
         return CoreActivationResult.EXECUTED;
     }

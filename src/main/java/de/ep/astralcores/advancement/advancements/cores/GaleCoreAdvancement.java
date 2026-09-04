@@ -1,6 +1,6 @@
-package de.ep.astralcores.datagen.advancement.cores;
+package de.ep.astralcores.advancement.advancements.cores;
 
-import de.ep.astralcores.datagen.advancement.AdvancementHelper;
+import de.ep.astralcores.advancement.advancements.AdvancementHelper;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementType;
@@ -40,7 +40,7 @@ public class GaleCoreAdvancement {
                         Items.BREEZE_ROD,
                         Component.literal("It needs to be FAST!!!"),
                         Component.literal(
-                                "Have Speed 2, Dolphins Grace, Netherite Boots with Soul Speed 3 while walking on soul sand"
+                                "Have Speed 2, Dolphins Grace and Netherite Boots with Soul Speed 3 while walking on soul sand"
                         ),
                         null,
                         AdvancementType.CHALLENGE,
@@ -107,7 +107,7 @@ public class GaleCoreAdvancement {
                                                                 MobEffects.DOLPHINS_GRACE,
                                                                 new MobEffectsPredicate.MobEffectInstancePredicate(
                                                                         MinMaxBounds.Ints.atLeast(0),
-                                                                        MinMaxBounds.Ints.atLeast(0),
+                                                                        MinMaxBounds.Ints.atLeast(1),
                                                                         Optional.empty(),
                                                                         Optional.empty()
                                                                 )

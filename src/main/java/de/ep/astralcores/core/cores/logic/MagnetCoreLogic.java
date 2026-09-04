@@ -123,6 +123,11 @@ public final class MagnetCoreLogic {
             );
         }
 
+        player.sendSystemMessage(
+                Component.literal("You pulled in nearby loot!")
+                        .withStyle(ChatFormatting.GREEN)
+        );
+
         return CoreActivationResult.EXECUTED;
     }
 

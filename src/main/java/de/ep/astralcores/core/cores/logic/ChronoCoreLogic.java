@@ -114,8 +114,8 @@ public class ChronoCoreLogic {
 
         // Tell the player that Time Return was activated.
         player.sendSystemMessage(
-                Component.literal("[Chrono Core] Time Return activated!")
-                        .withStyle(ChatFormatting.AQUA)
+                Component.literal("You rewound time!")
+                        .withStyle(ChatFormatting.GREEN)
         );
 
         return CoreActivationResult.EXECUTED;
@@ -168,7 +168,7 @@ public class ChronoCoreLogic {
             // Triggers visual and audio totem activation effects.
             playDeathCheatEffects(player);
 
-            player.sendSystemMessage(Component.literal("[Chrono Core] Second Timeline activated! You have been healed.")
+            player.sendSystemMessage(Component.literal(" You got saved by a second Timeline!")
                     .withStyle(ChatFormatting.GREEN));
 
             return false;

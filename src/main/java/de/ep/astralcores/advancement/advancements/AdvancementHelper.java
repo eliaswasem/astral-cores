@@ -1,4 +1,4 @@
-package de.ep.astralcores.datagen.advancement;
+package de.ep.astralcores.advancement.advancements;
 
 import de.ep.astralcores.AstralCores;
 import net.minecraft.advancements.AdvancementRewards;

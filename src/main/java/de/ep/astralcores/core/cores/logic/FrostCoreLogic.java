@@ -9,6 +9,8 @@ import de.ep.astralcores.manager.CoreCooldownManager;
 import de.ep.astralcores.playerdata.PlayerData;
 import de.ep.astralcores.util.Effects;
 import de.ep.astralcores.util.TickTimer;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -45,6 +47,9 @@ public class FrostCoreLogic {
         if (!armedPlayers.add(player.getUUID())) {
             return CoreActivationResult.FAILED;
         }
+
+        player.sendSystemMessage(Component.literal("Frost Lock is now armed.")
+                .withStyle(ChatFormatting.GREEN));
 
         // The next valid player hit will trigger Frost Lock.
         return CoreActivationResult.ARMED;
@@ -113,6 +118,11 @@ public class FrostCoreLogic {
                         CoreType.FROST_CORE,
                         core.getActiveCooldown()
                 )
+        );
+
+        attacker.sendSystemMessage(
+                Component.literal("You froze your target!")
+                        .withStyle(ChatFormatting.GREEN)
         );
     }
 

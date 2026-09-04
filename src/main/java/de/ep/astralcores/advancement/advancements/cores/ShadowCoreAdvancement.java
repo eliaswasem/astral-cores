@@ -1,8 +1,8 @@
-package de.ep.astralcores.datagen.advancement.cores;
+package de.ep.astralcores.advancement.advancements.cores;
 
 import de.ep.astralcores.advancement.criterion.CriterionRegistry;
 import de.ep.astralcores.advancement.criterion.criterions.VoidSurvivalCriterion;
-import de.ep.astralcores.datagen.advancement.AdvancementHelper;
+import de.ep.astralcores.advancement.advancements.AdvancementHelper;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementType;

@@ -5,6 +5,8 @@ import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.core.data.CoreActivationResult;
 import de.ep.astralcores.util.Effects;
 import de.ep.astralcores.util.TickTimer;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -39,6 +41,11 @@ public class BerserkerCoreLogic {
         Effects.applyEffect(player, MobEffects.STRENGTH, 1800, 2);
         Effects.applyEffect(player, MobEffects.SPEED, 1800, 2);
         Effects.applyEffect(player, MobEffects.FIRE_RESISTANCE, 1800, 1);
+
+        player.sendSystemMessage(
+                Component.literal("You entered Rage Mode!")
+                        .withStyle(ChatFormatting.GREEN)
+        );
 
         return CoreActivationResult.EXECUTED;
     }

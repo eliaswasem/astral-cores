@@ -3,7 +3,9 @@ package de.ep.astralcores.core.cores.logic;
 import de.ep.astralcores.core.data.CoreActivationResult;
 import de.ep.astralcores.util.Effects;
 import de.ep.astralcores.util.TickTimer;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -52,6 +54,11 @@ public final class GaleCoreLogic {
         explosionTimers.put(
                 player.getUUID(),
                 new TickTimer(10)
+        );
+
+        player.sendSystemMessage(
+                Component.literal("You unleashed a Sonic Dash!")
+                        .withStyle(ChatFormatting.GREEN)
         );
 
         return CoreActivationResult.EXECUTED;

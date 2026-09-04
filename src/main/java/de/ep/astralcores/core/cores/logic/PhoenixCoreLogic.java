@@ -2,6 +2,7 @@ package de.ep.astralcores.core.cores.logic;
 
 import de.ep.astralcores.core.data.CoreActivationResult;
 import de.ep.astralcores.util.Effects;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -70,6 +71,7 @@ public final class PhoenixCoreLogic {
 
         player.sendSystemMessage(
                 Component.literal("§cYou unleashed a Phoenix Burst!")
+                        .withStyle(ChatFormatting.GREEN)
         );
 
         // Explosion without block damage.

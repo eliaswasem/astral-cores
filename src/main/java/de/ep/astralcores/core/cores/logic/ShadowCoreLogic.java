@@ -231,6 +231,11 @@ public final class ShadowCoreLogic {
             );
         }
 
+        player.sendSystemMessage(
+                Component.literal("You vanished into the smoke!")
+                        .withStyle(ChatFormatting.GREEN)
+        );
+
         return CoreActivationResult.EXECUTED;
     }
 

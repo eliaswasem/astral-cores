@@ -1,6 +1,6 @@
 package de.ep.astralcores.datagen;
 
-import de.ep.astralcores.datagen.advancement.cores.*;
+import de.ep.astralcores.advancement.advancements.cores.*;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricAdvancementProvider;
 import net.minecraft.advancements.*;
