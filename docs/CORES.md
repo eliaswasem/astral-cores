@@ -10,13 +10,13 @@
 
 - **Active – Sonic Dash:** You dash forward, creating a sonic boom that deals 2.5 hearts of damage and applies minor knockback.
     - **Cooldown:**
-- **Passive – Lightfeet:** You permanently gain Speed I. While sprinting, wind particles appear beneath your feet.
+- **Passive – Lightfeet:** You permanently gain Speed I.
 
 ## 3. Chrono Core
 
 - **Active – Time Return:** You rewind your position to where you were 5 seconds ago.
     - **Cooldown:**
-- **Passive – Second Timeline:** You have a 100% chance to cheat death and fully heal. This ability has a global 10-minute cooldown.
+- **Passive – Second Timeline:** You cheat death and fully heal. This ability has a global 10-minute cooldown.
 
 ## 4. Gravity Core
 
@@ -26,7 +26,7 @@
 
 ## 5. Frost Core
 
-- **Active – Frost Lock:** You freeze a player in place for 2 seconds.
+- **Active – Frost Lock:** You freeze a player in place for 5 seconds.
     - **Cooldown:**
 - **Passive – Frost Aura:** You emit a Slowness aura that becomes stronger the closer enemies are to you.
 
@@ -38,9 +38,9 @@
 
 ## 7. Leviathan Core
 
-- **Active – Whirlpool:** You create a water vortex that pulls nearby players toward its center. The vortex is twice as strong underwater.
+- **Active – Whirlpool:** You create a water vortex that pulls nearby players toward its center if you are in water or rain. . The vortex is twice as strong underwater.
     - **Cooldown:**
-- **Passive – Oceanborn:** You gain increased swim speed and a 10-minute breath meter. While it is raining or you are in water, you gain additional stat buffs.
+- **Passive – Oceanborn:** You gain increased swim speed infinite water breathing. While it is raining or you are in water, you gain additional stat buffs.
 
 ## 8. Shadow Core
 
@@ -50,7 +50,7 @@
 
 ## 9. Berserker Core
 
-- **Active – Rage Mode:** For 10 seconds, you gain +30% melee damage. Your natural health regeneration is disabled during this time. You also gain Strength II, Speed II, and Fire Resistance I for 1 minute and 30 seconds, and you are fully healed.
+- **Active – Rage Mode:** For 10 seconds, you gain +15% melee damage. Your natural health regeneration is disabled during this time. You also gain Strength II, Speed II, and Fire Resistance I for 1 minute and 30 seconds, and you are fully healed.
     - **Cooldown:**
 - **Passive – Bloodlust:** Each kill restores 2 hearts and grants you Speed II and Strength III. If you have 3.5 hearts or less, you gain an additional Strength boost.
 

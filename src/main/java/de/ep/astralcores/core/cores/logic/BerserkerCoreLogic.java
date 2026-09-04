@@ -7,21 +7,31 @@ import de.ep.astralcores.util.Effects;
 import de.ep.astralcores.util.TickTimer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
-public class BerserkerCoreLogic {
+public final class BerserkerCoreLogic {
 
     private static final Map<UUID, TickTimer> ragePlayers = new HashMap<>();
+
+    private static final Identifier RAGE_DAMAGE_MODIFIER_ID =
+            Identifier.fromNamespaceAndPath(
+                    "astralcores",
+                    "berserker_rage_damage"
+            );
+
+    private static final double RAGE_DAMAGE_BONUS = 0.15;
 
     public static boolean allowHealing = false;
 
@@ -32,12 +42,22 @@ public class BerserkerCoreLogic {
     }
 
     public static CoreActivationResult activate(ServerPlayer player) {
+        if (!player.isAlive() || player.isRemoved()) {
+            return CoreActivationResult.FAILED;
+        }
+
         player.setHealth(player.getMaxHealth());
 
-        // Rage lasts for 1.5 minutes
-        ragePlayers.put(player.getUUID(), new TickTimer(1800));
+        // Rage lasts for 1.5 minutes.
+        ragePlayers.put(
+                player.getUUID(),
+                new TickTimer(1800)
+        );
 
-        // All active effects last for 1.5 minutes
+        // +20% melee damage while Rage is active.
+        addRageDamageModifier(player);
+
+        // Active effects last for 1.5 minutes.
         Effects.applyEffect(player, MobEffects.STRENGTH, 1800, 2);
         Effects.applyEffect(player, MobEffects.SPEED, 1800, 2);
         Effects.applyEffect(player, MobEffects.FIRE_RESISTANCE, 1800, 1);
@@ -54,7 +74,17 @@ public class BerserkerCoreLogic {
         UUID uuid = player.getUUID();
         TickTimer timer = ragePlayers.get(uuid);
 
-        if (timer != null && timer.tick()) {
+        if (timer == null) {
+            return;
+        }
+
+        if (!player.isAlive() || player.isRemoved()) {
+            cleanup(player);
+            return;
+        }
+
+        if (timer.tick()) {
+            removeRageDamageModifier(player);
             ragePlayers.remove(uuid);
         }
     }
@@ -69,13 +99,47 @@ public class BerserkerCoreLogic {
 
     private static void cleanup(ServerPlayer player) {
         ragePlayers.remove(player.getUUID());
+        removeRageDamageModifier(player);
     }
 
-    public static void handleBloodlust(ServerPlayer victim, DamageSource source) {
+    private static void addRageDamageModifier(ServerPlayer player) {
+        AttributeInstance attribute =
+                player.getAttribute(Attributes.ATTACK_DAMAGE);
+
+        if (attribute != null
+                && !attribute.hasModifier(RAGE_DAMAGE_MODIFIER_ID)) {
+
+            attribute.addTransientModifier(
+                    new AttributeModifier(
+                            RAGE_DAMAGE_MODIFIER_ID,
+                            RAGE_DAMAGE_BONUS,
+                            AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
+                    )
+            );
+        }
+    }
+
+    private static void removeRageDamageModifier(ServerPlayer player) {
+        AttributeInstance attribute =
+                player.getAttribute(Attributes.ATTACK_DAMAGE);
+
+        if (attribute != null
+                && attribute.hasModifier(RAGE_DAMAGE_MODIFIER_ID)) {
+
+            attribute.removeModifier(RAGE_DAMAGE_MODIFIER_ID);
+        }
+    }
+
+    public static void handleBloodlust(
+            ServerPlayer victim,
+            DamageSource source
+    ) {
         Entity attacker = source.getEntity();
 
         if (attacker instanceof ServerPlayer killer
-                && AstralCores.PLAYER_DATA.get(killer).getEquippedCore() == CoreType.BERSERKER_CORE) {
+                && AstralCores.PLAYER_DATA
+                .get(killer)
+                .getEquippedCore() == CoreType.BERSERKER_CORE) {
 
             killer.playSound(
                     SoundEvents.WARDEN_HEARTBEAT,
@@ -83,8 +147,19 @@ public class BerserkerCoreLogic {
                     1.2f
             );
 
-            Effects.applyEffect(killer, MobEffects.SPEED, 200, 2);
-            Effects.applyEffect(killer, MobEffects.STRENGTH, 200, 3);
+            Effects.applyEffect(
+                    killer,
+                    MobEffects.SPEED,
+                    200,
+                    2
+            );
+
+            Effects.applyEffect(
+                    killer,
+                    MobEffects.STRENGTH,
+                    200,
+                    3
+            );
 
             allowHealing = true;
             killer.heal(4.0f);

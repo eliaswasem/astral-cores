@@ -4,6 +4,8 @@ import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.core.cores.logic.ChronoCoreLogic;
 import de.ep.astralcores.core.data.CoreActivationResult;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.item.Items;
@@ -18,7 +20,24 @@ public class ChronoCore extends Core {
                 "§aChrono Core",
                 Items.CLOCK,
                 List.of(
-                        "§a[Active: Time Return]"
+                        Component.literal("A fragment of the core of a fallen meteor.")
+                                .withStyle(ChatFormatting.GRAY),
+                        Component.empty(),
+
+                        Component.literal("Active")
+                                .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                        Component.literal("Time Return")
+                                .withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD),
+                        Component.literal("Rewinds your position by five seconds.")
+                                .withStyle(ChatFormatting.GRAY),
+                        Component.empty(),
+
+                        Component.literal("Passive")
+                                .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                        Component.literal("Second Timeline")
+                                .withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD),
+                        Component.literal("Survive fatal damage and fully heal. 10-minute cooldown.")
+                                .withStyle(ChatFormatting.GRAY)
                 ),
                 10006,
                 45,

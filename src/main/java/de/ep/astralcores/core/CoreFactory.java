@@ -39,9 +39,6 @@ public class CoreFactory {
                         DataComponents.LORE,
                         new ItemLore(
                                 core.getLore()
-                                        .stream()
-                                        .map(Component::literal)
-                                        .collect(Collectors.toList())
                         )
                 );
             }

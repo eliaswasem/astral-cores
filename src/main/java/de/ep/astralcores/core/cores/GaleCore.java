@@ -6,6 +6,8 @@ import de.ep.astralcores.core.Core;
 import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.core.cores.logic.GaleCoreLogic;
 import de.ep.astralcores.core.data.CoreActivationResult;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.item.Items;
@@ -19,7 +21,24 @@ public class GaleCore extends Core {
                 "§7Gale Core",
                 Items.BREEZE_ROD,
                 List.of(
-                        "§f[Active: Sonic Dash]"
+                        Component.literal("A fragment of the core of a fallen meteor.")
+                                .withStyle(ChatFormatting.GRAY),
+                        Component.empty(),
+
+                        Component.literal("Active")
+                                .withStyle(ChatFormatting.DARK_AQUA, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                        Component.literal("Sonic Dash")
+                                .withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD),
+                        Component.literal("Dash forward, damaging and knocking back enemies.")
+                                .withStyle(ChatFormatting.GRAY),
+                        Component.empty(),
+
+                        Component.literal("Passive")
+                                .withStyle(ChatFormatting.DARK_AQUA, ChatFormatting.BOLD, ChatFormatting.ITALIC),
+                        Component.literal("Lightfeet")
+                                .withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD),
+                        Component.literal("Permanent Speed I.")
+                                .withStyle(ChatFormatting.GRAY)
                 ),
                 10005,
                 0,

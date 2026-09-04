@@ -2,6 +2,7 @@ package de.ep.astralcores.core;
 
 import de.ep.astralcores.core.CoreType;
 import de.ep.astralcores.core.data.CoreActivationResult;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.item.Item;
@@ -22,7 +23,7 @@ public abstract class Core {
     private final Item baseItem;
 
     // Item lore description text lines
-    private final List<String> lore;
+    private final List<Component> lore;
 
     // Custom model data index for resource pack textures
     private final int customModelData;
@@ -53,7 +54,7 @@ public abstract class Core {
             CoreType type,
             String name,
             Item baseItem,
-            List<String> lore,
+            List<Component> lore,
             int customModelData,
             int activeCooldown,
             int passiveCooldown,
@@ -98,7 +99,7 @@ public abstract class Core {
     }
 
     // Gets the item description lore lines
-    public List<String> getLore() {
+    public List<Component> getLore() {
         return lore;
     }
 
