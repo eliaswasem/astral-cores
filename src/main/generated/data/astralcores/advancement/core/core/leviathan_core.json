@@ -1,0 +1,31 @@
+{
+  "criteria": {
+    "all_effects": {
+      "conditions": {
+        "effects": {
+          "minecraft:conduit_power": {},
+          "minecraft:dolphins_grace": {},
+          "minecraft:water_breathing": {}
+        }
+      },
+      "trigger": "minecraft:effects_changed"
+    }
+  },
+  "display": {
+    "description": "Have Conduit Power, Water breathing & Dolphins Grace",
+    "frame": "challenge",
+    "icon": {
+      "id": "minecraft:conduit"
+    },
+    "title": "What a breath"
+  },
+  "requirements": [
+    [
+      "all_effects"
+    ]
+  ],
+  "rewards": {
+    "function": "astralcores:cores/leviathan_core"
+  },
+  "sends_telemetry_event": true
+}
