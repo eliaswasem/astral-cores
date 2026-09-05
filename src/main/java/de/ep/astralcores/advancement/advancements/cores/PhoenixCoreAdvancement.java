@@ -66,7 +66,7 @@ public class PhoenixCoreAdvancement {
                         "nether_12_hours",
                         CriterionRegistry.NETHER_TIME.createCriterion(
                                 NetherTimeCriterion.Conditions.create(
-                                        //12L stands four hours change it in NetherTimeManager and here to adjust Timer
+                                        // 12h
                                         12L * 60L * 60L * 1000L
                                 )
                         )
