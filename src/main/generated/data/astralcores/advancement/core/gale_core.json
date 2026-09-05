@@ -59,7 +59,7 @@
     ]
   ],
   "rewards": {
-    "function": "astralcores:cores/gale_core"
+    "function": "astralcores:core/gale_core"
   },
   "sends_telemetry_event": true
 }

@@ -69,7 +69,7 @@
     ]
   ],
   "rewards": {
-    "function": "astralcores:cores/chrono_core"
+    "function": "astralcores:core/chrono_core"
   },
   "sends_telemetry_event": true
 }

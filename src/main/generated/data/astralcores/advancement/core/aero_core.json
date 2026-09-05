@@ -38,7 +38,7 @@
     ]
   ],
   "rewards": {
-    "function": "astralcores:cores/aero_core"
+    "function": "astralcores:core/aero_core"
   },
   "sends_telemetry_event": true
 }
