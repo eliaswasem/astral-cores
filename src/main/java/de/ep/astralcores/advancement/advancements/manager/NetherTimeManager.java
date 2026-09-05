@@ -24,8 +24,7 @@ import java.util.UUID;
 public class NetherTimeManager {
 
     private static final long REQUIRED_TIME =
-            12L * 60L * 60L * 1000L;
-
+           12L * 60L * 60L * 1000L;
 
     private static final Map<UUID, Long> NETHER_TIME =
             new HashMap<>();
