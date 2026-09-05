@@ -18,20 +18,10 @@ import net.minecraft.world.level.biome.Biome;
 
 public final class AdvancementUtil {
 
-    private AdvancementUtil() {
-    }
-
     public static Identifier advancementId(String name) {
         return Identifier.fromNamespaceAndPath(
                 AstralCores.MOD_ID,
                 name
-        );
-    }
-
-    public static Identifier coreReward(String name) {
-        return Identifier.fromNamespaceAndPath(
-                AstralCores.MOD_ID,
-                "cores/" + name
         );
     }
 
@@ -62,8 +52,13 @@ public final class AdvancementUtil {
         );
     }
 
-    public static AdvancementRewards.Builder reward(String name) {
+    public static AdvancementRewards.Builder reward(String core) {
         return new AdvancementRewards.Builder()
-                .runs(coreReward(name));
+                .runs(
+                        Identifier.fromNamespaceAndPath(
+                                AstralCores.MOD_ID,
+                                "core/" + core
+                        )
+                );
     }
 }

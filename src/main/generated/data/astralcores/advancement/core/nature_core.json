@@ -376,7 +376,7 @@
     ]
   ],
   "rewards": {
-    "function": "astralcores:cores/nature_core"
+    "function": "astralcores:core/nature_core"
   },
   "sends_telemetry_event": true
 }

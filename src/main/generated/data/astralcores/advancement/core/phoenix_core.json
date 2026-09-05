@@ -116,7 +116,7 @@
     ]
   ],
   "rewards": {
-    "function": "astralcores:cores/phoenix_core"
+    "function": "astralcores:core/phoenix_core"
   },
   "sends_telemetry_event": true
 }

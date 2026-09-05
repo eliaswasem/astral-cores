@@ -18,7 +18,7 @@
     ]
   ],
   "rewards": {
-    "function": "astralcores:cores/shadow_core"
+    "function": "astralcores:core/shadow_core"
   },
   "sends_telemetry_event": true
 }
