@@ -88,12 +88,12 @@
     }
   },
   "display": {
-    "description": "Be for 12 hours in the nether and were in every nether biome",
+    "description": "Be for 12 hours in the nether and visit every nether biome",
     "frame": "challenge",
     "icon": {
-      "id": "minecraft:wind_charge"
+      "id": "minecraft:blaze_powder"
     },
-    "title": "Warm Living"
+    "title": "Hot Living"
   },
   "requirements": [
     [

@@ -1,6 +1,6 @@
 package de.ep.astralcores.advancement.advancements.cores;
 
-import de.ep.astralcores.advancement.advancements.AdvancementHelper;
+import de.ep.astralcores.util.AdvancementUtil;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementType;
@@ -105,22 +105,17 @@ public class GaleCoreAdvancement {
                                                         )
                                                         .and(
                                                                 MobEffects.DOLPHINS_GRACE,
-                                                                new MobEffectsPredicate.MobEffectInstancePredicate(
-                                                                        MinMaxBounds.Ints.atLeast(0),
-                                                                        MinMaxBounds.Ints.atLeast(1),
-                                                                        Optional.empty(),
-                                                                        Optional.empty()
-                                                                )
+                                                                new MobEffectsPredicate.MobEffectInstancePredicate()
                                                         )
                                         )
                         )
                 )
                     .rewards(
-                            AdvancementHelper.reward("gale_core")
+                            AdvancementUtil.reward("gale_core")
                     )
                     .save(
                             consumer,
-                            AdvancementHelper.advancementId("core/gale_core")
+                            AdvancementUtil.advancementId("core/gale_core")
                     );
     }
 }

@@ -1,6 +1,6 @@
 package de.ep.astralcores.advancement.advancements.cores;
 
-import de.ep.astralcores.advancement.advancements.AdvancementHelper;
+import de.ep.astralcores.util.AdvancementUtil;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementType;
@@ -88,11 +88,11 @@ public class ChronoCoreAdvancement {
                 )
 
                 .rewards(
-                        AdvancementHelper.reward("chrono_core")
+                        AdvancementUtil.reward("chrono_core")
                 )
                 .save(
                         consumer,
-                        AdvancementHelper.advancementId("core/chrono_core")
+                        AdvancementUtil.advancementId("core/chrono_core")
                 );
     }
 }

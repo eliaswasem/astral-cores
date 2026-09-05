@@ -8,14 +8,7 @@
             "entity": "this",
             "predicate": {
               "minecraft:effects": {
-                "minecraft:dolphins_grace": {
-                  "amplifier": {
-                    "min": 0
-                  },
-                  "duration": {
-                    "min": 1
-                  }
-                },
+                "minecraft:dolphins_grace": {},
                 "minecraft:speed": {
                   "amplifier": {
                     "min": 1

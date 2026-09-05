@@ -1,6 +1,6 @@
 package de.ep.astralcores.advancement.advancements.cores;
 
-import de.ep.astralcores.advancement.advancements.AdvancementHelper;
+import de.ep.astralcores.util.AdvancementUtil;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementType;
@@ -85,11 +85,11 @@ public class NatureCoreAdvancement {
 
         builder
                 .rewards(
-                        AdvancementHelper.reward("nature_core")
+                        AdvancementUtil.reward("nature_core")
                 )
                 .save(
                         consumer,
-                        AdvancementHelper.advancementId("core/nature_core")
+                        AdvancementUtil.advancementId("core/nature_core")
                 );
     }
 
@@ -102,7 +102,7 @@ public class NatureCoreAdvancement {
                 BuiltInRegistries.ITEM
                         .getKey(item)
                         .getPath(),
-                AdvancementHelper.hasItem(lookup, item)
+                AdvancementUtil.hasItem(lookup, item)
         );
     }
 }

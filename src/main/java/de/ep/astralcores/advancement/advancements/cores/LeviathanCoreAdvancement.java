@@ -1,6 +1,6 @@
 package de.ep.astralcores.advancement.advancements.cores;
 
-import de.ep.astralcores.advancement.advancements.AdvancementHelper;
+import de.ep.astralcores.util.AdvancementUtil;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementType;
@@ -76,11 +76,11 @@ public class LeviathanCoreAdvancement {
                 )
 
                 .rewards(
-                        AdvancementHelper.reward("leviathan_core")
+                        AdvancementUtil.reward("leviathan_core")
                 )
                 .save(
                         consumer,
-                        AdvancementHelper.advancementId("core/leviathan_core")
+                        AdvancementUtil.advancementId("core/leviathan_core")
                 );
     }
 }

@@ -1,28 +1,31 @@
 package de.ep.astralcores.advancement.advancements.cores;
 
-import de.ep.astralcores.advancement.advancements.AdvancementHelper;
+import de.ep.astralcores.util.AdvancementUtil;
 import de.ep.astralcores.advancement.criterion.CriterionRegistry;
 import de.ep.astralcores.advancement.criterion.criterions.NetherTimeCriterion;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementType;
-import net.minecraft.advancements.predicates.LocationPredicate;
-import net.minecraft.advancements.triggers.PlayerTrigger;
-import net.minecraft.advancements.triggers.SimpleCriterionTrigger;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.HolderSet;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 
 
-import java.awt.*;
-import java.util.Optional;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class PhoenixCoreAdvancement {
 
+    private static final List<ResourceKey<Biome>> BIOMES = List.of(
+            Biomes.NETHER_WASTES,
+            Biomes.CRIMSON_FOREST,
+            Biomes.WARPED_FOREST,
+            Biomes.SOUL_SAND_VALLEY,
+            Biomes.BASALT_DELTAS
+    );
 
 
     public static void generate(
@@ -37,85 +40,28 @@ public class PhoenixCoreAdvancement {
             HolderLookup.Provider lookup,
             Consumer<AdvancementHolder> consumer
     ) {
-        Advancement.Builder.advancement()
+        Advancement.Builder builder = Advancement.Builder.advancement()
                 .display(
-                        Items.WIND_CHARGE,
-                        Component.literal("Warm Living"),
+                        Items.BLAZE_POWDER,
+                        Component.literal("Hot Living"),
                         Component.literal(
-                                "Be for 12 hours in the nether and were in every nether biome"
+                                "Be for 12 hours in the nether and visit every nether biome"
                         ),
                         null,
                         AdvancementType.CHALLENGE,
                         true,
                         true,
                         false
-                )
+                );
 
-                .addCriterion(
-                        "nether_wastes",
-                        PlayerTrigger.TriggerInstance.located(
-                                LocationPredicate.Builder.location()
-                                        .setBiomes(
-                                                HolderSet.direct(
-                                                        lookup.lookupOrThrow(Registries.BIOME)
-                                                                .getOrThrow(Biomes.NETHER_WASTES)
-                                                )
-                                        )
-                        )
-                )
+        for (ResourceKey<Biome> biome : BIOMES) {
+            builder.addCriterion(
+                    biome.identifier().getPath(),
+                    AdvancementUtil.isInBiome(lookup, biome)
+            );
+        }
 
-                .addCriterion(
-                        "crimson_forest",
-                        PlayerTrigger.TriggerInstance.located(
-                                LocationPredicate.Builder.location()
-                                        .setBiomes(
-                                                HolderSet.direct(
-                                                        lookup.lookupOrThrow(Registries.BIOME)
-                                                                .getOrThrow(Biomes.CRIMSON_FOREST)
-                                                )
-                                        )
-                        )
-                )
-
-                .addCriterion(
-                        "warped_forest", //tarangelus wald
-                        PlayerTrigger.TriggerInstance.located(
-                                LocationPredicate.Builder.location()
-                                        .setBiomes(
-                                                HolderSet.direct(
-                                                        lookup.lookupOrThrow(Registries.BIOME)
-                                                                .getOrThrow(Biomes.WARPED_FOREST)
-                                                )
-                                        )
-                        )
-                )
-
-                .addCriterion(
-                        "soul_sand_valley",
-                        PlayerTrigger.TriggerInstance.located(
-                                LocationPredicate.Builder.location()
-                                        .setBiomes(
-                                                HolderSet.direct(
-                                                        lookup.lookupOrThrow(Registries.BIOME)
-                                                                .getOrThrow(Biomes.SOUL_SAND_VALLEY)
-                                                )
-                                        )
-                        )
-                )
-
-                .addCriterion(
-                        "basalt_deltas",
-                        PlayerTrigger.TriggerInstance.located(
-                                LocationPredicate.Builder.location()
-                                        .setBiomes(
-                                                HolderSet.direct(
-                                                        lookup.lookupOrThrow(Registries.BIOME)
-                                                                .getOrThrow(Biomes.BASALT_DELTAS)
-                                                )
-                                        )
-                        )
-                )
-
+        builder
                 .addCriterion(
                         "nether_12_hours",
                         CriterionRegistry.NETHER_TIME.createCriterion(
@@ -126,11 +72,11 @@ public class PhoenixCoreAdvancement {
                         )
                 )
                 .rewards(
-                        AdvancementHelper.reward("phoenix_core")
+                        AdvancementUtil.reward("phoenix_core")
                 )
                 .save(
                         consumer,
-                        AdvancementHelper.advancementId("core/phoenix_core")
+                        AdvancementUtil.advancementId("core/phoenix_core")
                 );
 
 
