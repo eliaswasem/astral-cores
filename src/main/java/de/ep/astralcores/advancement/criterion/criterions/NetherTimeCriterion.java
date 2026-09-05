@@ -5,49 +5,62 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.advancements.predicates.ContextAwarePredicate;
 import net.minecraft.advancements.triggers.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
+import net.minecraft.world.level.Level;
 
-import java.awt.*;
 import java.util.Optional;
 
 public class NetherTimeCriterion
         extends SimpleCriterionTrigger<NetherTimeCriterion.Conditions> {
-
-    public static final NetherTimeCriterion INSTANCE = new NetherTimeCriterion();
 
     @Override
     public Codec<Conditions> codec() {
         return Conditions.CODEC;
     }
 
-    public void trigger(ServerPlayer player , long ticks) {
-        this.trigger(player, conditions ->
-                player.level().dimensionTypeRegistration().is(BuiltinDimensionTypes.NETHER)
-                        && ticks >= conditions.requiredTicks()
+    public void trigger(
+            ServerPlayer player,
+            long elapsedTime
+    ) {
+        this.trigger(
+                player,
+                conditions ->
+                        player.level().dimension() == Level.NETHER
+                                && conditions.requirementsMet(elapsedTime)
         );
     }
 
     public record Conditions(
-            Optional<ContextAwarePredicate> playerPredicate,
-            long requiredTicks
+            Optional<ContextAwarePredicate> player,
+            long requiredTime
     ) implements SimpleCriterionTrigger.SimpleInstance {
 
-        public static final Codec<Conditions> CODEC = RecordCodecBuilder.create(instance ->
-                instance.group(
-                        ContextAwarePredicate.CODEC.optionalFieldOf("player")
-                                .forGetter(Conditions::player),
-                        Codec.LONG.fieldOf("required_ticks")
-                                .forGetter(Conditions::requiredTicks)
-                ).apply(instance, Conditions::new)
-        );
+        public static final Codec<Conditions> CODEC =
+                RecordCodecBuilder.create(instance ->
+                        instance.group(
+                                ContextAwarePredicate.CODEC
+                                        .optionalFieldOf("player")
+                                        .forGetter(Conditions::player),
 
-        @Override
-        public Optional<ContextAwarePredicate> player() {
-            return playerPredicate;
+                                Codec.LONG
+                                        .fieldOf("required_time")
+                                        .forGetter(Conditions::requiredTime)
+
+                        ).apply(instance, Conditions::new)
+                );
+
+        public boolean requirementsMet(
+                long elapsedTime
+        ) {
+            return elapsedTime >= requiredTime;
         }
 
-        public static Conditions create(long ticks) {
-            return new Conditions(Optional.empty(), ticks);
+        public static Conditions create(
+                long milliseconds
+        ) {
+            return new Conditions(
+                    Optional.empty(),
+                    milliseconds
+            );
         }
     }
 }

@@ -32,6 +32,12 @@
       },
       "trigger": "minecraft:location"
     },
+    "nether_12_hours": {
+      "conditions": {
+        "required_time": 43200000
+      },
+      "trigger": "astralcores:nether_time"
+    },
     "nether_wastes": {
       "conditions": {
         "player": [
@@ -64,12 +70,6 @@
       },
       "trigger": "minecraft:location"
     },
-    "stayed_in_nether": {
-      "conditions": {
-        "required_ticks": 864000
-      },
-      "trigger": "astralcores:nether_time"
-    },
     "warped_forest": {
       "conditions": {
         "player": [
@@ -88,7 +88,7 @@
     }
   },
   "display": {
-    "description": "Be for 12 hours continuously in the nether and were in every nether biome",
+    "description": "Be for 12 hours in the nether and were in every nether biome",
     "frame": "challenge",
     "icon": {
       "id": "minecraft:wind_charge"
@@ -112,7 +112,7 @@
       "basalt_deltas"
     ],
     [
-      "stayed_in_nether"
+      "nether_12_hours"
     ]
   ],
   "rewards": {

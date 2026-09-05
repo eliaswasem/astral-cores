@@ -8,6 +8,7 @@ import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementType;
 import net.minecraft.advancements.predicates.LocationPredicate;
 import net.minecraft.advancements.triggers.PlayerTrigger;
+import net.minecraft.advancements.triggers.SimpleCriterionTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
@@ -17,6 +18,7 @@ import net.minecraft.world.level.biome.Biomes;
 
 
 import java.awt.*;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public class PhoenixCoreAdvancement {
@@ -40,7 +42,7 @@ public class PhoenixCoreAdvancement {
                         Items.WIND_CHARGE,
                         Component.literal("Warm Living"),
                         Component.literal(
-                                "Be for 12 hours continuously in the nether and were in every nether biome"
+                                "Be for 12 hours in the nether and were in every nether biome"
                         ),
                         null,
                         AdvancementType.CHALLENGE,
@@ -115,11 +117,11 @@ public class PhoenixCoreAdvancement {
                 )
 
                 .addCriterion(
-                        "stayed_in_nether",
-
+                        "nether_12_hours",
                         CriterionRegistry.NETHER_TIME.createCriterion(
-
-                                new NetherTimeCriterion.Conditions(java.util.Optional.empty(), 12*20*60*60)
+                                NetherTimeCriterion.Conditions.create(
+                                        12L * 60L * 60L * 1000L
+                                )
                         )
                 )
                 .rewards(
