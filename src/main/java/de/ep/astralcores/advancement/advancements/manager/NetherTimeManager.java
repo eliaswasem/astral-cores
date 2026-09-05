@@ -24,7 +24,7 @@ import java.util.UUID;
 public class NetherTimeManager {
 
     private static final long REQUIRED_TIME =
-            //12L stands four hours change it in PhoenixCoreAdvancement and here to adjust Timer
+            //12h
            12L * 60L * 60L * 1000L;
 
     private static final Map<UUID, Long> NETHER_TIME =
