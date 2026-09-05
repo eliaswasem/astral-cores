@@ -50,6 +50,8 @@ public class AstralCores implements ModInitializer {
 
 		CriterionRegistry.init();
 
+
+		//This of for the NetherTimer
 		ServerTickEvents.END_SERVER_TICK.register(
 				NetherTimeManager::tick
 		);
