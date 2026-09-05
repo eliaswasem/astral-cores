@@ -313,21 +313,13 @@ public class NetherTimeManager {
     }
 
 
-    public static void removePlayer(
-            ServerPlayer player
-    ) {
 
-        long now =
-                System.currentTimeMillis();
+    public static void removePlayer(ServerPlayer player) {
 
-        UUID uuid =
-                player.getUUID();
+        long now = System.currentTimeMillis();
+        UUID uuid = player.getUUID();
 
-        pausePlayer(
-                uuid,
-                now
-        );
-
+        pausePlayer(uuid, now);
         removeBossBar(uuid);
     }
 

@@ -11,7 +11,9 @@ import de.ep.astralcores.core.CoreRegistry;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,6 +57,15 @@ public class AstralCores implements ModInitializer {
 		ServerLifecycleEvents.SERVER_STOPPING.register(
 				NetherTimeManager::onServerStopping
 		);
+
+		ServerPlayConnectionEvents.DISCONNECT.register(
+				(handler, server) -> {
+
+					ServerPlayer player = handler.player;
+
+					NetherTimeManager.removePlayer(player);
+					}
+				);
 	}
 
 	public static void setServer(MinecraftServer minecraftServer) {
